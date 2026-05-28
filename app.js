@@ -351,7 +351,7 @@ function render() {
 }
 
 async function init() {
-  const response = await fetch("./data/fundflow.json", { cache: "no-store" });
+  const response = await fetch(`./data/fundflow.json?v=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) throw new Error(`Data load failed: ${response.status}`);
   state.data = await response.json();
   setupControls();

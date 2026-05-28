@@ -68,18 +68,37 @@ FREESIS_SUMMARY_COLUMNS = {
     "FUND_EQUITY_DISCRETIONARY_OVERSEAS": "일임_해외_주식",
 }
 
+FREESIS_CALCULATED_PARENTS = [
+    {
+        "itemCode": "FUND_MMF_TOTAL", "itemName": "MMF", "displayOrder": 40,
+        "children": ["FUND_MMF_PUBLIC_DOMESTIC", "FUND_MMF_PRIVATE_DOMESTIC"],
+    },
+    {
+        "itemCode": "FUND_BOND_TOTAL", "itemName": "채권", "displayOrder": 45,
+        "children": ["FUND_BOND_PUBLIC_DOMESTIC", "FUND_BOND_PRIVATE_DOMESTIC", "FUND_BOND_DISCRETIONARY_DOMESTIC"],
+    },
+    {
+        "itemCode": "FUND_EQUITY_TOTAL", "itemName": "주식", "displayOrder": 55,
+        "children": [
+            "FUND_EQUITY_PUBLIC_DOMESTIC", "FUND_EQUITY_PUBLIC_OVERSEAS",
+            "FUND_EQUITY_PRIVATE_DOMESTIC", "FUND_EQUITY_PRIVATE_OVERSEAS",
+            "FUND_EQUITY_DISCRETIONARY_DOMESTIC", "FUND_EQUITY_DISCRETIONARY_OVERSEAS",
+        ],
+    },
+]
+
 FREESIS_FUND_ITEMS = [
-    {"itemCode": "FUND_BOND_PUBLIC_DOMESTIC", "itemName": "공모 국내 채권", "displayOrder": 40},
-    {"itemCode": "FUND_BOND_PRIVATE_DOMESTIC", "itemName": "사모 국내 채권", "displayOrder": 41},
-    {"itemCode": "FUND_BOND_DISCRETIONARY_DOMESTIC", "itemName": "일임 국내 채권", "displayOrder": 42},
-    {"itemCode": "FUND_MMF_PUBLIC_DOMESTIC", "itemName": "공모 국내 MMF", "displayOrder": 43},
-    {"itemCode": "FUND_MMF_PRIVATE_DOMESTIC", "itemName": "사모 국내 MMF", "displayOrder": 44},
-    {"itemCode": "FUND_EQUITY_PUBLIC_DOMESTIC", "itemName": "공모 국내 주식", "displayOrder": 50},
-    {"itemCode": "FUND_EQUITY_PUBLIC_OVERSEAS", "itemName": "공모 해외 주식", "displayOrder": 51},
-    {"itemCode": "FUND_EQUITY_PRIVATE_DOMESTIC", "itemName": "사모 국내 주식", "displayOrder": 52},
-    {"itemCode": "FUND_EQUITY_PRIVATE_OVERSEAS", "itemName": "사모 해외 주식", "displayOrder": 53},
-    {"itemCode": "FUND_EQUITY_DISCRETIONARY_DOMESTIC", "itemName": "일임 국내 주식", "displayOrder": 54},
-    {"itemCode": "FUND_EQUITY_DISCRETIONARY_OVERSEAS", "itemName": "일임 해외 주식", "displayOrder": 55},
+    {"itemCode": "FUND_MMF_PUBLIC_DOMESTIC", "itemName": "공모 국내 MMF", "displayOrder": 41, "parentCode": "FUND_MMF_TOTAL"},
+    {"itemCode": "FUND_MMF_PRIVATE_DOMESTIC", "itemName": "사모 국내 MMF", "displayOrder": 42, "parentCode": "FUND_MMF_TOTAL"},
+    {"itemCode": "FUND_BOND_PUBLIC_DOMESTIC", "itemName": "공모 국내 채권", "displayOrder": 46, "parentCode": "FUND_BOND_TOTAL"},
+    {"itemCode": "FUND_BOND_PRIVATE_DOMESTIC", "itemName": "사모 국내 채권", "displayOrder": 47, "parentCode": "FUND_BOND_TOTAL"},
+    {"itemCode": "FUND_BOND_DISCRETIONARY_DOMESTIC", "itemName": "일임 국내 채권", "displayOrder": 48, "parentCode": "FUND_BOND_TOTAL"},
+    {"itemCode": "FUND_EQUITY_PUBLIC_DOMESTIC", "itemName": "공모 국내 주식", "displayOrder": 56, "parentCode": "FUND_EQUITY_TOTAL"},
+    {"itemCode": "FUND_EQUITY_PUBLIC_OVERSEAS", "itemName": "공모 해외 주식", "displayOrder": 57, "parentCode": "FUND_EQUITY_TOTAL"},
+    {"itemCode": "FUND_EQUITY_PRIVATE_DOMESTIC", "itemName": "사모 국내 주식", "displayOrder": 58, "parentCode": "FUND_EQUITY_TOTAL"},
+    {"itemCode": "FUND_EQUITY_PRIVATE_OVERSEAS", "itemName": "사모 해외 주식", "displayOrder": 59, "parentCode": "FUND_EQUITY_TOTAL"},
+    {"itemCode": "FUND_EQUITY_DISCRETIONARY_DOMESTIC", "itemName": "일임 국내 주식", "displayOrder": 60, "parentCode": "FUND_EQUITY_TOTAL"},
+    {"itemCode": "FUND_EQUITY_DISCRETIONARY_OVERSEAS", "itemName": "일임 해외 주식", "displayOrder": 61, "parentCode": "FUND_EQUITY_TOTAL"},
 ]
 
 
@@ -122,10 +141,9 @@ TARGET_ITEMS = {
         "includeInTotal": False,
         "displayOrder": 12,
     },
-    "CD순발행": {"sector": "은행", "itemCode": "BANK_CD_NET_ISSUANCE", "itemName": "CD순발행", "displayOrder": 20},
-    "금전신탁": {"sector": "은행", "itemCode": "BANK_MONEY_TRUST", "itemName": "금전신탁", "displayOrder": 30},
+    "금전신탁": {"sector": "은행", "itemCode": "BANK_MONEY_TRUST", "itemName": "금전신탁", "displayOrder": 20},
     "고객예탁금": {"sector": "증권", "itemCode": "SEC_CUSTOMER_DEPOSIT", "itemName": "고객예탁금", "displayOrder": 70},
-    "대고객RP매도": {"sector": "증권", "itemCode": "SEC_CUSTOMER_RP", "itemName": "대고객RP매도", "displayOrder": 80},
+    "대고객RP매도": {"sector": "증권", "itemCode": "SEC_CUSTOMER_RP", "itemName": "고객RP", "displayOrder": 80},
     "CMA": {"sector": "증권", "itemCode": "SEC_CMA", "itemName": "CMA", "displayOrder": 90},
     "채권형": {"sector": "투신", "itemCode": "FUND_BOND", "itemName": "채권형", "displayOrder": 40},
     "MMF": {"sector": "투신", "itemCode": "FUND_MMF", "itemName": "MMF", "displayOrder": 50},
@@ -559,6 +577,8 @@ def recompute_status_summary(data: dict) -> None:
         per_code = records_by_date.get(date_value, {})
         missing = []
         for item in active_items:
+            if item.get("itemType") == "calculated":
+                continue
             row = per_code.get(item["itemCode"])
             if row is None or row.get("changeValue") is None or row.get("balanceValue") is None:
                 missing.append(item["itemName"])
@@ -729,17 +749,44 @@ def apply_freesis_summary(data: dict, freesis_summary_path: Path) -> None:
     data["items"] = [item for item in data["items"] if item["itemCode"] not in LEGACY_FUND_ITEM_CODES]
     data["records"] = [record for record in data["records"] if record["itemCode"] not in LEGACY_FUND_ITEM_CODES]
 
+    # Add calculated parent items (MMF, 채권, 주식)
+    for parent in FREESIS_CALCULATED_PARENTS:
+        available_children = [meta["itemCode"] for meta in available_fund_items]
+        if any(child in available_children for child in parent["children"]):
+            data["items"].append(
+                {
+                    "itemCode": parent["itemCode"],
+                    "sector": "투신",
+                    "groupName": parent["itemName"],
+                    "itemName": parent["itemName"],
+                    "parentCode": None,
+                    "level": 1,
+                    "itemType": "calculated",
+                    "includeInTotal": True,
+                    "requiredForComplete": False,
+                    "showInHeatmap": True,
+                    "rawBalanceColumn": None,
+                    "rawChangeColumn": None,
+                    "link": FREESIS_LINK_URL,
+                    "displayOrder": parent["displayOrder"],
+                    "isActive": True,
+                    "unit": "조원",
+                    "source": "FREESIS 유형별 설정/일임",
+                }
+            )
+
+    # Add child items
     for meta in available_fund_items:
         data["items"].append(
             {
                 "itemCode": meta["itemCode"],
                 "sector": "투신",
-                "groupName": "투신",
+                "groupName": meta.get("parentCode", "투신"),
                 "itemName": meta["itemName"],
-                "parentCode": None,
-                "level": 1,
+                "parentCode": meta.get("parentCode"),
+                "level": 2 if meta.get("parentCode") else 1,
                 "itemType": "raw",
-                "includeInTotal": True,
+                "includeInTotal": False,
                 "requiredForComplete": True,
                 "showInHeatmap": True,
                 "rawBalanceColumn": FREESIS_SUMMARY_COLUMNS[meta["itemCode"]],
@@ -780,13 +827,13 @@ def apply_freesis_summary(data: dict, freesis_summary_path: Path) -> None:
                 {
                     "date": date_iso,
                     "sector": "투신",
-                    "groupName": "투신",
+                    "groupName": meta.get("parentCode", "투신"),
                     "itemCode": item_code,
                     "itemName": meta["itemName"],
-                    "parentCode": None,
-                    "level": 1,
+                    "parentCode": meta.get("parentCode"),
+                    "level": 2 if meta.get("parentCode") else 1,
                     "itemType": "raw",
-                    "includeInTotal": True,
+                    "includeInTotal": False,
                     "requiredForComplete": True,
                     "showInHeatmap": True,
                     "changeValue": change,
@@ -804,6 +851,46 @@ def apply_freesis_summary(data: dict, freesis_summary_path: Path) -> None:
                     "sourcePageTitle": "FREESIS 유형별 기간설정",
                     "sourceAttachment": freesis_summary_path.name,
                     "sourceAttachmentUrl": "",
+                }
+            )
+
+    # Compute calculated parent records (MMF, 채권, 주식) by summing children per date.
+    all_dates = sorted({r["date"] for r in data["records"] if r["sector"] == "투신"})
+    records_by_date_code: dict[tuple[str, str], dict] = {}
+    for record in data["records"]:
+        records_by_date_code[(record["date"], record["itemCode"])] = record
+
+    for parent in FREESIS_CALCULATED_PARENTS:
+        for date_iso in all_dates:
+            child_records = [
+                records_by_date_code[(date_iso, child_code)]
+                for child_code in parent["children"]
+                if (date_iso, child_code) in records_by_date_code
+            ]
+            if not child_records:
+                continue
+            change_values = [r["changeValue"] for r in child_records if r["changeValue"] is not None]
+            balance_values = [r["balanceValue"] for r in child_records if r["balanceValue"] is not None]
+            data["records"].append(
+                {
+                    "date": date_iso,
+                    "sector": "투신",
+                    "groupName": parent["itemName"],
+                    "itemCode": parent["itemCode"],
+                    "itemName": parent["itemName"],
+                    "parentCode": None,
+                    "level": 1,
+                    "itemType": "calculated",
+                    "includeInTotal": True,
+                    "requiredForComplete": False,
+                    "showInHeatmap": True,
+                    "changeValue": sum(change_values) if change_values else None,
+                    "balanceValue": sum(balance_values) if balance_values else None,
+                    "link": FREESIS_LINK_URL,
+                    "displayOrder": parent["displayOrder"],
+                    "isActive": True,
+                    "hasSourceMapping": False,
+                    "source": "FREESIS 유형별 설정/일임 (합산)",
                 }
             )
 
