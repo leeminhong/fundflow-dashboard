@@ -1062,11 +1062,49 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
                 "sourceAttachment": db_path.name, "sourceAttachmentUrl": "",
             })
 
+    # --- Repo balance (기관RP) from DB ---
+    repo_balance = db.get("repoBalance", {})
+    repo_changes = db.get("repoChanges", {})
+    if repo_balance:
+        # Remove existing SEIBro-sourced repo records
+        data["items"] = [i for i in data["items"] if i["itemCode"] != "REPO_INTERBANK"]
+        data["records"] = [r for r in data["records"] if r["itemCode"] != "REPO_INTERBANK"]
+
+        data["items"].append(dict(SEIBRO_REPO_ITEM))
+
+        for date_key in sorted(repo_balance.keys()):
+            date_iso = parse_ymd(date_key)
+            if not date_iso:
+                continue
+            balance = to_number(repo_balance[date_key])
+            raw_change = to_number(repo_changes.get(date_key))
+            change = raw_change  # 이미 조원 단위
+            if balance is None:
+                continue
+            data["records"].append({
+                "date": date_iso, "sector": "REPO",
+                "groupName": "기관RP", "itemCode": "REPO_INTERBANK",
+                "itemName": "기관RP",
+                "parentCode": None, "level": 1, "itemType": "raw",
+                "includeInTotal": True, "requiredForComplete": True,
+                "showInHeatmap": True,
+                "changeValue": change, "balanceValue": balance,
+                "link": REPO_LINK_URL, "displayOrder": 65,
+                "isActive": True, "hasSourceMapping": True,
+                "source": "SEIBro Repo 시장현황",
+                "sourceLabel": "잔고금액", "sourceUnit": "조원",
+                "changeDate": date_iso, "balanceDate": date_iso,
+                "sourcePageUrl": REPO_LINK_URL,
+                "sourcePageTitle": "SEIBro Repo 시장현황",
+                "sourceAttachment": db_path.name, "sourceAttachmentUrl": "",
+            })
+
     data["meta"]["freesisDbFile"] = str(db_path)
     data["meta"]["freesisDbLastUpdated"] = db.get("lastUpdated")
     recompute_status_summary(data)
     print(f"freesis_db_applied: {db_path} "
-          f"(fund {len(fund_summary)} days, deposit {len(stock_deposit)} days)")
+          f"(fund {len(fund_summary)} days, deposit {len(stock_deposit)} days, "
+          f"repo {len(repo_balance)} days)")
 
 
 def item_link(item_code: str) -> str:
@@ -1493,16 +1531,21 @@ def main() -> None:
             if auto_db.exists():
                 apply_freesis_db(web_data, auto_db)
         if not args.skip_seibro_repo:
-            try:
-                seibro_rows = fetch_seibro_repo_rows(args.seibro_repo_limit)
-                apply_seibro_repo(web_data, seibro_rows)
-                recompute_status_summary(web_data)
-                if seibro_rows:
-                    print(f"seibro_repo_applied: {len(seibro_rows)} rows (latest {seibro_rows[-1]['date']})")
-                else:
-                    print("seibro_repo_applied: 0 rows")
-            except Exception as exc:
-                print(f"warning: seibro_repo_merge_failed: {exc}")
+            # Skip SEIBro fetch if REPO data already came from freesis_db
+            has_repo_from_db = any(r["source"] == "SEIBro Repo 시장현황" for r in web_data["records"] if r["itemCode"] == "REPO_INTERBANK")
+            if not has_repo_from_db:
+                try:
+                    seibro_rows = fetch_seibro_repo_rows(args.seibro_repo_limit)
+                    apply_seibro_repo(web_data, seibro_rows)
+                    recompute_status_summary(web_data)
+                    if seibro_rows:
+                        print(f"seibro_repo_applied: {len(seibro_rows)} rows (latest {seibro_rows[-1]['date']})")
+                    else:
+                        print("seibro_repo_applied: 0 rows")
+                except Exception as exc:
+                    print(f"warning: seibro_repo_merge_failed: {exc}")
+            else:
+                print("seibro_repo_skipped: REPO data from freesis_db")
         web_data_path = Path(args.write_web_data)
         web_data_path.parent.mkdir(parents=True, exist_ok=True)
 
