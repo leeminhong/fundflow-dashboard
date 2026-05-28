@@ -45,6 +45,11 @@
                 <p id="heatmapCaption">-</p>
               </div>
               <div class="panel-actions">
+                <div class="legend" aria-label="히트맵 범례">
+                  <span>감소</span>
+                  <div class="legend-scale"></div>
+                  <span>증가</span>
+                </div>
                 <button id="compactViewToggle" type="button" aria-pressed="false">간단히 보기</button>
                 <button id="resetFilters" type="button">초기화</button>
               </div>
@@ -71,18 +76,13 @@
                   <option value="all">전체</option>
                 </select>
               </label>
-              <div class="legend" aria-label="히트맵 범례">
-                <span>감소</span>
-                <div class="legend-scale"></div>
-                <span>증가</span>
-              </div>
             </div>
             <div class="heatmap-scroll">
               <div id="heatmap" class="heatmap" role="table" aria-label="일별 증감 히트맵"></div>
             </div>
           </section>
 
-          <section class="dashboard-panel trend-panel" aria-label="추이">
+          <section class="dashboard-panel trend-panel is-collapsed" aria-label="추이">
             <div class="panel-head">
               <div>
                 <h2 id="trendTitle">최근 추이</h2>
@@ -94,6 +94,7 @@
                   <select id="itemSelect"></select>
                 </label>
                 <a id="itemLink" href="#" target="_blank" rel="noreferrer">상세</a>
+                <button id="trendToggle" type="button" aria-expanded="false">추이 열기</button>
               </div>
             </div>
             <svg id="trendChart" class="trend-chart" role="img" aria-label="선택 항목 증감 추이"></svg>

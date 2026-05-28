@@ -7,6 +7,7 @@ const state = {
   selectedItem: null,
   expandedParents: new Set(),
   compactView: false,
+  trendExpanded: false,
 };
 
 const els = {
@@ -26,6 +27,8 @@ const els = {
   trendTitle: document.querySelector("#trendTitle"),
   trendSubtitle: document.querySelector("#trendSubtitle"),
   trendChart: document.querySelector("#trendChart"),
+  trendPanel: document.querySelector(".trend-panel"),
+  trendToggle: document.querySelector("#trendToggle"),
   itemLink: document.querySelector("#itemLink"),
   compactViewToggle: document.querySelector("#compactViewToggle"),
   resetFilters: document.querySelector("#resetFilters"),
@@ -147,18 +150,20 @@ function recordMap() {
 function colorFor(value, maxAbs) {
   if (!Number.isFinite(value) || maxAbs === 0) return "#f7fafc";
   const clamped = Math.max(-1, Math.min(1, value / maxAbs));
-  const negative = [201, 61, 61];
-  const positive = [39, 131, 79];
-  const neutral = [244, 246, 248];
+  const negative = [177, 83, 75];
+  const positive = [47, 118, 84];
+  const neutral = [246, 248, 249];
   const target = clamped >= 0 ? positive : negative;
   const t = Math.abs(clamped);
   const mixed = neutral.map((base, idx) => Math.round(base + (target[idx] - base) * t));
   return `rgb(${mixed.join(",")})`;
 }
 
-function textColorFor(value, maxAbs) {
-  if (!Number.isFinite(value) || maxAbs === 0) return "#17212b";
-  return Math.abs(value / maxAbs) > 0.62 ? "#ffffff" : "#17212b";
+function percentile(values, ratio) {
+  if (!values.length) return 0;
+  const sorted = [...values].sort((a, b) => a - b);
+  const index = Math.ceil(sorted.length * ratio) - 1;
+  return sorted[Math.max(0, Math.min(sorted.length - 1, index))];
 }
 
 function setupControls() {
@@ -252,7 +257,7 @@ function renderHeatmap() {
     }
   }
 
-  const maxAbs = Math.max(...values, 0);
+  const maxAbs = percentile(values, 0.9);
   els.heatmap.style.gridTemplateColumns = `86px 136px repeat(${dates.length}, minmax(62px, 1fr))`;
 
   const cells = [];
@@ -286,7 +291,7 @@ function renderHeatmap() {
         `<div class="heatmap-cell${latestClass}${incompleteClass}" data-item-code="${item.itemCode}" style="background:${colorFor(
           value,
           maxAbs,
-        )};color:${textColorFor(value, maxAbs)}">${formatValue(value)}</div>`,
+        )}">${formatValue(value)}</div>`,
       );
     }
   });
@@ -322,6 +327,7 @@ function renderHeatmap() {
   els.heatmap.querySelectorAll("[data-item-code]").forEach((node) => {
     node.addEventListener("click", () => {
       state.selectedItem = node.dataset.itemCode;
+      state.trendExpanded = true;
       els.itemSelect.value = state.selectedItem;
       renderTrend();
     });
@@ -332,6 +338,12 @@ function renderCompactToggle() {
   if (!els.compactViewToggle) return;
   els.compactViewToggle.textContent = state.compactView ? "전체 펼치기" : "간단히 보기";
   els.compactViewToggle.setAttribute("aria-pressed", String(state.compactView));
+}
+
+function renderTrendPanelState() {
+  els.trendPanel.classList.toggle("is-collapsed", !state.trendExpanded);
+  els.trendToggle.textContent = state.trendExpanded ? "추이 접기" : "추이 열기";
+  els.trendToggle.setAttribute("aria-expanded", String(state.trendExpanded));
 }
 
 function renderTrend() {
@@ -360,6 +372,7 @@ function renderTrend() {
   }
 
   drawLineChart(points);
+  renderTrendPanelState();
 }
 
 function drawLineChart(points) {
@@ -423,6 +436,7 @@ function render() {
   renderHeatmap();
   renderTrend();
   renderCompactToggle();
+  renderTrendPanelState();
 }
 
 async function init() {
@@ -452,7 +466,13 @@ async function init() {
   });
   els.itemSelect.addEventListener("change", (event) => {
     state.selectedItem = event.target.value;
+    state.trendExpanded = true;
     renderTrend();
+  });
+  els.trendToggle.addEventListener("click", () => {
+    state.trendExpanded = !state.trendExpanded;
+    renderTrendPanelState();
+    if (state.trendExpanded) renderTrend();
   });
   els.compactViewToggle.addEventListener("click", () => {
     state.compactView = !state.compactView;
@@ -465,6 +485,7 @@ async function init() {
     state.search = "";
     state.windowSize = 7;
     state.compactView = false;
+    state.trendExpanded = false;
     state.expandedParents.clear();
     state.asOfDate = state.data.meta.defaultDate ?? state.data.summary.defaultDate ?? state.data.meta.latestDate;
     els.asOfDate.value = state.asOfDate;
