@@ -150,7 +150,8 @@ TARGET_ITEMS = {
     "주식형": {"sector": "투신", "itemCode": "FUND_EQUITY", "itemName": "주식형", "displayOrder": 60},
 }
 
-SECTOR_ORDER = {"은행": 1, "REPO": 2, "투신": 3, "증권": 4}
+# 표시 순서는 app.js의 sectorOrder가 최종 기준. 여기도 동일하게 유지(REPO→투신→증권→은행).
+SECTOR_ORDER = {"REPO": 1, "투신": 2, "증권": 3, "은행": 4}
 
 SEIBRO_REPO_ITEM = {
     "itemCode": "REPO_INTERBANK",

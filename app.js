@@ -43,6 +43,7 @@ const nf = new Intl.NumberFormat("ko-KR", {
   minimumFractionDigits: 1,
 });
 
+// 섹터 표시 순서의 기준(single source of truth). 백엔드 SECTOR_ORDER도 동일하게 유지할 것.
 const sectorOrder = ["REPO", "투신", "증권", "은행"];
 
 function sectorRank(sector) {

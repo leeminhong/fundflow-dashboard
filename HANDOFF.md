@@ -67,9 +67,8 @@ fundflow-dashboard/
 ├── scripts/
 │   ├── fetch_bok_market_indicator.py   # 메인 파이프라인 (BOK+FREESIS DB+SEIBro)
 │   ├── freesis_final_4.py              # FREESIS API 크롤러 → freesis_db.json
-│   ├── extract_fundflow_source.py      # 엑셀→JSON 변환 (초기 MVP용)
-│   ├── build_fundflow_mvp_openpyxl.py  # MVP 빌더 (초기용)
 │   └── fetch_seibro_repo.js            # SEIBro Repo 스크래핑 (Playwright)
+# 레거시 MVP 스크립트(extract_fundflow_source.py, build_web_data.py, freesis_final_3.py)는 제거됨
 └── outputs/
     ├── bok_market_indicator/    # BOK 엑셀/JSON 다운로드
     └── fundflow_mvp/            # MVP 빌더 출력물
@@ -181,7 +180,7 @@ index.html + app.js (정적 대시보드)
 
 ## 알려진 이슈
 
-1. **섹터 순서 변경**: `SECTOR_ORDER`를 바꿔도 UI에 반영 안 됨 (app.js에서 별도 정렬 로직 있을 수 있음)
+1. ~~**섹터 순서 변경**: `SECTOR_ORDER`를 바꿔도 UI에 반영 안 됨~~ → **해결됨**: 원인은 `app.js`의 하드코딩된 `sectorOrder`가 표시 순서를 최종 결정하기 때문. 백엔드 `SECTOR_ORDER`는 JSON의 `sectors` 배열/정렬에만 영향을 주고 프론트가 재정렬하므로 무시됨. 현재는 `app.js`와 `fetch_bok_market_indicator.py` 모두 `REPO→투신→증권→은행`으로 통일(레거시 `build_web_data.py`는 제거됨). 표시 순서를 바꾸려면 `app.js`의 `sectorOrder`를 수정할 것.
 2. **FREESIS 데이터 시차**: 투신 데이터는 FREESIS API 기준. BOK 데이터와 날짜가 안 맞을 수 있음
 3. **REPO 수동 입력**: RP 잔고금액은 `freesis_db.json`에 수동으로 넣어야 함 (SEIBro 자동 fetch도 가능하나 현재 DB 우선)
 
