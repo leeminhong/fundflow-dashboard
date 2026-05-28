@@ -16,7 +16,9 @@ from .config import (
 from .httpfetch import (
     choose_balance_attachment,
     extract_attachments,
+    extract_ntt_id,
     extract_title,
+    fetch_bytes,
     safe_filename,
 )
 from .parsing import parse_market_workbook
