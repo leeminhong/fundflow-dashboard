@@ -9,24 +9,21 @@
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <div>
-          <p class="eyebrow">Daily Fundflow</p>
-          <h1>펀드플로우 증감 현황</h1>
-        </div>
+        <h1>펀드플로우 증감 현황</h1>
         <div class="topbar-meta">
-          <span id="sourceStatus">데이터 로딩 중</span>
           <span id="generatedAt"></span>
+          <span id="sourceStatus">데이터 로딩 중</span>
         </div>
       </header>
 
       <main>
         <section class="summary-strip" aria-label="요약">
-          <article class="date-panel">
-            <span class="metric-label">기준일</span>
+          <div class="summary-date">
+            <span class="summary-date-label">기준일</span>
             <strong id="latestDate">-</strong>
-            <span class="unit-note">단위 조원</span>
-          </article>
+          </div>
           <div class="sector-strip" id="sectorSummary" aria-label="섹터 요약"></div>
+          <span class="unit-note">단위 조원</span>
         </section>
 
         <section class="workbench">

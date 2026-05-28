@@ -174,7 +174,7 @@ function percentile(values, ratio) {
 function setupControls() {
   state.asOfDate = state.data.meta.defaultDate ?? state.data.summary.defaultDate ?? state.data.meta.latestDate;
   els.asOfDate.innerHTML = state.data.dateStatus
-    .map((row) => `<option value="${row.date}">${formatFullDate(row.date)}${row.isComplete ? "" : " · 업데이트 필요"}</option>`)
+    .map((row) => `<option value="${row.date}">${formatFullDate(row.date)}${row.isComplete ? "" : " · 잠정"}</option>`)
     .join("");
   els.asOfDate.value = state.asOfDate;
 
@@ -222,10 +222,8 @@ function renderSummary() {
   const isComplete = Boolean(status?.isComplete);
   els.dataStatus.hidden = isComplete;
   els.dataStatus.textContent = isComplete ? "" : "잠정치";
-  els.sourceStatus.textContent = isComplete
-    ? `항목 ${status.filledItemCount}/${status.totalItemCount}`
-    : `항목 ${status?.filledItemCount ?? 0}/${status?.totalItemCount ?? 0} · 잠정`;
-  els.generatedAt.textContent = `업데이트 ${state.data.meta.generatedAt.replace("T", " ")}`;
+  els.sourceStatus.textContent = isComplete ? "" : "잠정치";
+  els.generatedAt.textContent = `${state.data.meta.generatedAt.replace("T", " ").slice(0, 16)} 업데이트`;
 }
 
 function renderSectorSummary() {
@@ -233,11 +231,11 @@ function renderSectorSummary() {
   els.sectorSummary.innerHTML = summary.sectorSummary
     .map(
       (row) => `
-        <article class="sector-card">
+        <span class="sector-item">
           <span class="sector-name">${row.sector}</span>
           <strong class="sector-change ${valueClass(row.latestChange)}">${formatValue(row.latestChange)}</strong>
           <span class="sector-balance">잔액 ${nf.format(row.latestBalance)}</span>
-        </article>
+        </span>
       `,
     )
     .join("");
@@ -318,9 +316,16 @@ function renderHeatmap() {
   }
 
   const status = currentDateStatus();
-  els.heatmapCaption.textContent = status?.isComplete
-    ? `${items.length}개 항목, ${dates.length}개 날짜`
-    : `${items.length}개 항목, ${dates.length}개 날짜 · ${status.missingItems.join(", ")} 업데이트 필요`;
+  const base = `${items.length}개 항목 · ${dates.length}개 날짜`;
+  if (status?.isComplete === false && status.missingItems.length) {
+    const missing = status.missingItems;
+    const pending = missing.length > 1 ? `${missing[0]} 외 ${missing.length - 1}개 집계 전` : `${missing[0]} 집계 전`;
+    els.heatmapCaption.textContent = `${base} · ${pending}`;
+    els.heatmapCaption.title = `집계 전: ${missing.join(", ")}`;
+  } else {
+    els.heatmapCaption.textContent = base;
+    els.heatmapCaption.title = "";
+  }
 
   els.heatmap.querySelectorAll("[data-toggle-parent]").forEach((node) => {
     node.addEventListener("click", (event) => {
