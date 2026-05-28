@@ -434,7 +434,7 @@ def apply_seibro_repo(data: dict, rows: list[dict]) -> None:
 
     prev_balance = None
     for row in rows:
-        balance = round(row["balanceAmountBillion"] / 100, 4)
+        balance = round(row["balanceAmountBillion"] / 1000, 4)
         change = 0.0 if prev_balance is None else round(balance - prev_balance, 4)
         prev_balance = balance
         data["records"].append(
