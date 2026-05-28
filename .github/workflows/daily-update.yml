@@ -54,8 +54,20 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git diff --quiet -- data/; then
             echo "No data changes; nothing to commit."
-          else
-            git add data/fundflow.json data/freesis_db.json
-            git commit -m "chore: daily data update ($(date -u +%Y-%m-%d))"
-            git push
+            exit 0
           fi
+          git add data/fundflow.json data/freesis_db.json
+          git commit -m "chore: daily data update ($(date -u +%Y-%m-%d))"
+          # main may have advanced during the run (another run or a manual push),
+          # which rejects the push as non-fast-forward. Rebase the data commit on
+          # top of latest and retry. Data files don't conflict with other changes.
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "push rejected (attempt $attempt); rebasing on latest main"
+            git pull --rebase --autostash origin main
+          done
+          echo "push failed after retries"
+          exit 1
