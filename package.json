@@ -1,0 +1,12 @@
+{
+  "name": "fundflow-dashboard-scrapers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright scraper for SEIBro Repo daily balances (scripts/fetch_seibro_repo.js)",
+  "scripts": {
+    "fetch-seibro": "node scripts/fetch_seibro_repo.js"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}

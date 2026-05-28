@@ -1,0 +1,55 @@
+name: Daily data update
+
+# Runs the data pipeline on a schedule, commits the refreshed JSON back to the
+# repo, and lets GitHub Pages serve the updated static dashboard.
+on:
+  schedule:
+    # 10:00 UTC = 19:00 KST, daily. Adjust as needed.
+    - cron: "0 10 * * *"
+  workflow_dispatch: {}   # allow manual "Run workflow" from the Actions tab
+
+# Allow the workflow to push the updated data file back to the repo.
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Python deps
+        run: pip install -r requirements.txt
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install Playwright (for SEIBro RP scraping)
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+
+      - name: Run pipeline
+        run: bash scripts/update.sh
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/; then
+            echo "No data changes; nothing to commit."
+          else
+            git add data/fundflow.json data/freesis_db.json
+            git commit -m "chore: daily data update ($(date -u +%Y-%m-%d))"
+            git push
+          fi

@@ -1,0 +1,6 @@
+# Python dependencies for the data pipeline.
+#   scripts/fetch_bok_market_indicator.py  -> openpyxl (stdlib urllib for HTTP)
+#   scripts/freesis_final_4.py             -> requests, pandas
+openpyxl>=3.1
+requests>=2.31
+pandas>=2.0

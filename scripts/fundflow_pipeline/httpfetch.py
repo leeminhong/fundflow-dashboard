@@ -137,7 +137,9 @@ def extract_related_page_urls(page_url: str, html: str) -> list[str]:
 def discover_recent_page_urls(seed_url: str, count: int, max_pages: int = 24) -> tuple[list[str], dict[str, str]]:
     seed = canonicalize_detail_url(seed_url)
     if seed is None:
-        raise RuntimeError("Seed URL does not contain nttId.")
+        # Seed has no nttId (e.g. the stable list page used for scheduled runs).
+        # Skip link-walking; the caller falls back to RSS-based discovery.
+        return [], {}
 
     queue = deque([seed])
     html_cache: dict[str, str] = {}
