@@ -900,6 +900,183 @@ def apply_freesis_summary(data: dict, freesis_summary_path: Path) -> None:
     recompute_status_summary(data)
 
 
+def apply_freesis_db(data: dict, db_path: Path) -> None:
+    """Read freesis_db.json and inject fund + stock-deposit records."""
+    db = json.loads(db_path.read_text(encoding="utf-8"))
+
+    fund_summary = db.get("fundSummary", {})
+    stock_deposit = db.get("stockDeposit", {})
+    if not fund_summary and not stock_deposit:
+        print(f"freesis_db: no data in {db_path}")
+        return
+
+    # --- Fund items ---
+    # Remove legacy BOK aggregate fund items
+    data["items"] = [i for i in data["items"] if i["itemCode"] not in LEGACY_FUND_ITEM_CODES]
+    data["records"] = [r for r in data["records"] if r["itemCode"] not in LEGACY_FUND_ITEM_CODES]
+
+    # Determine which child items are available from DB
+    sample_cols = next(iter(fund_summary.values()), {})
+    available_fund_items = [
+        meta for meta in FREESIS_FUND_ITEMS
+        if FREESIS_SUMMARY_COLUMNS[meta["itemCode"]] in sample_cols
+    ]
+
+    # Add calculated parent items
+    for parent in FREESIS_CALCULATED_PARENTS:
+        available_codes = {m["itemCode"] for m in available_fund_items}
+        if any(c in available_codes for c in parent["children"]):
+            data["items"].append({
+                "itemCode": parent["itemCode"], "sector": "투신",
+                "groupName": parent["itemName"], "itemName": parent["itemName"],
+                "parentCode": None, "level": 1, "itemType": "calculated",
+                "includeInTotal": True, "requiredForComplete": False,
+                "showInHeatmap": True, "rawBalanceColumn": None,
+                "rawChangeColumn": None, "link": FREESIS_LINK_URL,
+                "displayOrder": parent["displayOrder"], "isActive": True,
+                "unit": "조원", "source": "FREESIS 유형별 설정/일임",
+            })
+
+    # Add child items
+    for meta in available_fund_items:
+        data["items"].append({
+            "itemCode": meta["itemCode"], "sector": "투신",
+            "groupName": meta.get("parentCode", "투신"),
+            "itemName": meta["itemName"],
+            "parentCode": meta.get("parentCode"),
+            "level": 2 if meta.get("parentCode") else 1,
+            "itemType": "raw", "includeInTotal": False,
+            "requiredForComplete": True, "showInHeatmap": True,
+            "rawBalanceColumn": FREESIS_SUMMARY_COLUMNS[meta["itemCode"]],
+            "rawChangeColumn": f"{FREESIS_SUMMARY_COLUMNS[meta['itemCode']]}_증감",
+            "link": FREESIS_LINK_URL, "displayOrder": meta["displayOrder"],
+            "isActive": True, "unit": "조원",
+            "source": "FREESIS 유형별 설정/일임",
+        })
+
+    # Add fund summary records
+    sorted_dates = sorted(fund_summary.keys())
+    prev_balance: dict[str, float] = {}
+    for date_key in sorted_dates:
+        row = fund_summary[date_key]
+        date_iso = parse_ymd(date_key)
+        if not date_iso:
+            continue
+        for meta in available_fund_items:
+            col_name = FREESIS_SUMMARY_COLUMNS[meta["itemCode"]]
+            raw_val = to_number(row.get(col_name))
+            balance = None if raw_val is None else raw_val / 10000
+            change = None
+            if balance is not None and meta["itemCode"] in prev_balance:
+                change = balance - prev_balance[meta["itemCode"]]
+            elif balance is not None:
+                change = 0.0
+                prev_balance[meta["itemCode"]] = balance
+            data["records"].append({
+                "date": date_iso, "sector": "투신",
+                "groupName": meta.get("parentCode", "투신"),
+                "itemCode": meta["itemCode"], "itemName": meta["itemName"],
+                "parentCode": meta.get("parentCode"),
+                "level": 2 if meta.get("parentCode") else 1,
+                "itemType": "raw", "includeInTotal": False,
+                "requiredForComplete": True, "showInHeatmap": True,
+                "changeValue": change, "balanceValue": balance,
+                "link": FREESIS_LINK_URL, "displayOrder": meta["displayOrder"],
+                "isActive": True, "hasSourceMapping": True,
+                "source": "FREESIS 유형별 설정/일임",
+                "sourceLabel": col_name, "sourceUnit": "억원",
+                "changeDate": date_iso, "balanceDate": date_iso,
+                "sourcePageUrl": FREESIS_LINK_URL,
+                "sourcePageTitle": "FREESIS 유형별 기간설정",
+                "sourceAttachment": db_path.name, "sourceAttachmentUrl": "",
+            })
+
+    # Compute calculated parent records
+    all_dates = sorted({r["date"] for r in data["records"] if r["sector"] == "투신"})
+    rec_map: dict[tuple[str, str], dict] = {}
+    for r in data["records"]:
+        rec_map[(r["date"], r["itemCode"])] = r
+    for parent in FREESIS_CALCULATED_PARENTS:
+        for date_iso in all_dates:
+            children = [rec_map[(date_iso, c)] for c in parent["children"] if (date_iso, c) in rec_map]
+            if not children:
+                continue
+            cv = [r["changeValue"] for r in children if r["changeValue"] is not None]
+            bv = [r["balanceValue"] for r in children if r["balanceValue"] is not None]
+            data["records"].append({
+                "date": date_iso, "sector": "투신",
+                "groupName": parent["itemName"],
+                "itemCode": parent["itemCode"],
+                "itemName": parent["itemName"],
+                "parentCode": None, "level": 1,
+                "itemType": "calculated", "includeInTotal": True,
+                "requiredForComplete": False, "showInHeatmap": True,
+                "changeValue": sum(cv) if cv else None,
+                "balanceValue": sum(bv) if bv else None,
+                "link": FREESIS_LINK_URL,
+                "displayOrder": parent["displayOrder"], "isActive": True,
+                "hasSourceMapping": False,
+                "source": "FREESIS 유형별 설정/일임 (합산)",
+            })
+
+    # --- Stock deposit (투자자예탁금) ---
+    if stock_deposit:
+        # Remove existing BOK-sourced deposit
+        data["items"] = [i for i in data["items"] if i["itemCode"] != "SEC_CUSTOMER_DEPOSIT"]
+        data["records"] = [r for r in data["records"] if r["itemCode"] != "SEC_CUSTOMER_DEPOSIT"]
+
+        data["items"].append({
+            "itemCode": "SEC_CUSTOMER_DEPOSIT", "sector": "증권",
+            "groupName": "고객예탁금", "itemName": "고객예탁금",
+            "parentCode": None, "level": 1, "itemType": "raw",
+            "includeInTotal": True, "requiredForComplete": True,
+            "showInHeatmap": True, "rawBalanceColumn": "투자자예탁금",
+            "rawChangeColumn": "투자자예탁금_증감",
+            "link": FREESIS_LINK_URL, "displayOrder": 70, "isActive": True,
+            "unit": "조원", "source": "FREESIS 증시자금추이",
+        })
+
+        sorted_dep = sorted(stock_deposit.items())
+        prev_dep = None
+        for date_key, raw_val in sorted_dep:
+            date_iso = parse_ymd(date_key)
+            if not date_iso:
+                continue
+            val = to_number(raw_val)
+            balance = None if val is None else val / 1000000  # 백만원 → 조원
+            change = None
+            if balance is not None and prev_dep is not None:
+                change = balance - prev_dep
+            elif balance is not None:
+                change = 0.0
+            if balance is not None:
+                prev_dep = balance
+            data["records"].append({
+                "date": date_iso, "sector": "증권",
+                "groupName": "고객예탁금",
+                "itemCode": "SEC_CUSTOMER_DEPOSIT",
+                "itemName": "고객예탁금",
+                "parentCode": None, "level": 1, "itemType": "raw",
+                "includeInTotal": True, "requiredForComplete": True,
+                "showInHeatmap": True,
+                "changeValue": change, "balanceValue": balance,
+                "link": FREESIS_LINK_URL, "displayOrder": 70,
+                "isActive": True, "hasSourceMapping": True,
+                "source": "FREESIS 증시자금추이",
+                "sourceLabel": "투자자예탁금", "sourceUnit": "백만원",
+                "changeDate": date_iso, "balanceDate": date_iso,
+                "sourcePageUrl": FREESIS_LINK_URL,
+                "sourcePageTitle": "FREESIS 증시자금추이",
+                "sourceAttachment": db_path.name, "sourceAttachmentUrl": "",
+            })
+
+    data["meta"]["freesisDbFile"] = str(db_path)
+    data["meta"]["freesisDbLastUpdated"] = db.get("lastUpdated")
+    recompute_status_summary(data)
+    print(f"freesis_db_applied: {db_path} "
+          f"(fund {len(fund_summary)} days, deposit {len(stock_deposit)} days)")
+
+
 def item_link(item_code: str) -> str:
     return ITEM_LINK_OVERRIDES.get(item_code, BOK_MARKET_LIST_URL)
 
@@ -1099,6 +1276,111 @@ def build_web_data(page_results: list[PageResult]) -> dict:
     }
 
 
+def merge_web_data(existing: dict, new_data: dict) -> dict:
+    """Merge new BOK data into existing JSON, keeping all old records and only adding new dates."""
+    old_rec_map: dict[tuple[str, str], dict] = {}
+    for r in existing.get("records", []):
+        old_rec_map[(r["date"], r["itemCode"])] = r
+
+    new_count = 0
+    for r in new_data.get("records", []):
+        key = (r["date"], r["itemCode"])
+        if key not in old_rec_map:
+            old_rec_map[key] = r
+            new_count += 1
+
+    # Merge items (keep unique by itemCode)
+    item_map: dict[str, dict] = {i["itemCode"]: i for i in existing.get("items", [])}
+    for i in new_data.get("items", []):
+        if i["itemCode"] not in item_map:
+            item_map[i["itemCode"]] = i
+
+    records = sorted(old_rec_map.values(), key=lambda r: (r["date"], r.get("displayOrder", 0)))
+    items = sorted(item_map.values(), key=lambda i: i.get("displayOrder", 0))
+    dates = sorted({r["date"] for r in records})
+    sectors = sorted(
+        {i["sector"] for i in items if i.get("isActive", True)},
+        key=lambda s: SECTOR_ORDER.get(s, 99),
+    )
+
+    # Rebuild dateStatus
+    active_items = [i for i in items if i.get("isActive", True)]
+    active_codes = [i["itemCode"] for i in active_items]
+    recs_by_date: dict[str, dict[str, dict]] = {}
+    for r in records:
+        if r.get("isActive", True):
+            recs_by_date.setdefault(r["date"], {})[r["itemCode"]] = r
+
+    date_status = []
+    complete_dates = []
+    for d in dates:
+        per_code = recs_by_date.get(d, {})
+        missing = []
+        for item in active_items:
+            if item.get("itemType") == "calculated":
+                continue
+            row = per_code.get(item["itemCode"])
+            if row is None or row.get("changeValue") is None or row.get("balanceValue") is None:
+                missing.append(item["itemName"])
+        is_complete = len(missing) == 0
+        if is_complete:
+            complete_dates.append(d)
+        date_status.append({
+            "date": d, "isComplete": is_complete,
+            "missingItems": missing, "pendingItems": missing,
+            "filledItemCount": len(active_codes) - len(missing),
+            "totalItemCount": len(active_codes),
+        })
+
+    latest_date = dates[-1] if dates else None
+    default_date = complete_dates[-1] if complete_dates else latest_date
+
+    default_records = [
+        r for r in records
+        if r["date"] == default_date
+        and r.get("includeInTotal", True)
+        and r.get("changeValue") is not None
+    ]
+    sector_summary = []
+    for sector in sectors:
+        sec_recs = [r for r in default_records if r["sector"] == sector]
+        sector_summary.append({
+            "sector": sector,
+            "latestChange": sum(r["changeValue"] or 0 for r in sec_recs),
+            "latestBalance": sum(r["balanceValue"] or 0 for r in sec_recs),
+            "itemCount": len(sec_recs),
+        })
+
+    # Preserve FREESIS/SEIBro meta from existing
+    meta = existing.get("meta", {})
+    meta.update({
+        "title": "Daily Fundflow Dashboard",
+        "generatedAt": datetime.now().isoformat(timespec="seconds"),
+        "latestDate": latest_date,
+        "defaultDate": default_date,
+        "unit": "조원",
+        "version": 3,
+        "historyWindow": len(dates),
+    })
+
+    print(f"merge: {new_count} new records added, {len(records)} total, {len(dates)} dates")
+
+    return {
+        "meta": meta,
+        "items": items,
+        "dates": dates,
+        "sectors": sectors,
+        "dateStatus": date_status,
+        "summary": {
+            "latestDate": latest_date,
+            "defaultDate": default_date,
+            "totalLatestChange": sum(r["changeValue"] or 0 for r in default_records),
+            "sectorSummary": sector_summary,
+        },
+        "records": records,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -1118,13 +1400,19 @@ def main() -> None:
     parser.add_argument(
         "--days",
         type=int,
-        default=1,
-        help="How many recent market-indicator pages to aggregate (default: 1).",
+        default=7,
+        help="How many recent market-indicator pages to aggregate (default: 7).",
     )
     parser.add_argument(
         "--freesis-summary-xlsx",
         default=None,
         help="Optional FREESIS summary xlsx path (요약 sheet) to replace fund items with 11 detailed rows.",
+    )
+    parser.add_argument(
+        "--freesis-db-json",
+        default=None,
+        help="Path to freesis_db.json for cumulative fund/deposit data. "
+             "Auto-detected at data/freesis_db.json if --freesis-summary-xlsx is not set.",
     )
     parser.add_argument(
         "--skip-seibro-repo",
@@ -1198,6 +1486,15 @@ def main() -> None:
                 raise FileNotFoundError(f"FREESIS summary file not found: {freesis_path}")
             apply_freesis_summary(web_data, freesis_path)
             print(f"freesis_summary_applied: {freesis_path}")
+        elif args.freesis_db_json:
+            db_path = Path(args.freesis_db_json)
+            if not db_path.exists():
+                raise FileNotFoundError(f"FREESIS DB file not found: {db_path}")
+            apply_freesis_db(web_data, db_path)
+        else:
+            auto_db = Path(__file__).resolve().parent.parent / "data" / "freesis_db.json"
+            if auto_db.exists():
+                apply_freesis_db(web_data, auto_db)
         if not args.skip_seibro_repo:
             try:
                 seibro_rows = fetch_seibro_repo_rows(args.seibro_repo_limit)
@@ -1211,6 +1508,15 @@ def main() -> None:
                 print(f"warning: seibro_repo_merge_failed: {exc}")
         web_data_path = Path(args.write_web_data)
         web_data_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Merge with existing JSON (incremental: only add new dates)
+        if web_data_path.exists():
+            try:
+                existing = json.loads(web_data_path.read_text(encoding="utf-8"))
+                web_data = merge_web_data(existing, web_data)
+            except Exception as exc:
+                print(f"warning: could not merge with existing data, overwriting: {exc}")
+
         web_data_path.write_text(json.dumps(web_data, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"web_data: {web_data_path}")
 
