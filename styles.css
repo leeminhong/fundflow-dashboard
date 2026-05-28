@@ -566,6 +566,7 @@ a:focus {
 }
 
 .trend-chart {
+  cursor: crosshair;
   display: block;
   height: 260px;
   width: 100%;
@@ -611,6 +612,43 @@ a:focus {
   font-weight: 700;
   height: 200px;
   justify-content: center;
+}
+
+.chart-tooltip {
+  background: var(--navy);
+  border-radius: 5px;
+  color: #fff;
+  font-size: 12px;
+  left: 0;
+  line-height: 1.5;
+  opacity: 0;
+  padding: 6px 10px;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  transition: opacity 0.1s;
+  white-space: nowrap;
+  z-index: 100;
+}
+
+.chart-tooltip.visible {
+  opacity: 1;
+}
+
+.chart-tooltip strong {
+  font-weight: 700;
+}
+
+.guide-line {
+  opacity: 0;
+  stroke: var(--muted);
+  stroke-dasharray: 4 3;
+  stroke-width: 1;
+  transition: opacity 0.1s;
+}
+
+.guide-line.visible {
+  opacity: 1;
 }
 
 @media (max-width: 1020px) {

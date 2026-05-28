@@ -32,6 +32,12 @@ const els = {
   resetFilters: document.querySelector("#resetFilters"),
 };
 
+const tooltip = document.createElement("div");
+tooltip.className = "chart-tooltip";
+document.body.appendChild(tooltip);
+
+let chartCtx = null;
+
 const nf = new Intl.NumberFormat("ko-KR", {
   maximumFractionDigits: 1,
   minimumFractionDigits: 1,
@@ -435,6 +441,13 @@ function drawLineChart(points) {
     ${circles}
     ${xLabels}
   `;
+
+  chartCtx = { points, x, margin, width, height };
+  const guide = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  guide.setAttribute("class", "guide-line");
+  guide.setAttribute("y1", margin.top);
+  guide.setAttribute("y2", height - margin.bottom);
+  svg.appendChild(guide);
 }
 
 function render() {
@@ -452,6 +465,43 @@ async function init() {
   state.data = await response.json();
   setupControls();
   render();
+
+  let hoverIdx = -1;
+  els.trendChart.addEventListener("mousemove", (e) => {
+    if (!chartCtx) return;
+    const rect = els.trendChart.getBoundingClientRect();
+    const scale = els.trendChart.viewBox.baseVal.width / rect.width;
+    const svgX = (e.clientX - rect.left) * scale;
+    const { points, x } = chartCtx;
+    let nearest = 0;
+    let minDist = Infinity;
+    for (let i = 0; i < points.length; i++) {
+      const d = Math.abs(x(i) - svgX);
+      if (d < minDist) { minDist = d; nearest = i; }
+    }
+    const circles = els.trendChart.querySelectorAll(".point");
+    if (hoverIdx >= 0 && circles[hoverIdx]) circles[hoverIdx].setAttribute("r", "4");
+    hoverIdx = nearest;
+    if (circles[hoverIdx]) circles[hoverIdx].setAttribute("r", "6");
+    const guide = els.trendChart.querySelector(".guide-line");
+    if (guide) {
+      guide.setAttribute("x1", x(nearest));
+      guide.setAttribute("x2", x(nearest));
+      guide.classList.add("visible");
+    }
+    tooltip.innerHTML = `<strong>${formatFullDate(points[nearest].date)}</strong><br>${formatValue(points[nearest].value)} ${state.data.meta.unit}`;
+    tooltip.classList.add("visible");
+    tooltip.style.left = `${e.clientX + 14}px`;
+    tooltip.style.top = `${e.clientY - 44}px`;
+  });
+  els.trendChart.addEventListener("mouseleave", () => {
+    const circles = els.trendChart.querySelectorAll(".point");
+    if (hoverIdx >= 0 && circles[hoverIdx]) circles[hoverIdx].setAttribute("r", "4");
+    hoverIdx = -1;
+    tooltip.classList.remove("visible");
+    const guide = els.trendChart.querySelector(".guide-line");
+    if (guide) guide.classList.remove("visible");
+  });
 
   els.asOfDate.addEventListener("change", (event) => {
     state.asOfDate = event.target.value;
