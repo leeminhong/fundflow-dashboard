@@ -136,21 +136,24 @@ def main() -> None:
             if auto_db.exists():
                 apply_freesis_db(web_data, auto_db)
         if not args.skip_seibro_repo:
-            # Skip SEIBro fetch if REPO data already came from freesis_db
-            has_repo_from_db = any(r["source"] == "SEIBro Repo 시장현황" for r in web_data["records"] if r["itemCode"] == "REPO_INTERBANK")
-            if not has_repo_from_db:
-                try:
-                    seibro_rows = fetch_seibro_repo_rows(args.seibro_repo_limit)
-                    apply_seibro_repo(web_data, seibro_rows)
-                    recompute_status_summary(web_data)
-                    if seibro_rows:
-                        print(f"seibro_repo_applied: {len(seibro_rows)} rows (latest {seibro_rows[-1]['date']})")
-                    else:
-                        print("seibro_repo_applied: 0 rows")
-                except Exception as exc:
-                    print(f"warning: seibro_repo_merge_failed: {exc}")
-            else:
-                print("seibro_repo_skipped: REPO data from freesis_db")
+            # SEIBro serves only recent dates (no history). apply_seibro_repo
+            # forward-fills dates newer than the manually backfilled history in
+            # freesis_db, so daily runs pick up fresh dates without clobbering it.
+            def _repo_count():
+                return sum(1 for r in web_data["records"] if r["itemCode"] == "REPO_INTERBANK")
+
+            try:
+                before = _repo_count()
+                seibro_rows = fetch_seibro_repo_rows(args.seibro_repo_limit)
+                apply_seibro_repo(web_data, seibro_rows)
+                recompute_status_summary(web_data)
+                added = _repo_count() - before
+                if added > 0:
+                    print(f"seibro_repo_applied: +{added} new dates (latest {web_data['meta'].get('seibroRepoLatestDate')})")
+                else:
+                    print("seibro_repo_applied: 0 new dates (history already current)")
+            except Exception as exc:
+                print(f"warning: seibro_repo_merge_failed: {exc} (existing REPO history kept)")
         web_data_path = Path(args.write_web_data)
         web_data_path.parent.mkdir(parents=True, exist_ok=True)
 

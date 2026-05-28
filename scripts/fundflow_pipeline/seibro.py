@@ -37,6 +37,15 @@ def fetch_seibro_repo_rows(limit: int) -> list[dict]:
 
 
 def apply_seibro_repo(data: dict, rows: list[dict]) -> None:
+    """Forward-merge SEIBro daily Repo balances into the dashboard records.
+
+    SEIBro only serves recent dates (no history), so any existing REPO_INTERBANK
+    records — e.g. the manually backfilled history injected from freesis_db.json —
+    are preserved. SEIBro fills only dates *newer* than the latest existing
+    record, with the day-over-day change carried across the boundary. This lets
+    daily runs pick up fresh dates automatically without clobbering verified
+    history, and is a no-op when nothing newer is available.
+    """
     if not rows:
         return
 
@@ -45,10 +54,22 @@ def apply_seibro_repo(data: dict, rows: list[dict]) -> None:
         item = dict(SEIBRO_REPO_ITEM)
         data["items"].append(item)
 
-    data["records"] = [record for record in data["records"] if record["itemCode"] != item["itemCode"]]
+    existing = sorted(
+        (r for r in data["records"] if r["itemCode"] == item["itemCode"]),
+        key=lambda r: r["date"],
+    )
+    latest_existing_date = existing[-1]["date"] if existing else None
+    prev_balance = existing[-1]["balanceValue"] if existing else None
 
-    prev_balance = None
-    for row in rows:
+    new_rows = [
+        row for row in rows
+        if latest_existing_date is None or row["date"] > latest_existing_date
+    ]
+    new_rows.sort(key=lambda row: row["date"])
+    if not new_rows:
+        return
+
+    for row in new_rows:
         balance = round(row["balanceAmountBillion"] / 1000, 4)
         change = 0.0 if prev_balance is None else round(balance - prev_balance, 4)
         prev_balance = balance
@@ -83,7 +104,7 @@ def apply_seibro_repo(data: dict, rows: list[dict]) -> None:
             }
         )
 
-    data["meta"]["seibroRepoRows"] = len(rows)
-    data["meta"]["seibroRepoLatestDate"] = rows[-1]["date"]
+    data["meta"]["seibroRepoRows"] = len(new_rows)
+    data["meta"]["seibroRepoLatestDate"] = new_rows[-1]["date"]
 
 

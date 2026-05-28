@@ -191,7 +191,7 @@ index.html + app.js (정적 대시보드)
 
 1. ~~**섹터 순서 변경**: `SECTOR_ORDER`를 바꿔도 UI에 반영 안 됨~~ → **해결됨**: 원인은 `app.js`의 하드코딩된 `sectorOrder`가 표시 순서를 최종 결정하기 때문. 백엔드 `SECTOR_ORDER`는 JSON의 `sectors` 배열/정렬에만 영향을 주고 프론트가 재정렬하므로 무시됨. 현재는 `app.js`와 `fetch_bok_market_indicator.py` 모두 `REPO→투신→증권→은행`으로 통일(레거시 `build_web_data.py`는 제거됨). 표시 순서를 바꾸려면 `app.js`의 `sectorOrder`를 수정할 것.
 2. **FREESIS 데이터 시차**: 투신 데이터는 FREESIS API 기준. BOK 데이터와 날짜가 안 맞을 수 있음
-3. **REPO 수동 입력**: RP 잔고금액은 `freesis_db.json`에 수동으로 넣어야 함 (SEIBro 자동 fetch도 가능하나 현재 DB 우선)
+3. ~~**REPO 수동 입력**: RP 잔고금액은 `freesis_db.json`에 수동으로 넣어야 함~~ → **개선됨**: SEIBro에 과거 이력이 없어 초기 1주일치는 `freesis_db.json`에 수동 백필함. 이제 `apply_seibro_repo`가 **forward-merge**로 동작 — 수동 백필(과거)은 그대로 보존하고, SEIBro로 그보다 **새로운 날짜만 자동 채움**(일별 증감은 경계 넘어 이어서 계산). 따라서 일일 실행이 새 날짜 RP를 자동 수집함. 단, SEIBro fetch는 `node`(Playwright)가 설치된 환경 필요 — 없으면 경고만 내고 기존 RP 유지.
 
 ---
 
@@ -204,10 +204,11 @@ index.html + app.js (정적 대시보드)
 
 ### 기타
 
-- `.gitignore`에 `__pycache__/` 추가
+- ~~`.gitignore`에 `__pycache__/` 추가~~ (완료)
+- ~~RP 데이터 수동 입력 → 자동화 (SEIBro fetch 개선)~~ (완료: forward-merge)
 - GitHub Pages 배포 자동화
 - 항목 정의를 별도 설정 파일로 분리
-- RP 데이터 수동 입력 → 자동화 (SEIBro fetch 개선)
+- `node`/Playwright 설치 후 SEIBro 자동 fetch 실제 검증 (현재 환경엔 node 없음)
 
 ---
 
