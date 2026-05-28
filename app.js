@@ -5,6 +5,8 @@ const state = {
   windowSize: 15,
   asOfDate: null,
   selectedItem: null,
+  expandedParents: new Set(),
+  compactView: false,
 };
 
 const els = {
@@ -25,6 +27,7 @@ const els = {
   trendSubtitle: document.querySelector("#trendSubtitle"),
   trendChart: document.querySelector("#trendChart"),
   itemLink: document.querySelector("#itemLink"),
+  compactViewToggle: document.querySelector("#compactViewToggle"),
   resetFilters: document.querySelector("#resetFilters"),
 };
 
@@ -32,6 +35,13 @@ const nf = new Intl.NumberFormat("ko-KR", {
   maximumFractionDigits: 1,
   minimumFractionDigits: 1,
 });
+
+const sectorOrder = ["REPO", "투신", "증권", "은행"];
+
+function sectorRank(sector) {
+  const idx = sectorOrder.indexOf(sector);
+  return idx === -1 ? sectorOrder.length : idx;
+}
 
 function formatDate(date) {
   if (!date) return "-";
@@ -63,7 +73,15 @@ function valueClass(value) {
 }
 
 function byDisplayOrder(a, b) {
-  return a.displayOrder - b.displayOrder || a.itemName.localeCompare(b.itemName, "ko");
+  return (
+    sectorRank(a.sector) - sectorRank(b.sector) ||
+    a.displayOrder - b.displayOrder ||
+    a.itemName.localeCompare(b.itemName, "ko")
+  );
+}
+
+function orderedSectors() {
+  return [...state.data.sectors].sort((a, b) => sectorRank(a) - sectorRank(b) || a.localeCompare(b, "ko"));
 }
 
 function activeItems() {
@@ -74,12 +92,40 @@ function heatmapItems() {
   return activeItems().filter((item) => item.showInHeatmap);
 }
 
+function childMap() {
+  const map = new Map();
+  for (const item of heatmapItems()) {
+    if (!item.parentCode) continue;
+    if (!map.has(item.parentCode)) map.set(item.parentCode, []);
+    map.get(item.parentCode).push(item);
+  }
+  return map;
+}
+
+function hasChildren(item) {
+  return childMap().has(item.itemCode);
+}
+
 function filteredItems() {
-  return heatmapItems().filter((item) => {
+  const items = heatmapItems();
+  const childrenByParent = childMap();
+  const matched = items.filter((item) => {
     const sectorOk = state.sector === "전체" || item.sector === state.sector;
     const searchOk = !state.search || item.itemName.toLowerCase().includes(state.search.toLowerCase());
     return sectorOk && searchOk;
   });
+
+  if (state.search) {
+    const wantedCodes = new Set(matched.map((item) => item.itemCode));
+    for (const item of matched) {
+      if (item.parentCode) wantedCodes.add(item.parentCode);
+    }
+    return items.filter((item) => wantedCodes.has(item.itemCode));
+  }
+
+  if (!state.compactView) return matched;
+
+  return matched.filter((item) => !item.parentCode || state.expandedParents.has(item.parentCode) || !childrenByParent.has(item.parentCode));
 }
 
 function visibleDates() {
@@ -122,7 +168,7 @@ function setupControls() {
     .join("");
   els.asOfDate.value = state.asOfDate;
 
-  els.sectorFilter.innerHTML = ["전체", ...state.data.sectors]
+  els.sectorFilter.innerHTML = ["전체", ...orderedSectors()]
     .map((sector) => `<option value="${sector}">${sector}</option>`)
     .join("");
 
@@ -148,7 +194,7 @@ function recordsForDate(date) {
 function selectedDateSummary() {
   const records = recordsForDate(state.asOfDate).filter((record) => record.includeInTotal);
   const totalChange = records.reduce((sum, record) => sum + (record.changeValue || 0), 0);
-  const sectorSummary = state.data.sectors.map((sector) => {
+  const sectorSummary = orderedSectors().map((sector) => {
     const sectorRecords = records.filter((record) => record.sector === sector);
     return {
       sector,
@@ -213,23 +259,28 @@ function renderHeatmap() {
   cells.push(`<div class="heatmap-cell heatmap-header">섹터</div>`);
   cells.push(`<div class="heatmap-cell heatmap-header">항목</div>`);
   for (const date of dates) {
-    const selectedClass = date === state.asOfDate ? " latest-column" : "";
+    const selectedClass = date === state.asOfDate ? " latest-column latest-column-start" : "";
     const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
     cells.push(`<div class="heatmap-cell heatmap-header${selectedClass}${incompleteClass}">${formatDate(date)}</div>`);
   }
 
-  for (const item of items) {
+  items.forEach((item, itemIdx) => {
     cells.push(`<div class="heatmap-cell heatmap-sector">${item.sector}</div>`);
     const hierarchyClass = item.level > 1 ? "heatmap-child" : "heatmap-parent";
+    const canExpand = hasChildren(item);
+    const expanded = Boolean(state.search) || !state.compactView || state.expandedParents.has(item.itemCode);
+    const toggle = canExpand
+      ? `<button class="tree-toggle" type="button" data-toggle-parent="${item.itemCode}" aria-expanded="${expanded}" aria-label="${item.itemName} ${expanded ? "접기" : "펼치기"}">${expanded ? "▾" : "▸"}</button>`
+      : `<span class="tree-spacer" aria-hidden="true"></span>`;
     const link = item.link
       ? `<a href="${item.link}" target="_blank" rel="noreferrer" class="${hierarchyClass}">${item.itemName}</a>`
       : `<button class="item-button ${hierarchyClass}" type="button" data-item-code="${item.itemCode}">${item.itemName}</button>`;
-    cells.push(`<div class="heatmap-cell heatmap-item level-${item.level}">${link}</div>`);
+    cells.push(`<div class="heatmap-cell heatmap-item level-${item.level}" data-item-code="${item.itemCode}">${toggle}${link}</div>`);
 
     for (const date of dates) {
       const record = map.get(`${item.itemCode}|${date}`);
       const value = record?.changeValue;
-      const latestClass = date === state.asOfDate ? " latest-column" : "";
+      const latestClass = date === state.asOfDate ? ` latest-column${itemIdx === items.length - 1 ? " latest-column-end" : ""}` : "";
       const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
       cells.push(
         `<div class="heatmap-cell${latestClass}${incompleteClass}" data-item-code="${item.itemCode}" style="background:${colorFor(
@@ -238,7 +289,7 @@ function renderHeatmap() {
         )};color:${textColorFor(value, maxAbs)}">${formatValue(value)}</div>`,
       );
     }
-  }
+  });
 
   if (!items.length) {
     els.heatmap.innerHTML = `<div class="empty-state">표시할 항목이 없습니다</div>`;
@@ -251,6 +302,23 @@ function renderHeatmap() {
     ? `${items.length}개 항목, ${dates.length}개 날짜`
     : `${items.length}개 항목, ${dates.length}개 날짜 · ${status.missingItems.join(", ")} 업데이트 필요`;
 
+  els.heatmap.querySelectorAll("[data-toggle-parent]").forEach((node) => {
+    node.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const itemCode = node.dataset.toggleParent;
+      if (!state.compactView) {
+        state.compactView = true;
+        state.expandedParents.clear();
+      } else if (state.expandedParents.has(itemCode)) {
+        state.expandedParents.delete(itemCode);
+      } else {
+        state.expandedParents.add(itemCode);
+      }
+      renderHeatmap();
+      renderCompactToggle();
+    });
+  });
+
   els.heatmap.querySelectorAll("[data-item-code]").forEach((node) => {
     node.addEventListener("click", () => {
       state.selectedItem = node.dataset.itemCode;
@@ -258,6 +326,12 @@ function renderHeatmap() {
       renderTrend();
     });
   });
+}
+
+function renderCompactToggle() {
+  if (!els.compactViewToggle) return;
+  els.compactViewToggle.textContent = state.compactView ? "전체 펼치기" : "간단히 보기";
+  els.compactViewToggle.setAttribute("aria-pressed", String(state.compactView));
 }
 
 function renderTrend() {
@@ -348,6 +422,7 @@ function render() {
   renderSectorSummary();
   renderHeatmap();
   renderTrend();
+  renderCompactToggle();
 }
 
 async function init() {
@@ -373,15 +448,24 @@ async function init() {
     state.windowSize = event.target.value;
     renderHeatmap();
     renderTrend();
+    renderCompactToggle();
   });
   els.itemSelect.addEventListener("change", (event) => {
     state.selectedItem = event.target.value;
     renderTrend();
   });
+  els.compactViewToggle.addEventListener("click", () => {
+    state.compactView = !state.compactView;
+    state.expandedParents.clear();
+    renderHeatmap();
+    renderCompactToggle();
+  });
   els.resetFilters.addEventListener("click", () => {
     state.sector = "전체";
     state.search = "";
     state.windowSize = 15;
+    state.compactView = false;
+    state.expandedParents.clear();
     state.asOfDate = state.data.meta.defaultDate ?? state.data.summary.defaultDate ?? state.data.meta.latestDate;
     els.asOfDate.value = state.asOfDate;
     els.sectorFilter.value = "전체";

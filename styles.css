@@ -252,6 +252,12 @@ a:focus {
   margin-top: 4px;
 }
 
+.panel-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
 .panel-head button,
 .panel-head a {
   align-items: center;
@@ -267,6 +273,12 @@ a:focus {
   padding: 0 12px;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.panel-head button[aria-pressed="true"] {
+  background: #e5eef4;
+  border-color: #a9bdca;
+  color: var(--ink);
 }
 
 .panel-head a[aria-disabled="true"] {
@@ -325,6 +337,7 @@ a:focus {
 }
 
 .heatmap-item {
+  gap: 6px;
   color: var(--ink);
   left: 86px;
 }
@@ -335,7 +348,7 @@ a:focus {
 
 .heatmap-child {
   color: var(--muted);
-  padding-left: 18px;
+  padding-left: 8px;
 }
 
 .heatmap-child::before {
@@ -371,7 +384,16 @@ a:focus {
 }
 
 .latest-column {
-  box-shadow: inset 0 0 0 2px rgba(18, 61, 90, 0.45);
+  border-left: 2px solid rgba(18, 61, 90, 0.5);
+  border-right: 2px solid rgba(18, 61, 90, 0.5);
+}
+
+.latest-column-start {
+  border-top: 2px solid rgba(18, 61, 90, 0.5);
+}
+
+.latest-column-end {
+  border-bottom: 2px solid rgba(18, 61, 90, 0.5);
 }
 
 .incomplete-column {
@@ -382,6 +404,37 @@ a:focus {
     transparent 6px,
     transparent 12px
   );
+}
+
+.tree-toggle {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 18px;
+  font-size: 12px;
+  height: 18px;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  width: 18px;
+}
+
+.tree-toggle:hover {
+  background: var(--surface-soft);
+  border-color: var(--line);
+  color: var(--navy);
+}
+
+.tree-spacer {
+  flex: 0 0 18px;
+  height: 18px;
+  width: 18px;
 }
 
 .trend-panel {
