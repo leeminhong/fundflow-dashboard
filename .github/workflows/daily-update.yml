@@ -4,10 +4,10 @@ name: Daily data update
 # repo, and lets GitHub Pages serve the updated static dashboard.
 on:
   schedule:
-    # 10:00 UTC = 19:00 KST
-    - cron: "0 10 * * *"
-    # 14:30 UTC = 23:30 KST
-    - cron: "30 14 * * *"
+    # 21:00 UTC = 06:00 KST (다음 날)
+    - cron: "0 21 * * *"
+    # 08:00 UTC = 17:00 KST
+    - cron: "0 8 * * *"
   workflow_dispatch: {}   # allow manual "Run workflow" from the Actions tab
 
 # Allow the workflow to push the updated data file back to the repo.
