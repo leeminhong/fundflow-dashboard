@@ -219,11 +219,12 @@ function renderSummary() {
   const status = currentDateStatus();
 
   els.latestDate.textContent = formatFullDate(state.asOfDate);
-  els.dataStatus.textContent = status?.isComplete ? "확정" : "업데이트 필요";
-  els.dataStatus.className = status?.isComplete ? "status-chip" : "status-chip pending";
-  els.sourceStatus.textContent = status?.isComplete
-    ? `기준일 확정 · ${status.filledItemCount}/${status.totalItemCount}개 항목`
-    : `업데이트 필요 · ${status?.filledItemCount ?? 0}/${status?.totalItemCount ?? 0}개 항목 입력`;
+  const isComplete = Boolean(status?.isComplete);
+  els.dataStatus.hidden = isComplete;
+  els.dataStatus.textContent = isComplete ? "" : "잠정치";
+  els.sourceStatus.textContent = isComplete
+    ? `항목 ${status.filledItemCount}/${status.totalItemCount}`
+    : `항목 ${status?.filledItemCount ?? 0}/${status?.totalItemCount ?? 0} · 잠정`;
   els.generatedAt.textContent = `업데이트 ${state.data.meta.generatedAt.replace("T", " ")}`;
 }
 
@@ -233,12 +234,9 @@ function renderSectorSummary() {
     .map(
       (row) => `
         <article class="sector-card">
-          <header>
-            <h3>${row.sector}</h3>
-            <small>${row.itemCount}개 항목</small>
-          </header>
-          <strong class="${valueClass(row.latestChange)}">${formatValue(row.latestChange)} ${state.data.meta.unit}</strong>
-          <small>잔액 ${nf.format(row.latestBalance)} ${state.data.meta.unit}</small>
+          <span class="sector-name">${row.sector}</span>
+          <strong class="sector-change ${valueClass(row.latestChange)}">${formatValue(row.latestChange)}</strong>
+          <span class="sector-balance">잔액 ${nf.format(row.latestBalance)}</span>
         </article>
       `,
     )
