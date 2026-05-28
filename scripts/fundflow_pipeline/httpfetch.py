@@ -13,7 +13,6 @@ from urllib.request import Request, urlopen
 
 from .config import (
     USER_AGENT,
-    BOK_MARKET_LIST_URL,
     BOK_MARKET_RSS_URL,
     DETAIL_URL_PATTERN,
     Attachment,

@@ -5,6 +5,7 @@ outputs
 # Python 캐시
 __pycache__/
 *.pyc
+.pytest_cache/
 
 # 크롤 산출물 (freesis_final_4.py가 생성하는 타임스탬프 엑셀). DB는 data/freesis_db.json에 누적됨.
 freesis_*.xlsx

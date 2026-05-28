@@ -114,7 +114,7 @@ def call_api(label, payload, col_map=None):
               next((v for v in data.values() if isinstance(v, list)), [])
 
     if not records:
-        print(f"     ! 데이터 없음")
+        print("     ! 데이터 없음")
         return pd.DataFrame()
 
     df = pd.DataFrame(records)
@@ -206,7 +206,7 @@ def save_to_db(df_fund_summary, df_deposit):
 
 def main():
     print("=" * 60)
-    print(f"  FREESIS 크레딧채권 운용 + 증시자금 크롤러")
+    print("  FREESIS 크레딧채권 운용 + 증시자금 크롤러")
     print(f"  펀드/일임: {START_DATE} ~ {END_DATE} (1년)")
     print(f"  증시자금:  {STOCK_START} ~ {END_DATE} (1년)")
     print("=" * 60)
@@ -331,7 +331,7 @@ def main():
     print(f"\n{'='*60}")
     print(f"  완료! -> {OUTPUT}")
     print(f"{'='*60}")
-    print(f"""
+    print("""
   시트 구성:
     펀드일임_요약  - 11개 조합 (채권/MMF/주식 x 공모/사모/일임 x 국내/해외)
     투자자예탁금   - 투자자예탁금(장내파생상품거래예수금제외) 일별

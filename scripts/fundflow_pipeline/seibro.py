@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import subprocess
-from pathlib import Path
 
 from .config import REPO_LINK_URL, SEIBRO_REPO_FETCH_SCRIPT, SEIBRO_REPO_ITEM
 from .parsing import parse_ymd, to_number

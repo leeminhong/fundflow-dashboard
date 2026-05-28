@@ -65,6 +65,29 @@ python3 -m http.server 4173
 
 → http://127.0.0.1:4173/
 
+## 검사 (lint + 테스트)
+
+파이프라인 코드를 고친 뒤 회귀를 막으려면:
+
+```bash
+scripts/check.sh
+```
+
+- `pyflakes`로 undefined name / unused import 검사 (패키지 분할 때 났던 import 누락류를 잡음)
+- `pytest`로 순수 헬퍼 단위 테스트(`tests/`) 실행
+
+### 커밋 시 자동 실행 (선택)
+
+매 커밋 전에 위 검사를 자동으로 돌리려면 git 훅을 한 번 설치:
+
+```bash
+printf '#!/usr/bin/env bash\nexec "$(git rev-parse --show-toplevel)/scripts/check.sh"\n' \
+  > .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
+
+(긴급 시 우회: `git commit --no-verify`)
+
 ## 참고
 
 - 섹터 표시 순서의 기준은 `app.js`의 `sectorOrder` (백엔드 `SECTOR_ORDER`도 동일하게 유지).
