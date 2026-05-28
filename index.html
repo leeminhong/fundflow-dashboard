@@ -20,7 +20,7 @@
       </header>
 
       <main>
-        <section class="summary-grid" aria-label="요약">
+        <section class="status-bar" aria-label="요약">
           <article class="metric-panel">
             <span class="metric-label">기준일</span>
             <strong id="latestDate">-</strong>
@@ -38,39 +38,6 @@
         <section class="sector-strip" id="sectorSummary" aria-label="섹터 요약"></section>
 
         <section class="workbench">
-          <aside class="controls" aria-label="필터">
-            <label>
-              <span>기준일</span>
-              <select id="asOfDate"></select>
-            </label>
-            <label>
-              <span>섹터</span>
-              <select id="sectorFilter"></select>
-            </label>
-            <label>
-              <span>항목 검색</span>
-              <input id="itemSearch" type="search" placeholder="항목명" />
-            </label>
-            <label>
-              <span>표시 기간</span>
-              <select id="windowSize">
-                <option value="7">최근 7일</option>
-                <option value="15" selected>최근 15일</option>
-                <option value="30">최근 30일</option>
-                <option value="all">전체</option>
-              </select>
-            </label>
-            <label>
-              <span>선택 항목</span>
-              <select id="itemSelect"></select>
-            </label>
-            <div class="legend" aria-label="히트맵 범례">
-              <span>감소</span>
-              <div class="legend-scale"></div>
-              <span>증가</span>
-            </div>
-          </aside>
-
           <section class="dashboard-panel heatmap-panel" aria-label="히트맵">
             <div class="panel-head">
               <div>
@@ -80,6 +47,34 @@
               <div class="panel-actions">
                 <button id="compactViewToggle" type="button" aria-pressed="false">간단히 보기</button>
                 <button id="resetFilters" type="button">초기화</button>
+              </div>
+            </div>
+            <div class="controls table-toolbar" aria-label="필터">
+              <label>
+                <span>기준일</span>
+                <select id="asOfDate"></select>
+              </label>
+              <label>
+                <span>섹터</span>
+                <select id="sectorFilter"></select>
+              </label>
+              <label>
+                <span>항목 검색</span>
+                <input id="itemSearch" type="search" placeholder="항목명" />
+              </label>
+              <label>
+                <span>표시 기간</span>
+                <select id="windowSize">
+                  <option value="7" selected>최근 7일</option>
+                  <option value="15">최근 15일</option>
+                  <option value="30">최근 30일</option>
+                  <option value="all">전체</option>
+                </select>
+              </label>
+              <div class="legend" aria-label="히트맵 범례">
+                <span>감소</span>
+                <div class="legend-scale"></div>
+                <span>증가</span>
               </div>
             </div>
             <div class="heatmap-scroll">
@@ -93,7 +88,13 @@
                 <h2 id="trendTitle">최근 추이</h2>
                 <p id="trendSubtitle">-</p>
               </div>
-              <a id="itemLink" href="#" target="_blank" rel="noreferrer">상세</a>
+              <div class="panel-actions trend-actions">
+                <label class="inline-control">
+                  <span>선택 항목</span>
+                  <select id="itemSelect"></select>
+                </label>
+                <a id="itemLink" href="#" target="_blank" rel="noreferrer">상세</a>
+              </div>
             </div>
             <svg id="trendChart" class="trend-chart" role="img" aria-label="선택 항목 증감 추이"></svg>
           </section>

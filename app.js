@@ -2,7 +2,7 @@ const state = {
   data: null,
   sector: "전체",
   search: "",
-  windowSize: 15,
+  windowSize: 7,
   asOfDate: null,
   selectedItem: null,
   expandedParents: new Set(),
@@ -259,7 +259,7 @@ function renderHeatmap() {
   cells.push(`<div class="heatmap-cell heatmap-header">섹터</div>`);
   cells.push(`<div class="heatmap-cell heatmap-header">항목</div>`);
   for (const date of dates) {
-    const selectedClass = date === state.asOfDate ? " latest-column latest-column-start" : "";
+    const selectedClass = date === state.asOfDate ? " latest-column" : "";
     const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
     cells.push(`<div class="heatmap-cell heatmap-header${selectedClass}${incompleteClass}">${formatDate(date)}</div>`);
   }
@@ -280,7 +280,7 @@ function renderHeatmap() {
     for (const date of dates) {
       const record = map.get(`${item.itemCode}|${date}`);
       const value = record?.changeValue;
-      const latestClass = date === state.asOfDate ? ` latest-column${itemIdx === items.length - 1 ? " latest-column-end" : ""}` : "";
+      const latestClass = date === state.asOfDate ? " latest-column" : "";
       const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
       cells.push(
         `<div class="heatmap-cell${latestClass}${incompleteClass}" data-item-code="${item.itemCode}" style="background:${colorFor(
@@ -463,14 +463,14 @@ async function init() {
   els.resetFilters.addEventListener("click", () => {
     state.sector = "전체";
     state.search = "";
-    state.windowSize = 15;
+    state.windowSize = 7;
     state.compactView = false;
     state.expandedParents.clear();
     state.asOfDate = state.data.meta.defaultDate ?? state.data.summary.defaultDate ?? state.data.meta.latestDate;
     els.asOfDate.value = state.asOfDate;
     els.sectorFilter.value = "전체";
     els.itemSearch.value = "";
-    els.windowSize.value = "15";
+    els.windowSize.value = "7";
     render();
   });
   window.addEventListener("resize", renderTrend);

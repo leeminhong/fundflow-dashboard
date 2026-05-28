@@ -1,16 +1,16 @@
 :root {
-  --bg: #eef3f6;
+  --bg: #f6f8fa;
   --surface: #ffffff;
-  --surface-soft: #f7fafc;
-  --ink: #17212b;
-  --muted: #667789;
-  --line: #d7e0e7;
-  --navy: #123d5a;
+  --surface-soft: #f8fafb;
+  --ink: #18212a;
+  --muted: #66717d;
+  --line: #dfe5ea;
+  --line-strong: #c6d0d8;
+  --navy: #18364a;
   --teal: #2e7d8f;
   --green: #27834f;
   --red: #c93d3d;
   --amber: #b7791f;
-  --shadow: 0 16px 34px rgba(18, 61, 90, 0.11);
 }
 
 * {
@@ -40,19 +40,20 @@ select {
 
 .topbar {
   align-items: center;
-  background: var(--navy);
-  color: #fff;
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
   display: flex;
   justify-content: space-between;
   gap: 24px;
-  padding: 22px 28px;
+  padding: 14px 28px 12px;
 }
 
 .eyebrow {
-  color: #bcd6e8;
-  font-size: 12px;
+  color: var(--muted);
+  font-size: 11px;
   font-weight: 700;
-  margin: 0 0 5px;
+  margin: 0 0 3px;
   text-transform: uppercase;
 }
 
@@ -63,28 +64,33 @@ p {
 }
 
 h1 {
-  font-size: 25px;
+  font-size: 20px;
   line-height: 1.2;
 }
 
 .topbar-meta {
   align-items: flex-end;
-  color: #dbe8f0;
+  color: var(--muted);
   display: flex;
   flex-direction: column;
-  font-size: 13px;
+  font-size: 12px;
   gap: 4px;
   text-align: right;
 }
 
 main {
-  padding: 22px 28px 36px;
+  padding: 14px 28px 28px;
 }
 
-.summary-grid {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.status-bar {
+  align-items: center;
+  background: var(--surface);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  display: flex;
+  min-height: 44px;
 }
 
 .metric-panel,
@@ -93,27 +99,37 @@ main {
 .sector-card {
   background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: var(--shadow);
 }
 
 .metric-panel {
-  border-radius: 8px;
-  min-height: 92px;
-  padding: 15px 16px;
+  align-items: center;
+  border: 0;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex: 1 1 0;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 14px;
+}
+
+.metric-panel:last-child {
+  border-right: 0;
 }
 
 .metric-label {
   color: var(--muted);
-  display: block;
-  font-size: 12px;
+  display: inline-flex;
+  font-size: 11px;
   font-weight: 700;
-  margin-bottom: 13px;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .metric-panel strong {
-  display: block;
-  font-size: 24px;
+  display: inline-flex;
+  font-size: 16px;
   line-height: 1.1;
+  white-space: nowrap;
 }
 
 .metric-panel .up,
@@ -131,17 +147,26 @@ main {
 }
 
 .sector-strip {
+  align-items: stretch;
+  background: #fff;
+  border: 0;
+  border-bottom: 1px solid var(--line);
   display: grid;
-  gap: 12px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-top: 12px;
+  margin-top: 0;
 }
 
 .sector-card {
-  border-radius: 8px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-radius: 0;
   display: grid;
-  gap: 8px;
-  padding: 14px 16px;
+  gap: 3px;
+  padding: 8px 14px 9px;
+}
+
+.sector-card:last-child {
+  border-right: 0;
 }
 
 .sector-card header {
@@ -152,41 +177,48 @@ main {
 }
 
 .sector-card h3 {
-  font-size: 15px;
+  font-size: 12px;
   margin: 0;
 }
 
 .sector-card small {
   color: var(--muted);
+  font-size: 11px;
 }
 
 .sector-card strong {
-  font-size: 21px;
+  font-size: 15px;
 }
 
 .workbench {
   display: grid;
-  gap: 14px;
-  grid-template-columns: 246px minmax(0, 1fr);
-  margin-top: 14px;
+  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: 12px;
 }
 
 .controls {
-  align-self: start;
-  border-radius: 8px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
   display: grid;
-  gap: 14px;
-  padding: 16px;
+  gap: 10px;
+  padding: 10px 14px;
+}
+
+.table-toolbar {
+  align-items: end;
+  grid-template-columns: minmax(132px, 0.9fr) minmax(110px, 0.65fr) minmax(150px, 1fr) minmax(120px, 0.7fr) minmax(170px, 0.9fr);
 }
 
 .controls label {
   display: grid;
-  gap: 6px;
+  gap: 4px;
 }
 
 .controls span {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 }
 
@@ -194,11 +226,13 @@ select,
 input {
   background: var(--surface-soft);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 4px;
   color: var(--ink);
-  height: 38px;
+  font-size: 11px;
+  font-weight: 600;
+  height: 30px;
   min-width: 0;
-  padding: 0 10px;
+  padding: 0 9px;
   width: 100%;
 }
 
@@ -213,24 +247,26 @@ a:focus {
 .legend {
   align-items: center;
   display: grid;
-  gap: 8px;
+  gap: 7px;
   grid-template-columns: auto 1fr auto;
-  margin-top: 4px;
+  margin-bottom: 5px;
+  min-width: 0;
 }
 
 .legend-scale {
   background: linear-gradient(90deg, var(--red), #f4f6f8, var(--green));
   border-radius: 999px;
-  height: 10px;
+  height: 8px;
 }
 
 .dashboard-panel {
-  border-radius: 8px;
+  border-color: var(--line);
+  border-radius: 4px;
   min-width: 0;
 }
 
 .heatmap-panel {
-  grid-row: span 2;
+  grid-row: auto;
 }
 
 .panel-head {
@@ -239,17 +275,17 @@ a:focus {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  padding: 15px 16px;
+  padding: 12px 14px;
 }
 
 .panel-head h2 {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .panel-head p {
   color: var(--muted);
-  font-size: 12px;
-  margin-top: 4px;
+  font-size: 11px;
+  margin-top: 3px;
 }
 
 .panel-actions {
@@ -258,19 +294,37 @@ a:focus {
   gap: 8px;
 }
 
+.inline-control {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.inline-control span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.inline-control select {
+  width: min(260px, 34vw);
+}
+
 .panel-head button,
 .panel-head a {
   align-items: center;
   background: var(--surface-soft);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 4px;
   color: var(--navy);
   cursor: pointer;
   display: inline-flex;
+  font-size: 12px;
   font-weight: 700;
-  height: 34px;
+  height: 30px;
   justify-content: center;
-  padding: 0 12px;
+  padding: 0 10px;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -289,22 +343,22 @@ a:focus {
 
 .heatmap-scroll {
   overflow: auto;
-  padding: 0 0 10px;
+  padding: 0 0 8px;
 }
 
 .heatmap {
   display: grid;
   min-width: 920px;
-  padding: 0 16px 16px;
+  padding: 0 14px 14px;
 }
 
 .heatmap-cell {
   align-items: center;
-  border-bottom: 1px solid #e7edf2;
-  border-right: 1px solid #e7edf2;
+  border-bottom: 1px solid #e8edf1;
+  border-right: 1px solid #e8edf1;
   display: flex;
   font-size: 12px;
-  height: 30px;
+  height: 28px;
   justify-content: center;
   min-width: 0;
   overflow: hidden;
@@ -314,9 +368,10 @@ a:focus {
 }
 
 .heatmap-header {
-  background: #dceaf3;
+  background: #edf3f7;
   color: var(--navy);
   font-weight: 700;
+  gap: 4px;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -324,7 +379,7 @@ a:focus {
 
 .heatmap-sector,
 .heatmap-item {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.96);
   justify-content: flex-start;
   position: sticky;
   z-index: 1;
@@ -384,16 +439,13 @@ a:focus {
 }
 
 .latest-column {
-  border-left: 2px solid rgba(18, 61, 90, 0.5);
-  border-right: 2px solid rgba(18, 61, 90, 0.5);
+  box-shadow: none;
 }
 
-.latest-column-start {
-  border-top: 2px solid rgba(18, 61, 90, 0.5);
-}
-
-.latest-column-end {
-  border-bottom: 2px solid rgba(18, 61, 90, 0.5);
+.heatmap-header.latest-column {
+  box-shadow: inset 0 3px 0 var(--teal);
+  color: #092f47;
+  font-weight: 900;
 }
 
 .incomplete-column {
@@ -438,12 +490,17 @@ a:focus {
 }
 
 .trend-panel {
-  grid-column: 2;
+  grid-column: 1;
+}
+
+.trend-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .trend-chart {
   display: block;
-  height: 320px;
+  height: 280px;
   width: 100%;
 }
 
@@ -490,17 +547,8 @@ a:focus {
 }
 
 @media (max-width: 1020px) {
-  .summary-grid,
-  .sector-strip {
+  .table-toolbar {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .workbench {
-    grid-template-columns: 1fr;
-  }
-
-  .trend-panel {
-    grid-column: 1;
   }
 }
 
@@ -520,9 +568,35 @@ a:focus {
     padding: 14px;
   }
 
-  .summary-grid,
+  .status-bar,
   .sector-strip {
     grid-template-columns: 1fr;
+  }
+
+  .metric-panel,
+  .sector-card,
+  .metric-panel:nth-child(2),
+  .sector-card:nth-child(2) {
+    border-bottom: 1px solid var(--line);
+    border-right: 0;
+  }
+
+  .metric-panel:last-child,
+  .sector-card:last-child {
+    border-bottom: 0;
+  }
+
+  .table-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-actions {
+    width: 100%;
+  }
+
+  .panel-head button,
+  .panel-head a {
+    flex: 1;
   }
 
   .panel-head {
