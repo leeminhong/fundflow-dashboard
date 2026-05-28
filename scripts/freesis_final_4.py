@@ -142,6 +142,10 @@ def save_to_db(df_fund_summary, df_deposit):
     else:
         db = {"fundSummary": {}, "stockDeposit": {}, "lastUpdated": None}
 
+    # 새 키 보장
+    db.setdefault("fundChanges", {})
+    db.setdefault("stockDepositChanges", {})
+
     # 펀드/일임 요약 누적 (기준일자가 키)
     if not df_fund_summary.empty:
         for _, row in df_fund_summary.iterrows():
@@ -152,6 +156,22 @@ def save_to_db(df_fund_summary, df_deposit):
                 if col != "기준일자"
             }
 
+        # 일별 증감 계산 (날짜순 정렬 후 인접 차이)
+        sorted_dates = sorted(db["fundSummary"].keys())
+        fund_cols = [c for c in df_fund_summary.columns if c != "기준일자"]
+        prev = {}
+        for d in sorted_dates:
+            changes = {}
+            for col in fund_cols:
+                val = db["fundSummary"][d].get(col)
+                if val is not None and col in prev:
+                    changes[col] = round(val - prev[col], 4)
+                else:
+                    changes[col] = None
+                if val is not None:
+                    prev[col] = val
+            db["fundChanges"][d] = changes
+
     # 투자자예탁금 누적
     if not df_deposit.empty:
         date_col = "기준일자" if "기준일자" in df_deposit.columns else df_deposit.columns[0]
@@ -161,6 +181,18 @@ def save_to_db(df_fund_summary, df_deposit):
             if val_col:
                 val = row[val_col]
                 db["stockDeposit"][date_key] = None if pd.isna(val) else val
+
+        # 투자자예탁금 일별 증감 계산
+        sorted_dep = sorted(db["stockDeposit"].keys())
+        prev_dep = None
+        for d in sorted_dep:
+            val = db["stockDeposit"][d]
+            if val is not None and prev_dep is not None:
+                db["stockDepositChanges"][d] = round(val - prev_dep, 4)
+            else:
+                db["stockDepositChanges"][d] = None
+            if val is not None:
+                prev_dep = val
 
     db["lastUpdated"] = datetime.now().isoformat(timespec="seconds")
 

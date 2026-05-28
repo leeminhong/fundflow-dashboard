@@ -955,23 +955,20 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
         })
 
     # Add fund summary records
+    fund_changes = db.get("fundChanges", {})
     sorted_dates = sorted(fund_summary.keys())
-    prev_balance: dict[str, float] = {}
     for date_key in sorted_dates:
         row = fund_summary[date_key]
         date_iso = parse_ymd(date_key)
         if not date_iso:
             continue
+        change_row = fund_changes.get(date_key, {})
         for meta in available_fund_items:
             col_name = FREESIS_SUMMARY_COLUMNS[meta["itemCode"]]
             raw_val = to_number(row.get(col_name))
             balance = None if raw_val is None else raw_val / 10000
-            change = None
-            if balance is not None and meta["itemCode"] in prev_balance:
-                change = balance - prev_balance[meta["itemCode"]]
-            elif balance is not None:
-                change = 0.0
-                prev_balance[meta["itemCode"]] = balance
+            raw_change = to_number(change_row.get(col_name))
+            change = None if raw_change is None else raw_change / 10000
             data["records"].append({
                 "date": date_iso, "sector": "투신",
                 "groupName": meta.get("parentCode", "투신"),
@@ -1020,6 +1017,7 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
             })
 
     # --- Stock deposit (투자자예탁금) ---
+    stock_changes = db.get("stockDepositChanges", {})
     if stock_deposit:
         # Remove existing BOK-sourced deposit
         data["items"] = [i for i in data["items"] if i["itemCode"] != "SEC_CUSTOMER_DEPOSIT"]
@@ -1037,20 +1035,14 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
         })
 
         sorted_dep = sorted(stock_deposit.items())
-        prev_dep = None
         for date_key, raw_val in sorted_dep:
             date_iso = parse_ymd(date_key)
             if not date_iso:
                 continue
             val = to_number(raw_val)
             balance = None if val is None else val / 1000000  # 백만원 → 조원
-            change = None
-            if balance is not None and prev_dep is not None:
-                change = balance - prev_dep
-            elif balance is not None:
-                change = 0.0
-            if balance is not None:
-                prev_dep = balance
+            raw_change = to_number(stock_changes.get(date_key))
+            change = None if raw_change is None else raw_change / 1000000
             data["records"].append({
                 "date": date_iso, "sector": "증권",
                 "groupName": "고객예탁금",
@@ -1283,9 +1275,14 @@ def merge_web_data(existing: dict, new_data: dict) -> dict:
         old_rec_map[(r["date"], r["itemCode"])] = r
 
     new_count = 0
+    update_count = 0
     for r in new_data.get("records", []):
         key = (r["date"], r["itemCode"])
-        if key not in old_rec_map:
+        if key in old_rec_map:
+            # Always overwrite with new data (corrects stale change values)
+            old_rec_map[key] = r
+            update_count += 1
+        else:
             old_rec_map[key] = r
             new_count += 1
 
@@ -1363,7 +1360,7 @@ def merge_web_data(existing: dict, new_data: dict) -> dict:
         "historyWindow": len(dates),
     })
 
-    print(f"merge: {new_count} new records added, {len(records)} total, {len(dates)} dates")
+    print(f"merge: {new_count} new, {update_count} updated, {len(records)} total, {len(dates)} dates")
 
     return {
         "meta": meta,
