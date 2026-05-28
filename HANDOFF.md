@@ -65,7 +65,15 @@ fundflow-dashboard/
 │   ├── fundflow.json           # 최종 웹 데이터 (22개 항목, 244일)
 │   └── freesis_db.json         # FREESIS + RP 누적 DB
 ├── scripts/
-│   ├── fetch_bok_market_indicator.py   # 메인 파이프라인 (BOK+FREESIS DB+SEIBro)
+│   ├── fetch_bok_market_indicator.py   # 얇은 엔트리 (fundflow_pipeline.cli.main 호출)
+│   ├── fundflow_pipeline/              # 메인 파이프라인 패키지
+│   │   ├── config.py                   # 상수·항목정의(TARGET_ITEMS, FREESIS_*)·dataclass
+│   │   ├── httpfetch.py                # HTTP + BOK 게시글 탐색/RSS
+│   │   ├── parsing.py                  # 값/날짜 변환, 엑셀 워크북 파싱
+│   │   ├── seibro.py                   # SEIBro RP 수집/주입
+│   │   ├── freesis.py                  # 예탁금·펀드합산·DB 주입
+│   │   ├── webdata.py                  # 상태 재계산, build/merge web data
+│   │   └── cli.py                      # argparse 엔트리 main()
 │   ├── freesis_final_4.py              # FREESIS API 크롤러 → freesis_db.json
 │   └── fetch_seibro_repo.js            # SEIBro Repo 스크래핑 (Playwright)
 # 레거시 MVP 스크립트(extract_fundflow_source.py, build_web_data.py, freesis_final_3.py)는 제거됨
@@ -141,18 +149,19 @@ index.html + app.js (정적 대시보드)
 
 ## 핵심 코드 포인트
 
-### `fetch_bok_market_indicator.py`
+### `fundflow_pipeline/` (구 `fetch_bok_market_indicator.py` 분할)
 
-| 위치 | 내용 |
-|------|------|
-| `FREESIS_CALCULATED_PARENTS` | MMF/채권/주식 부모 정의, children 목록 |
-| `FREESIS_FUND_ITEMS` | 11개 child 항목 정의 (`parentCode`, `displayOrder`) |
-| `TARGET_ITEMS` | BOK 기반 항목 정의 |
-| `SECTOR_ORDER` | 섹터 정렬 순서 (은행→REPO→투신→증권) |
-| `apply_freesis_db()` | freesis_db.json에서 펀드+예탁금+RP 자동 주입 |
-| `merge_web_data()` | 기존 JSON과 새 데이터 머지 (덮어쓰기) |
-| `apply_seibro_repo()` | SEIBro RP 데이터 주입 (DB에 없을 때만) |
-| `recompute_status_summary()` | dateStatus 재계산 (calculated 항목 skip) |
+| 모듈 | 위치 | 내용 |
+|------|------|------|
+| `config.py` | `FREESIS_CALCULATED_PARENTS` | MMF/채권/주식 부모 정의, children 목록 |
+| `config.py` | `FREESIS_FUND_ITEMS` | 11개 child 항목 정의 (`parentCode`, `displayOrder`) |
+| `config.py` | `TARGET_ITEMS` | BOK 기반 항목 정의 |
+| `config.py` | `SECTOR_ORDER` | 섹터 정렬 순서 (REPO→투신→증권→은행, app.js와 동일) |
+| `freesis.py` | `apply_freesis_db()` | freesis_db.json에서 펀드+예탁금+RP 자동 주입 |
+| `webdata.py` | `merge_web_data()` | 기존 JSON과 새 데이터 머지 (덮어쓰기) |
+| `webdata.py` | `recompute_status_summary()` | dateStatus 재계산 (calculated 항목 skip) |
+| `seibro.py` | `apply_seibro_repo()` | SEIBro RP 데이터 주입 (DB에 없을 때만) |
+| `cli.py` | `main()` | argparse 엔트리. 엔트리 스크립트가 이걸 호출 |
 
 ### `freesis_final_4.py`
 
