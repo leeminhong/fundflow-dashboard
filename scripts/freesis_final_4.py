@@ -17,15 +17,17 @@ import requests
 import json
 import pandas as pd
 from datetime import datetime, timedelta
+from pathlib import Path
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  설정
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 END_DATE   = datetime.now().strftime("%Y%m%d")
-START_DATE = (datetime.now() - timedelta(days=7)).strftime("%Y%m%d")
-# 증시자금은 3개월 기본
-STOCK_START = (datetime.now() - timedelta(days=90)).strftime("%Y%m%d")
+START_DATE = (datetime.now() - timedelta(days=365)).strftime("%Y%m%d")
+# 증시자금도 동일하게 1년
+STOCK_START = (datetime.now() - timedelta(days=365)).strftime("%Y%m%d")
 OUTPUT     = f"freesis_크레딧채권운용_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
+DB_JSON    = Path(__file__).resolve().parent.parent / "data" / "freesis_db.json"
 
 API_URL  = "https://freesis.kofia.or.kr/meta/getMetaDataList.do"
 INIT_URL = ("https://freesis.kofia.or.kr/stat/FreeSIS.do"
@@ -130,11 +132,51 @@ def call_api(label, payload, col_map=None):
     return df
 
 
+def save_to_db(df_fund_summary, df_deposit):
+    """기존 DB JSON을 로드하고, 새 데이터를 날짜 키로 머지한 뒤 저장."""
+    DB_JSON.parent.mkdir(parents=True, exist_ok=True)
+
+    # 기존 데이터 로드
+    if DB_JSON.exists():
+        db = json.loads(DB_JSON.read_text(encoding="utf-8"))
+    else:
+        db = {"fundSummary": {}, "stockDeposit": {}, "lastUpdated": None}
+
+    # 펀드/일임 요약 누적 (기준일자가 키)
+    if not df_fund_summary.empty:
+        for _, row in df_fund_summary.iterrows():
+            date_key = str(row["기준일자"])
+            db["fundSummary"][date_key] = {
+                col: (None if pd.isna(row[col]) else row[col])
+                for col in df_fund_summary.columns
+                if col != "기준일자"
+            }
+
+    # 투자자예탁금 누적
+    if not df_deposit.empty:
+        date_col = "기준일자" if "기준일자" in df_deposit.columns else df_deposit.columns[0]
+        val_col = [c for c in df_deposit.columns if c != date_col][0] if len(df_deposit.columns) > 1 else None
+        for _, row in df_deposit.iterrows():
+            date_key = str(row[date_col])
+            if val_col:
+                val = row[val_col]
+                db["stockDeposit"][date_key] = None if pd.isna(val) else val
+
+    db["lastUpdated"] = datetime.now().isoformat(timespec="seconds")
+
+    DB_JSON.write_text(
+        json.dumps(db, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    print(f"  OK DB 저장: {DB_JSON}")
+    print(f"     펀드일임: {len(db['fundSummary'])}일, 투자자예탁금: {len(db['stockDeposit'])}일")
+
+
 def main():
     print("=" * 60)
     print(f"  FREESIS 크레딧채권 운용 + 증시자금 크롤러")
-    print(f"  펀드/일임: {START_DATE} ~ {END_DATE}")
-    print(f"  증시자금:  {STOCK_START} ~ {END_DATE}")
+    print(f"  펀드/일임: {START_DATE} ~ {END_DATE} (1년)")
+    print(f"  증시자금:  {STOCK_START} ~ {END_DATE} (1년)")
     print("=" * 60)
 
     # 세션
@@ -259,11 +301,15 @@ def main():
     print(f"{'='*60}")
     print(f"""
   시트 구성:
-    펀드일임_요약  - 9개 조합 (채권/주식 x 공모/사모/일임 x 국내/해외)
+    펀드일임_요약  - 11개 조합 (채권/MMF/주식 x 공모/사모/일임 x 국내/해외)
     투자자예탁금   - 투자자예탁금(장내파생상품거래예수금제외) 일별
     증시자금_전체  - 증시자금추이 전체 컬럼
     펀드_공모_국내 ~ 일임_해외 - 원본 데이터
     """)
+
+    # ─── JSON DB 누적 저장 ───
+    print("[5] JSON DB 누적 저장")
+    save_to_db(df_fund_summary, df_deposit)
 
 
 if __name__ == "__main__":
