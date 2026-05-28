@@ -22,6 +22,9 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Stamp generatedAt (and all timestamps) in Korea time, not the runner's UTC.
+    env:
+      TZ: Asia/Seoul
     steps:
       - uses: actions/checkout@v4
 
