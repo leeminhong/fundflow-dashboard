@@ -1,0 +1,9 @@
+.DS_Store
+node_modules
+outputs
+
+# Local spreadsheet MVP/probe scripts kept out of the public site repo.
+scripts/artifact_probe.mjs
+scripts/build_fundflow_mvp.mjs
+scripts/build_fundflow_mvp_openpyxl.py
+
