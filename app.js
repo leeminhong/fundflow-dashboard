@@ -7,7 +7,7 @@ const state = {
   selectedItem: null,
   expandedParents: new Set(),
   compactView: false,
-  trendExpanded: false,
+  trendExpanded: true,
 };
 
 const els = {
@@ -15,11 +15,9 @@ const els = {
   generatedAt: document.querySelector("#generatedAt"),
   latestDate: document.querySelector("#latestDate"),
   dataStatus: document.querySelector("#dataStatus"),
-  totalChange: document.querySelector("#totalChange"),
   sectorSummary: document.querySelector("#sectorSummary"),
   asOfDate: document.querySelector("#asOfDate"),
   sectorFilter: document.querySelector("#sectorFilter"),
-  itemSearch: document.querySelector("#itemSearch"),
   windowSize: document.querySelector("#windowSize"),
   itemSelect: document.querySelector("#itemSelect"),
   heatmap: document.querySelector("#heatmap"),
@@ -198,7 +196,6 @@ function recordsForDate(date) {
 
 function selectedDateSummary() {
   const records = recordsForDate(state.asOfDate).filter((record) => record.includeInTotal);
-  const totalChange = records.reduce((sum, record) => sum + (record.changeValue || 0), 0);
   const sectorSummary = orderedSectors().map((sector) => {
     const sectorRecords = records.filter((record) => record.sector === sector);
     return {
@@ -208,18 +205,15 @@ function selectedDateSummary() {
       itemCount: sectorRecords.length,
     };
   });
-  return { records, totalChange, sectorSummary };
+  return { records, sectorSummary };
 }
 
 function renderSummary() {
   const status = currentDateStatus();
-  const summary = selectedDateSummary();
 
   els.latestDate.textContent = formatFullDate(state.asOfDate);
   els.dataStatus.textContent = status?.isComplete ? "확정" : "업데이트 필요";
-  els.dataStatus.className = status?.isComplete ? "" : "pending";
-  els.totalChange.textContent = `${status?.isComplete ? "" : "부분 "}${formatValue(summary.totalChange)} ${state.data.meta.unit}`;
-  els.totalChange.className = valueClass(summary.totalChange);
+  els.dataStatus.className = status?.isComplete ? "status-chip" : "status-chip pending";
   els.sourceStatus.textContent = status?.isComplete
     ? `기준일 확정 · ${status.filledItemCount}/${status.totalItemCount}개 항목`
     : `업데이트 필요 · ${status?.filledItemCount ?? 0}/${status?.totalItemCount ?? 0}개 항목 입력`;
@@ -259,18 +253,31 @@ function renderHeatmap() {
 
   const maxAbs = percentile(values, 0.9);
   els.heatmap.style.gridTemplateColumns = `86px 136px repeat(${dates.length}, minmax(62px, 1fr))`;
+  els.heatmap.style.gridTemplateRows = `repeat(${items.length + 1}, 27px)`;
 
   const cells = [];
-  cells.push(`<div class="heatmap-cell heatmap-header">섹터</div>`);
-  cells.push(`<div class="heatmap-cell heatmap-header">항목</div>`);
-  for (const date of dates) {
+  cells.push(`<div class="heatmap-cell heatmap-header" style="grid-column:1;grid-row:1">섹터</div>`);
+  cells.push(`<div class="heatmap-cell heatmap-header" style="grid-column:2;grid-row:1">항목</div>`);
+  for (const [dateIdx, date] of dates.entries()) {
     const selectedClass = date === state.asOfDate ? " latest-column" : "";
     const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
-    cells.push(`<div class="heatmap-cell heatmap-header${selectedClass}${incompleteClass}">${formatDate(date)}</div>`);
+    cells.push(
+      `<div class="heatmap-cell heatmap-header${selectedClass}${incompleteClass}" style="grid-column:${dateIdx + 3};grid-row:1">${formatDate(date)}</div>`,
+    );
+  }
+
+  for (let idx = 0; idx < items.length; idx += 1) {
+    const item = items[idx];
+    if (idx > 0 && items[idx - 1].sector === item.sector) continue;
+    let span = 1;
+    while (items[idx + span]?.sector === item.sector) span += 1;
+    cells.push(
+      `<div class="heatmap-cell heatmap-sector heatmap-sector-merged" style="grid-column:1;grid-row:${idx + 2} / span ${span}">${item.sector}</div>`,
+    );
   }
 
   items.forEach((item, itemIdx) => {
-    cells.push(`<div class="heatmap-cell heatmap-sector">${item.sector}</div>`);
+    const row = itemIdx + 2;
     const hierarchyClass = item.level > 1 ? "heatmap-child" : "heatmap-parent";
     const canExpand = hasChildren(item);
     const expanded = Boolean(state.search) || !state.compactView || state.expandedParents.has(item.itemCode);
@@ -280,15 +287,17 @@ function renderHeatmap() {
     const link = item.link
       ? `<a href="${item.link}" target="_blank" rel="noreferrer" class="${hierarchyClass}">${item.itemName}</a>`
       : `<button class="item-button ${hierarchyClass}" type="button" data-item-code="${item.itemCode}">${item.itemName}</button>`;
-    cells.push(`<div class="heatmap-cell heatmap-item level-${item.level}" data-item-code="${item.itemCode}">${toggle}${link}</div>`);
+    cells.push(
+      `<div class="heatmap-cell heatmap-item level-${item.level}" data-item-code="${item.itemCode}" style="grid-column:2;grid-row:${row}">${toggle}${link}</div>`,
+    );
 
-    for (const date of dates) {
+    for (const [dateIdx, date] of dates.entries()) {
       const record = map.get(`${item.itemCode}|${date}`);
       const value = record?.changeValue;
       const latestClass = date === state.asOfDate ? " latest-column" : "";
       const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
       cells.push(
-        `<div class="heatmap-cell${latestClass}${incompleteClass}" data-item-code="${item.itemCode}" style="background:${colorFor(
+        `<div class="heatmap-cell${latestClass}${incompleteClass}" data-item-code="${item.itemCode}" style="grid-column:${dateIdx + 3};grid-row:${row};background:${colorFor(
           value,
           maxAbs,
         )}">${formatValue(value)}</div>`,
@@ -297,6 +306,7 @@ function renderHeatmap() {
   });
 
   if (!items.length) {
+    els.heatmap.style.gridTemplateRows = "";
     els.heatmap.innerHTML = `<div class="empty-state">표시할 항목이 없습니다</div>`;
   } else {
     els.heatmap.innerHTML = cells.join("");
@@ -405,12 +415,9 @@ function drawLineChart(points) {
     )
     .join("");
 
-  const labelEvery = Math.max(1, Math.ceil(points.length / 6));
   const xLabels = points
     .map((point, idx) =>
-      idx % labelEvery === 0 || idx === points.length - 1
-        ? `<text class="axis-label" x="${x(idx)}" y="${height - 16}" text-anchor="middle">${formatDate(point.date)}</text>`
-        : "",
+      `<text class="axis-label" x="${x(idx)}" y="${height - 16}" text-anchor="middle">${formatDate(point.date)}</text>`,
     )
     .join("");
 
@@ -454,10 +461,6 @@ async function init() {
     state.sector = event.target.value;
     renderHeatmap();
   });
-  els.itemSearch.addEventListener("input", (event) => {
-    state.search = event.target.value.trim();
-    renderHeatmap();
-  });
   els.windowSize.addEventListener("change", (event) => {
     state.windowSize = event.target.value;
     renderHeatmap();
@@ -485,12 +488,11 @@ async function init() {
     state.search = "";
     state.windowSize = 7;
     state.compactView = false;
-    state.trendExpanded = false;
+    state.trendExpanded = true;
     state.expandedParents.clear();
     state.asOfDate = state.data.meta.defaultDate ?? state.data.summary.defaultDate ?? state.data.meta.latestDate;
     els.asOfDate.value = state.asOfDate;
     els.sectorFilter.value = "전체";
-    els.itemSearch.value = "";
     els.windowSize.value = "7";
     render();
   });

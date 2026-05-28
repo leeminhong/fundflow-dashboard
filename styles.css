@@ -82,18 +82,19 @@ main {
   padding: 10px 28px 28px;
 }
 
-.status-bar {
+.summary-strip {
   align-items: center;
   background: var(--surface);
   border: 0;
   border-bottom: 1px solid var(--line);
   border-top: 1px solid var(--line);
   border-radius: 0;
-  display: flex;
-  min-height: 36px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  min-height: 60px;
 }
 
-.metric-panel,
+.date-panel,
 .dashboard-panel,
 .controls,
 .sector-card {
@@ -101,19 +102,14 @@ main {
   border: 1px solid var(--line);
 }
 
-.metric-panel {
+.date-panel {
   align-items: center;
   border: 0;
   border-right: 1px solid var(--line);
   display: flex;
-  flex: 1 1 0;
   gap: 8px;
-  min-height: 34px;
+  min-height: 60px;
   padding: 0 12px;
-}
-
-.metric-panel:last-child {
-  border-right: 0;
 }
 
 .metric-label {
@@ -125,43 +121,40 @@ main {
   white-space: nowrap;
 }
 
-.metric-panel strong {
+.date-panel strong {
   display: inline-flex;
   font-size: 14px;
   line-height: 1.1;
   white-space: nowrap;
 }
 
-.metric-panel .up,
 .sector-card .up {
   color: var(--green);
 }
 
-.metric-panel .down,
 .sector-card .down {
   color: var(--red);
-}
-
-.metric-panel .pending {
-  color: var(--amber);
 }
 
 .sector-strip {
   align-items: stretch;
   background: #fff;
   border: 0;
-  border-bottom: 1px solid var(--line);
   display: grid;
+  grid-column: span 4;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  height: 100%;
   margin-top: 0;
 }
 
 .sector-card {
+  align-content: center;
   border: 0;
   border-right: 1px solid var(--line);
   border-radius: 0;
   display: grid;
   gap: 2px;
+  min-height: 60px;
   padding: 6px 12px 7px;
 }
 
@@ -208,7 +201,7 @@ main {
 
 .table-toolbar {
   align-items: end;
-  grid-template-columns: minmax(142px, 0.9fr) minmax(108px, 0.55fr) minmax(170px, 1fr) minmax(118px, 0.65fr);
+  grid-template-columns: minmax(142px, 0.8fr) minmax(108px, 0.55fr) minmax(118px, 0.55fr) minmax(280px, 1fr);
 }
 
 .controls label {
@@ -264,6 +257,18 @@ a:focus {
   height: 6px;
 }
 
+.toolbar-tools {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.toolbar-tools .legend {
+  margin-right: 14px;
+}
+
 .dashboard-panel {
   border-color: var(--line);
   border-radius: 4px;
@@ -286,6 +291,31 @@ a:focus {
 
 .panel-head h2 {
   font-size: 13px;
+}
+
+.panel-title-row {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.status-chip {
+  align-items: center;
+  background: #edf5f1;
+  border: 1px solid #cfe0d7;
+  border-radius: 4px;
+  color: var(--green);
+  display: inline-flex;
+  font-size: 10px;
+  font-weight: 700;
+  height: 20px;
+  padding: 0 6px;
+}
+
+.status-chip.pending {
+  background: #fff6e8;
+  border-color: #ebd2a9;
+  color: var(--amber);
 }
 
 .panel-head p {
@@ -318,7 +348,8 @@ a:focus {
 }
 
 .panel-head button,
-.panel-head a {
+.panel-head a,
+.table-toolbar button {
   align-items: center;
   background: var(--surface-soft);
   border: 1px solid var(--line);
@@ -335,7 +366,12 @@ a:focus {
   white-space: nowrap;
 }
 
-.panel-head button[aria-pressed="true"] {
+.table-toolbar button {
+  height: 30px;
+}
+
+.panel-head button[aria-pressed="true"],
+.table-toolbar button[aria-pressed="true"] {
   background: #e5eef4;
   border-color: #a9bdca;
   color: var(--ink);
@@ -364,8 +400,8 @@ a:focus {
   border-right: 1px solid #e8edf1;
   display: flex;
   font-size: 11.5px;
-  height: 27px;
   justify-content: center;
+  min-height: 27px;
   min-width: 0;
   overflow: hidden;
   padding: 0 7px;
@@ -395,6 +431,12 @@ a:focus {
   color: var(--muted);
   font-weight: 600;
   left: 0;
+}
+
+.heatmap-sector-merged {
+  align-items: center;
+  border-bottom-color: var(--line-strong);
+  justify-content: center;
 }
 
 .heatmap-item {
@@ -600,20 +642,22 @@ a:focus {
     padding: 14px;
   }
 
-  .status-bar,
+  .summary-strip,
   .sector-strip {
     grid-template-columns: 1fr;
   }
 
-  .metric-panel,
+  .sector-strip {
+    grid-column: auto;
+  }
+
+  .date-panel,
   .sector-card,
-  .metric-panel:nth-child(2),
   .sector-card:nth-child(2) {
     border-bottom: 1px solid var(--line);
     border-right: 0;
   }
 
-  .metric-panel:last-child,
   .sector-card:last-child {
     border-bottom: 0;
   }
@@ -627,8 +671,15 @@ a:focus {
   }
 
   .panel-head button,
-  .panel-head a {
+  .panel-head a,
+  .table-toolbar button {
     flex: 1;
+  }
+
+  .toolbar-tools {
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   .panel-head {
