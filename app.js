@@ -22,6 +22,7 @@ const els = {
   windowSize: document.querySelector("#windowSize"),
   compareBasis: document.querySelector("#compareBasis"),
   itemSelect: document.querySelector("#itemSelect"),
+  heatmapScroll: document.querySelector(".heatmap-scroll"),
   heatmap: document.querySelector("#heatmap"),
   heatmapCaption: document.querySelector("#heatmapCaption"),
   trendTitle: document.querySelector("#trendTitle"),
@@ -198,6 +199,26 @@ function deltaValue(map, itemCode, date, basis = state.compareBasis) {
   return cur - prev;
 }
 
+function colorMetricValue(map, itemCode, date, basis = state.compareBasis) {
+  const record = map.get(`${itemCode}|${date}`);
+  if (!record) return undefined;
+
+  if (basis === "day") {
+    const change = record.changeValue;
+    const current = record.balanceValue;
+    const previous = current - change;
+    if (!Number.isFinite(change) || !Number.isFinite(previous) || previous === 0) return undefined;
+    return change / Math.abs(previous);
+  }
+
+  const refDate = referenceDateFor(date, basis);
+  if (!refDate) return undefined;
+  const current = record.balanceValue;
+  const previous = map.get(`${itemCode}|${refDate}`)?.balanceValue;
+  if (!Number.isFinite(current) || !Number.isFinite(previous) || previous === 0) return undefined;
+  return (current - previous) / Math.abs(previous);
+}
+
 function colorFor(value, maxAbs) {
   if (!Number.isFinite(value) || maxAbs === 0) return "#f7fafc";
   const clamped = Math.max(-1, Math.min(1, value / maxAbs));
@@ -208,13 +229,6 @@ function colorFor(value, maxAbs) {
   const t = Math.abs(clamped);
   const mixed = neutral.map((base, idx) => Math.round(base + (target[idx] - base) * t));
   return `rgb(${mixed.join(",")})`;
-}
-
-function percentile(values, ratio) {
-  if (!values.length) return 0;
-  const sorted = [...values].sort((a, b) => a - b);
-  const index = Math.ceil(sorted.length * ratio) - 1;
-  return sorted[Math.max(0, Math.min(sorted.length - 1, index))];
 }
 
 function setupControls() {
@@ -292,16 +306,16 @@ function renderHeatmap() {
   const dates = visibleDates();
   const items = filteredItems();
   const map = recordMap();
-  const values = [];
+  const colorValues = [];
 
   for (const item of items) {
     for (const date of dates) {
-      const value = deltaValue(map, item.itemCode, date);
-      if (Number.isFinite(value)) values.push(Math.abs(value));
+      const value = colorMetricValue(map, item.itemCode, date);
+      if (Number.isFinite(value)) colorValues.push(Math.abs(value));
     }
   }
 
-  const maxAbs = percentile(values, 0.9);
+  const maxAbs = colorValues.length ? Math.max(...colorValues) : 0;
   els.heatmap.style.gridTemplateColumns = `86px 136px repeat(${dates.length}, minmax(62px, 1fr))`;
   els.heatmap.style.gridTemplateRows = `repeat(${items.length + 1}, 27px)`;
 
@@ -343,11 +357,12 @@ function renderHeatmap() {
 
     for (const [dateIdx, date] of dates.entries()) {
       const value = deltaValue(map, item.itemCode, date);
+      const colorValue = colorMetricValue(map, item.itemCode, date);
       const latestClass = date === state.asOfDate ? " latest-column" : "";
       const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
       cells.push(
         `<div class="heatmap-cell${latestClass}${incompleteClass}" data-item-code="${item.itemCode}" style="grid-column:${dateIdx + 3};grid-row:${row};background:${colorFor(
-          value,
+          colorValue,
           maxAbs,
         )}">${formatValue(value)}</div>`,
       );
@@ -397,6 +412,15 @@ function renderHeatmap() {
       els.itemSelect.value = state.selectedItem;
       renderTrend();
     });
+  });
+
+  scrollHeatmapToLatest();
+}
+
+function scrollHeatmapToLatest() {
+  if (!els.heatmapScroll) return;
+  requestAnimationFrame(() => {
+    els.heatmapScroll.scrollLeft = els.heatmapScroll.scrollWidth - els.heatmapScroll.clientWidth;
   });
 }
 
