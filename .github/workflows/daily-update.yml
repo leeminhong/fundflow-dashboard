@@ -7,8 +7,8 @@ on:
     # 정시(:00)는 GitHub 부하로 지연/누락이 잦아 분을 살짝 늦춤.
     # 21:10 UTC = 06:10 KST (다음 날)
     - cron: "10 21 * * *"
-    # 08:10 UTC = 17:10 KST
-    - cron: "10 8 * * *"
+    # 06:10 UTC = 15:10 KST
+    - cron: "10 6 * * *"
   workflow_dispatch: {}   # allow manual "Run workflow" from the Actions tab
 
 # Allow the workflow to push the updated data file back to the repo.
