@@ -23,6 +23,24 @@ from .httpfetch import (
 )
 from .parsing import parse_market_workbook
 
+# 기준일은 메인 데이터인 FREESIS의 최종 영업일을 따른다.
+# BOK·SEIBro는 갱신 시점이 FREESIS와 어긋날 수 있는데, 모든 소스가 채워진
+# "완전한 날짜"를 기준일로 잡으면 FREESIS가 더 최신이어도 과거로 끌려간다.
+# FREESIS record는 source가 "FREESIS"로 시작하므로 이를 식별자로 쓴다.
+FREESIS_SOURCE_PREFIX = "FREESIS"
+
+
+def freesis_default_date(records: list[dict]) -> str | None:
+    """FREESIS 항목에 실제 잔액이 채워진 가장 최근 날짜를 반환(없으면 None)."""
+    freesis_dates = {
+        record["date"]
+        for record in records
+        if str(record.get("source", "")).startswith(FREESIS_SOURCE_PREFIX)
+        and record.get("balanceValue") is not None
+    }
+    return max(freesis_dates) if freesis_dates else None
+
+
 def recompute_status_summary(data: dict) -> None:
     items = sorted(data["items"], key=lambda item: item["displayOrder"])
     active_items = [item for item in items if item.get("isActive", True)]
@@ -68,7 +86,9 @@ def recompute_status_summary(data: dict) -> None:
 
     data["dateStatus"] = date_status
     latest_date = data["dates"][-1] if data["dates"] else None
-    default_date = complete_dates[-1] if complete_dates else latest_date
+    default_date = freesis_default_date(data["records"]) or (
+        complete_dates[-1] if complete_dates else latest_date
+    )
 
     default_records = [
         record
@@ -359,7 +379,9 @@ def merge_web_data(existing: dict, new_data: dict) -> dict:
         })
 
     latest_date = dates[-1] if dates else None
-    default_date = complete_dates[-1] if complete_dates else latest_date
+    default_date = freesis_default_date(records) or (
+        complete_dates[-1] if complete_dates else latest_date
+    )
 
     default_records = [
         r for r in records

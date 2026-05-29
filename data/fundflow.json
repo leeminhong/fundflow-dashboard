@@ -8,7 +8,7 @@
     "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/43d6fe71b57142e28389adb651a6e2de/1/a1933bbdc5b04db6b35cb88fb56c99e1.xlsx",
     "generatedAt": "2026-05-29T13:46:39",
     "latestDate": "2026-05-28",
-    "defaultDate": "2026-05-22",
+    "defaultDate": "2026-05-27",
     "unit": "조원",
     "version": 3,
     "historyWindow": 245,
@@ -6488,32 +6488,32 @@
   ],
   "summary": {
     "latestDate": "2026-05-28",
-    "defaultDate": "2026-05-22",
-    "totalLatestChange": 10.713753003900155,
+    "defaultDate": "2026-05-27",
+    "totalLatestChange": 10.721415,
     "sectorSummary": [
       {
         "sector": "REPO",
-        "latestChange": 1.2,
-        "latestBalance": 272.0,
+        "latestChange": 3.015,
+        "latestBalance": 275.207,
         "itemCount": 1
       },
       {
         "sector": "투신",
-        "latestChange": 3.0149999999999997,
-        "latestBalance": 1380.4864,
+        "latestChange": 3.7082999999999995,
+        "latestBalance": 1391.539,
         "itemCount": 3
       },
       {
         "sector": "증권",
-        "latestChange": 2.210468,
-        "latestBalance": 348.961009,
-        "itemCount": 3
+        "latestChange": 3.998115,
+        "latestBalance": 128.574969,
+        "itemCount": 1
       },
       {
         "sector": "은행",
-        "latestChange": 4.288285003900155,
-        "latestBalance": 2644.4321050767,
-        "itemCount": 2
+        "latestChange": 0,
+        "latestBalance": 0,
+        "itemCount": 0
       }
     ]
   },
