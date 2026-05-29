@@ -226,6 +226,7 @@ a:focus {
   align-items: center;
   display: grid;
   color: var(--muted);
+  flex-shrink: 0;
   font-size: 10px;
   gap: 6px;
   grid-template-columns: auto 72px auto;
@@ -276,6 +277,12 @@ a:focus {
   align-items: center;
   display: flex;
   gap: 8px;
+}
+
+/* 히트맵 패널은 제목(좌)과 감소/증가 범례(우)를 화면이 좁아져도 한 줄로 유지.
+   제목 블록은 줄어들 수 있게 하고 범례는 폭을 고정한다(.legend flex-shrink:0). */
+.heatmap-panel .panel-head > div {
+  min-width: 0;
 }
 
 .status-chip {
@@ -657,7 +664,11 @@ a:focus {
 
   .sector-strip {
     border-left: 0;
+    column-gap: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     padding-left: 0;
+    row-gap: 6px;
   }
 
   .table-toolbar {
@@ -680,7 +691,7 @@ a:focus {
     justify-content: flex-start;
   }
 
-  .panel-head {
+  .trend-panel .panel-head {
     align-items: flex-start;
     flex-direction: column;
   }
