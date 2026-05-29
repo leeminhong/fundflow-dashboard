@@ -4,7 +4,7 @@
 
 - 🌐 **배포 주소**: https://leeminhong.github.io/fundflow-dashboard/
 - 🧩 **기술 스택**: 순수 HTML/CSS/JS(빌드 도구 없음) + Python 데이터 파이프라인
-- 📦 **데이터 단위**: 조원
+- 📦 **데이터 단위**: 조원.
 
 ---
 
