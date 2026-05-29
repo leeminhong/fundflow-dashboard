@@ -399,6 +399,8 @@ a:focus {
 
 .heatmap-header {
   background: #f0f4f6;
+  /* 헤더(섹터/항목/날짜) 아래에도 강조 구분선을 둬 첫 섹터(REPO) 위를 구분한다. */
+  border-bottom-color: var(--line-strong);
   color: var(--navy);
   font-weight: 700;
   gap: 4px;
