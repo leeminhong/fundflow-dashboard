@@ -1,0 +1,18 @@
+name: Schedule main test
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print schedule context
+        run: |
+          date -u
+          echo "event_name=${{ github.event_name }}"
+          echo "actor=${{ github.actor }}"
+          echo "schedule=${{ github.event.schedule }}"
+          echo "sha=${{ github.sha }}"
