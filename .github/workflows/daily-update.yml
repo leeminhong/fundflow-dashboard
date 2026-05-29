@@ -6,7 +6,7 @@ on:
   schedule:
     - cron: "10,15,20,25,30,35,40 6 * * *"
       timezone: "Asia/Seoul"
-    - cron: "10,15,20,25,30,35,40,45,50,55 15 * * *"
+    - cron: "13,18,23,28,33,38,43,49,52,57 15 * * *"
       timezone: "Asia/Seoul"
   workflow_dispatch: {}   # allow manual "Run workflow" from the Actions tab
 
