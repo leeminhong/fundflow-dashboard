@@ -323,6 +323,11 @@ a:focus {
   width: min(260px, 34vw);
 }
 
+.trend-mode {
+  display: inline-flex;
+  gap: 4px;
+}
+
 .panel-head button,
 .panel-head a,
 .table-toolbar button {

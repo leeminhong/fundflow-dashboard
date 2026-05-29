@@ -9,6 +9,7 @@ const state = {
   expandedParents: new Set(),
   compactView: false,
   trendExpanded: true,
+  trendMode: "change",
 };
 
 const els = {
@@ -30,6 +31,7 @@ const els = {
   trendChart: document.querySelector("#trendChart"),
   trendPanel: document.querySelector(".trend-panel"),
   trendToggle: document.querySelector("#trendToggle"),
+  trendModeButtons: document.querySelectorAll("[data-trend-mode]"),
   itemLink: document.querySelector("#itemLink"),
   compactViewToggle: document.querySelector("#compactViewToggle"),
   resetFilters: document.querySelector("#resetFilters"),
@@ -443,13 +445,18 @@ function renderTrend() {
 
   const dates = visibleDates();
   const map = recordMap();
-  const points = dates.map((date) => ({
-    date,
-    value: deltaValue(map, item.itemCode, date) ?? 0,
-  }));
+  const isBalance = state.trendMode === "balance";
+  const points = dates.map((date) => {
+    const record = map.get(`${item.itemCode}|${date}`);
+    const value = isBalance
+      ? (Number.isFinite(record?.balanceValue) ? record.balanceValue : null)
+      : (deltaValue(map, item.itemCode, date) ?? 0);
+    return { date, value };
+  });
 
-  els.trendTitle.textContent = `${item.itemName} 최근 추이`;
-  els.trendSubtitle.textContent = `${item.sector} · ${BASIS_LABEL[state.compareBasis]} · ${dates.length}개 날짜 · 단위 ${state.data.meta.unit}`;
+  const basisLabel = isBalance ? "잔액" : BASIS_LABEL[state.compareBasis];
+  els.trendTitle.textContent = `${item.itemName} ${isBalance ? "잔액" : "증감"} 추이`;
+  els.trendSubtitle.textContent = `${item.sector} · ${basisLabel} · ${dates.length}개 날짜 · 단위 ${state.data.meta.unit}`;
 
   if (item.link) {
     els.itemLink.href = item.link;
@@ -461,36 +468,71 @@ function renderTrend() {
     els.itemLink.setAttribute("aria-disabled", "true");
   }
 
-  drawLineChart(points);
+  drawLineChart(points, {
+    includeZero: !isBalance,
+    formatter: isBalance ? formatBalance : formatValue,
+  });
   renderTrendPanelState();
+  renderTrendModeButtons();
 }
 
-function drawLineChart(points) {
+function formatBalance(value) {
+  return Number.isFinite(value) ? nf.format(value) : "-";
+}
+
+function renderTrendModeButtons() {
+  els.trendModeButtons.forEach((btn) => {
+    btn.setAttribute("aria-pressed", String(btn.dataset.trendMode === state.trendMode));
+  });
+}
+
+function drawLineChart(points, opts = {}) {
+  const { includeZero = true, formatter = formatValue } = opts;
   const svg = els.trendChart;
   const width = svg.clientWidth || 760;
   const height = 320;
   const margin = { top: 26, right: 24, bottom: 42, left: 58 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
-  const values = points.map((point) => point.value);
-  let min = Math.min(...values, 0);
-  let max = Math.max(...values, 0);
+  const finiteValues = points.map((point) => point.value).filter(Number.isFinite);
+  if (!finiteValues.length) {
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.innerHTML = `<rect x="0" y="0" width="${width}" height="${height}" fill="#ffffff"></rect>`;
+    chartCtx = { points, x: () => 0, margin, width, height, formatter };
+    return;
+  }
+  let min = includeZero ? Math.min(...finiteValues, 0) : Math.min(...finiteValues);
+  let max = includeZero ? Math.max(...finiteValues, 0) : Math.max(...finiteValues);
   if (min === max) {
     min -= 1;
     max += 1;
+  } else if (!includeZero) {
+    const pad = (max - min) * 0.08;
+    min -= pad;
+    max += pad;
   }
   const x = (idx) => margin.left + (points.length <= 1 ? innerW / 2 : (idx / (points.length - 1)) * innerW);
   const y = (value) => margin.top + ((max - value) / (max - min)) * innerH;
   const zeroY = y(0);
-  const line = points.map((point, idx) => `${idx === 0 ? "M" : "L"} ${x(idx).toFixed(1)} ${y(point.value).toFixed(1)}`).join(" ");
-  const area = `${line} L ${x(points.length - 1).toFixed(1)} ${zeroY.toFixed(1)} L ${x(0).toFixed(1)} ${zeroY.toFixed(1)} Z`;
+
+  // null 구간에서 선이 끊기도록 세그먼트별로 경로를 만든다.
+  let line = "";
+  let penDown = false;
+  points.forEach((point, idx) => {
+    if (!Number.isFinite(point.value)) {
+      penDown = false;
+      return;
+    }
+    line += `${penDown ? "L" : "M"} ${x(idx).toFixed(1)} ${y(point.value).toFixed(1)} `;
+    penDown = true;
+  });
 
   const ticks = [min, min + (max - min) / 2, max];
   const yGrid = ticks
     .map(
       (tick) => `
         <line class="grid-line" x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick)}" y2="${y(tick)}"></line>
-        <text class="axis-label" x="${margin.left - 8}" y="${y(tick) + 4}" text-anchor="end">${formatValue(tick)}</text>
+        <text class="axis-label" x="${margin.left - 8}" y="${y(tick) + 4}" text-anchor="end">${formatter(tick)}</text>
       `,
     )
     .join("");
@@ -502,21 +544,26 @@ function drawLineChart(points) {
     .join("");
 
   const circles = points
-    .map((point, idx) => `<circle class="point" cx="${x(idx)}" cy="${y(point.value)}" r="4"><title>${point.date} ${formatValue(point.value)}</title></circle>`)
+    .map((point, idx) =>
+      Number.isFinite(point.value)
+        ? `<circle class="point" data-idx="${idx}" cx="${x(idx)}" cy="${y(point.value)}" r="4"><title>${point.date} ${formatter(point.value)}</title></circle>`
+        : "",
+    )
     .join("");
+
+  const zeroAxis = includeZero ? `<line class="axis" x1="${margin.left}" x2="${width - margin.right}" y1="${zeroY}" y2="${zeroY}"></line>` : "";
 
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   svg.innerHTML = `
     <rect x="0" y="0" width="${width}" height="${height}" fill="#ffffff"></rect>
     ${yGrid}
-    <line class="axis" x1="${margin.left}" x2="${width - margin.right}" y1="${zeroY}" y2="${zeroY}"></line>
-    <path class="trend-area" d="${area}"></path>
-    <path class="trend-line" d="${line}"></path>
+    ${zeroAxis}
+    <path class="trend-line" d="${line.trim()}"></path>
     ${circles}
     ${xLabels}
   `;
 
-  chartCtx = { points, x, margin, width, height };
+  chartCtx = { points, x, margin, width, height, formatter };
   const guide = document.createElementNS("http://www.w3.org/2000/svg", "line");
   guide.setAttribute("class", "guide-line");
   guide.setAttribute("y1", margin.top);
@@ -546,31 +593,38 @@ async function init() {
     const rect = els.trendChart.getBoundingClientRect();
     const scale = els.trendChart.viewBox.baseVal.width / rect.width;
     const svgX = (e.clientX - rect.left) * scale;
-    const { points, x } = chartCtx;
-    let nearest = 0;
+    const { points, x, formatter = formatValue } = chartCtx;
+    let nearest = -1;
     let minDist = Infinity;
     for (let i = 0; i < points.length; i++) {
+      if (!Number.isFinite(points[i].value)) continue;
       const d = Math.abs(x(i) - svgX);
       if (d < minDist) { minDist = d; nearest = i; }
     }
-    const circles = els.trendChart.querySelectorAll(".point");
-    if (hoverIdx >= 0 && circles[hoverIdx]) circles[hoverIdx].setAttribute("r", "4");
+    if (nearest < 0) return;
+    if (hoverIdx >= 0) {
+      const prev = els.trendChart.querySelector(`.point[data-idx="${hoverIdx}"]`);
+      if (prev) prev.setAttribute("r", "4");
+    }
     hoverIdx = nearest;
-    if (circles[hoverIdx]) circles[hoverIdx].setAttribute("r", "6");
+    const current = els.trendChart.querySelector(`.point[data-idx="${hoverIdx}"]`);
+    if (current) current.setAttribute("r", "6");
     const guide = els.trendChart.querySelector(".guide-line");
     if (guide) {
       guide.setAttribute("x1", x(nearest));
       guide.setAttribute("x2", x(nearest));
       guide.classList.add("visible");
     }
-    tooltip.innerHTML = `<strong>${formatFullDate(points[nearest].date)}</strong><br>${formatValue(points[nearest].value)} ${state.data.meta.unit}`;
+    tooltip.innerHTML = `<strong>${formatFullDate(points[nearest].date)}</strong><br>${formatter(points[nearest].value)} ${state.data.meta.unit}`;
     tooltip.classList.add("visible");
     tooltip.style.left = `${e.clientX + 14}px`;
     tooltip.style.top = `${e.clientY - 44}px`;
   });
   els.trendChart.addEventListener("mouseleave", () => {
-    const circles = els.trendChart.querySelectorAll(".point");
-    if (hoverIdx >= 0 && circles[hoverIdx]) circles[hoverIdx].setAttribute("r", "4");
+    if (hoverIdx >= 0) {
+      const prev = els.trendChart.querySelector(`.point[data-idx="${hoverIdx}"]`);
+      if (prev) prev.setAttribute("r", "4");
+    }
     hoverIdx = -1;
     tooltip.classList.remove("visible");
     const guide = els.trendChart.querySelector(".guide-line");
@@ -607,6 +661,13 @@ async function init() {
     renderTrendPanelState();
     if (state.trendExpanded) renderTrend();
   });
+  els.trendModeButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.trendMode = btn.dataset.trendMode;
+      state.trendExpanded = true;
+      renderTrend();
+    });
+  });
   els.compactViewToggle.addEventListener("click", () => {
     state.compactView = !state.compactView;
     state.expandedParents.clear();
@@ -620,6 +681,7 @@ async function init() {
     state.compareBasis = "day";
     state.compactView = false;
     state.trendExpanded = true;
+    state.trendMode = "change";
     state.expandedParents.clear();
     state.asOfDate = state.data.meta.defaultDate ?? state.data.summary.defaultDate ?? state.data.meta.latestDate;
     els.asOfDate.value = state.asOfDate;
