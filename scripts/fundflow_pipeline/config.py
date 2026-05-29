@@ -19,7 +19,16 @@ REPO_LINK_URL = (
 )
 # 패키지(scripts/fundflow_pipeline/) → scripts/fetch_seibro_repo.js
 SEIBRO_REPO_FETCH_SCRIPT = Path(__file__).resolve().parent.parent / "fetch_seibro_repo.js"
-FREESIS_LINK_URL = "https://freesis.kofia.or.kr"
+# 유형별기간설정 (펀드 설정/일임) — 스크래퍼 INIT_URL과 동일한 페이지
+FREESIS_LINK_URL = (
+    "https://freesis.kofia.or.kr/stat/FreeSIS.do"
+    "?parentDivId=MSIS40100000000000&serviceId=STATFND0100100260"
+)
+# 증시자금추이 (고객예탁금/CMA)
+FREESIS_STOCK_LINK_URL = (
+    "https://freesis.kofia.or.kr/stat/FreeSIS.do"
+    "?parentDivId=MSIS10000000000000&serviceId=STATSCU0100000060"
+)
 DETAIL_URL_PATTERN = re.compile(
     r"/portal/bbs/P0002018/view\.do\?[^\"'<> ]*nttId=\d+[^\"'<> ]*",
     re.I,
@@ -29,8 +38,8 @@ ITEM_LINK_OVERRIDES = {
     "FUND_BOND": FREESIS_LINK_URL,
     "FUND_MMF": FREESIS_LINK_URL,
     "FUND_EQUITY": FREESIS_LINK_URL,
-    "SEC_CUSTOMER_DEPOSIT": FREESIS_LINK_URL,
-    "SEC_CMA": FREESIS_LINK_URL,
+    "SEC_CUSTOMER_DEPOSIT": FREESIS_STOCK_LINK_URL,
+    "SEC_CMA": FREESIS_STOCK_LINK_URL,
     "SEC_CUSTOMER_RP": REPO_LINK_URL,
     "REPO_INTERBANK": REPO_LINK_URL,
 }
