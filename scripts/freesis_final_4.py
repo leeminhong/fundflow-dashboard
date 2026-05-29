@@ -22,10 +22,14 @@ from pathlib import Path
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  설정
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# 매일 누적 DB(freesis_db.json)에 머지하므로 최근 며칠만 받으면 된다.
+# 노는 날에는 값이 없고 영업일에만 갱신되므로, 명절 연휴(최대 ~6일)를
+# 건너뛰어도 직전 영업일이 포함되도록 10일치를 받는다. 과거치는 DB에 보존됨.
+# (1년 전체 백필이 필요하면 LOOKBACK_DAYS를 365로 일시 변경.)
+LOOKBACK_DAYS = 10
 END_DATE   = datetime.now().strftime("%Y%m%d")
-START_DATE = (datetime.now() - timedelta(days=365)).strftime("%Y%m%d")
-# 증시자금도 동일하게 1년
-STOCK_START = (datetime.now() - timedelta(days=365)).strftime("%Y%m%d")
+START_DATE = (datetime.now() - timedelta(days=LOOKBACK_DAYS)).strftime("%Y%m%d")
+STOCK_START = START_DATE
 OUTPUT     = f"freesis_크레딧채권운용_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
 DB_JSON    = Path(__file__).resolve().parent.parent / "data" / "freesis_db.json"
 
@@ -207,8 +211,8 @@ def save_to_db(df_fund_summary, df_deposit):
 def main():
     print("=" * 60)
     print("  FREESIS 크레딧채권 운용 + 증시자금 크롤러")
-    print(f"  펀드/일임: {START_DATE} ~ {END_DATE} (1년)")
-    print(f"  증시자금:  {STOCK_START} ~ {END_DATE} (1년)")
+    print(f"  펀드/일임: {START_DATE} ~ {END_DATE} (최근 {LOOKBACK_DAYS}일)")
+    print(f"  증시자금:  {STOCK_START} ~ {END_DATE} (최근 {LOOKBACK_DAYS}일)")
     print("=" * 60)
 
     # 세션
