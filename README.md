@@ -1,6 +1,6 @@
 # Fundflow Dashboard
 
-국내 자금 흐름(펀드플로우)의 **일별 증감·잔액**을 한 화면에서 보여주는 정적 웹 대시보드입니다. 매일 자동으로 데이터를 받아 갱신되며, GitHub Pages로 서빙됩니다.
+국내 자금 흐름(펀드플로우)의 **일별 증감·잔액**을 한 화면에서 보여주는 정적 웹 대시보드입니다. 데이터 파이프라인으로 매일 갱신해 GitHub Pages로 서빙합니다.
 
 - 🌐 **배포 주소**: https://leeminhong.github.io/fundflow-dashboard/
 - 🧩 **기술 스택**: 순수 HTML/CSS/JS(빌드 도구 없음) + Python 데이터 파이프라인
@@ -16,11 +16,10 @@
 4. [데이터 출처](#4-데이터-출처)
 5. [데이터 파이프라인 동작 원리](#5-데이터-파이프라인-동작-원리)
 6. [데이터 갱신하기](#6-데이터-갱신하기)
-7. [자동 업데이트](#7-자동-업데이트)
-8. [로컬에서 띄워 보기](#8-로컬에서-띄워-보기)
-9. [개발 · 검사](#9-개발--검사)
-10. [자주 묻는 질문](#10-자주-묻는-질문)
-11. [커스터마이징 포인트](#11-커스터마이징-포인트)
+7. [로컬에서 띄워 보기](#7-로컬에서-띄워-보기)
+8. [개발 · 검사](#8-개발--검사)
+9. [자주 묻는 질문](#9-자주-묻는-질문)
+10. [커스터마이징 포인트](#10-커스터마이징-포인트)
 
 ---
 
@@ -31,7 +30,7 @@
 | 부분 | 무엇 | 어디서 도나 |
 |------|------|-------------|
 | **프론트엔드** | 브라우저에서 보이는 대시보드 (`index.html`, `styles.css`, `app.js`) | 사용자의 웹 브라우저 |
-| **데이터 파이프라인** | 외부 사이트에서 데이터를 받아 `data/*.json`으로 가공하는 파이썬 스크립트 | GitHub Actions(클라우드) 또는 로컬 PC |
+| **데이터 파이프라인** | 외부 사이트에서 데이터를 받아 `data/*.json`으로 가공하는 파이썬 스크립트 | 로컬 PC 또는 CI |
 
 흐름을 한 줄로 요약하면:
 
@@ -71,7 +70,7 @@ fundflow-dashboard/
 ├── scripts/
 │   ├── update.sh             # 한 번에 갱신하는 진입점 (FREESIS → BOK 병합)
 │   ├── check.sh              # lint(pyflakes) + 테스트(pytest)
-│   ├── freesis_final_4.py    # FREESIS API 크롤러 → freesis_db.json 누적
+│   ├── freesis_final_4.py    # FREESIS 크롤러 → freesis_db.json 누적
 │   ├── fetch_bok_market_indicator.py   # 얇은 진입점 (fundflow_pipeline.cli.main 호출)
 │   ├── fetch_seibro_repo.js   # SEIBro RP 스크래핑 (Node + Playwright)
 │   └── fundflow_pipeline/     # 데이터 가공 메인 패키지
@@ -84,8 +83,7 @@ fundflow-dashboard/
 │       └── webdata.py         #   상태 재계산, build/merge web data, 기준일 산정
 │
 ├── tests/                    # pytest 단위 테스트
-├── requirements.txt          # 파이썬 의존성 (openpyxl, requests, pandas)
-└── .github/workflows/daily-update.yml   # 매일 자동 갱신 워크플로
+└── requirements.txt          # 파이썬 의존성 (openpyxl, requests, pandas)
 ```
 
 **두 개의 JSON을 구분하세요:**
@@ -102,8 +100,10 @@ fundflow-dashboard/
 | 소스 | 사이트 | 가져오는 항목 | 수집 방식 |
 |------|--------|---------------|-----------|
 | **BOK** (한국은행) | 일일 금융시장 주요지표 | 은행 예금(실세총예금·실세요구불·저축성)·금전신탁, 증권 고객RP·CMA | 게시글의 **엑셀 첨부**를 내려받아 파싱 |
-| **FREESIS** (금융투자협회) | 유형별 설정/일임, 증시자금추이 | 투신 펀드/일임 11종 + 합산 3종, 증권 고객예탁금 | **단일 API 호출**(날짜 범위 지정) |
+| **FREESIS** (금융투자협회) | 유형별 설정/일임, 증시자금추이 | 투신 펀드/일임 11종 + 합산 3종, 증권 고객예탁금 | **단일 JSON 요청**(`getMetaDataList.do`에 POST, 날짜 범위 지정) |
 | **SEIBro** (예탁결제원) | RP 시장현황 | REPO 기관RP | **Playwright**로 페이지 로드 후 테이블 읽기 |
+
+> FREESIS는 공식 공개 API가 아니라 FreeSIS 웹앱의 내부 조회 엔드포인트입니다. JSON을 POST로 보내면 JSON으로 응답하는 구조라, 코드에서는 한 번의 HTTP 요청으로 날짜 범위 전체를 받습니다.
 
 각 소스는 갱신 시점이 서로 다릅니다(특히 BOK는 며칠씩 늦을 수 있음). 그래서 화면의 **기준일은 메인 소스인 FREESIS의 최종 영업일**로 잡습니다([상세](#기준일은-어떻게-정해지나요)).
 
@@ -112,7 +112,7 @@ fundflow-dashboard/
 ## 5. 데이터 파이프라인 동작 원리
 
 ```
-[1단계] FREESIS API
+[1단계] FREESIS 데이터 조회 (JSON POST)
    scripts/freesis_final_4.py
         └─> data/freesis_db.json  (펀드/일임·고객예탁금·RP를 날짜키로 누적)
 
@@ -128,9 +128,9 @@ fundflow-dashboard/
 **핵심 포인트**
 
 - **누적 구조**: 매 실행은 "최근 며칠"만 받아도 됩니다. 과거치는 두 DB에 그대로 남고, 증감값은 DB 전체 날짜를 기준으로 다시 계산되므로 짧게 받아도 정확합니다.
-- **fetch 창을 짧게 두는 이유**: 매일 도는 전제라 속도가 중요합니다.
-  - FREESIS는 단일 API 호출이라 날짜 범위가 넓어도 빠릅니다 → `freesis_final_4.py`의 `LOOKBACK_DAYS = 10`(최근 10일).
-  - BOK는 **날짜마다 엑셀을 받아 파싱**하므로 날짜 수가 곧 소요 시간입니다 → 일일 실행은 `--days 1`(최신 1영업일만).
+- **fetch 창을 짧게 두는 이유**: 자주 돌리는 전제라 속도가 중요합니다.
+  - FREESIS는 한 번의 JSON 요청(POST)으로 날짜 범위 전체를 받으므로 범위가 넓어도 빠릅니다 → `freesis_final_4.py`의 `LOOKBACK_DAYS = 10`(최근 10일).
+  - BOK는 **날짜마다 엑셀을 받아 파싱**하므로 날짜 수가 곧 소요 시간입니다 → 보통 `--days 1`(최신 1영업일만).
   - SEIBro는 페이지를 한 번만 로드해 테이블을 읽으므로 limit이 커도 느리지 않습니다.
 - **머지 규칙**: `fundflow.json`은 기존 레코드를 보존하고 같은 날짜는 덮어써서 stale한 증감값을 교정합니다.
 
@@ -166,7 +166,7 @@ python3 scripts/fetch_bok_market_indicator.py \
 
 | 옵션 | 설명 |
 |------|------|
-| `--days N` | BOK 최근 N영업일치 fetch. CLI 기본값은 7이지만 일일 실행(`update.sh`)은 **`--days 1`**. BOK는 날짜 수 = 소요시간이라 보통 작게 둡니다. |
+| `--days N` | BOK 최근 N영업일치 fetch. CLI 기본값은 7이지만 `update.sh`는 **`--days 1`**. BOK는 날짜 수 = 소요시간이라 보통 작게 둡니다. |
 | `--freesis-db-json <path>` | `freesis_db.json` 경로 (기본: 자동 탐지) |
 | `--skip-seibro-repo` | SEIBro RP 수집 건너뛰기 (`node` 없는 환경 등) |
 
@@ -194,33 +194,7 @@ git push
 
 ---
 
-## 7. 자동 업데이트
-
-데이터는 두 가지 방법으로 자동 갱신할 수 있습니다.
-
-### A. GitHub Actions (클라우드) — 현재 사용 중
-
-`.github/workflows/daily-update.yml`
-
-- **하루 2회** cron 실행: `06:10 KST`, `17:10 KST` (정시는 부하로 지연이 잦아 :10에 실행). Actions 탭에서 수동 실행(`workflow_dispatch`)도 가능.
-- 파이썬 의존성 설치 → Node/Playwright 설치 → `scripts/update.sh` 실행 → 변경된 `data/*.json`을 **자동 커밋·푸시** → GitHub Pages가 그 결과를 서빙.
-- 푸시 충돌(다른 실행/수동 푸시로 main이 앞서간 경우)에 대비해 `git pull --rebase` 후 최대 3회 재시도.
-- ⚠️ **주의**: GitHub 러너는 해외(미국) IP라 국내 금융 사이트(BOK/FREESIS/SEIBro) 접속이 막히거나 불안정할 수 있습니다. 한 단계가 실패해도 나머지는 기존 데이터를 유지하도록 설계되어 있습니다.
-
-### B. 로컬 스케줄 (부서 PC가 한국에 있을 때 권장)
-
-국내 IP라 접속이 안정적이고 `node`/Playwright도 이미 깔려 있을 가능성이 높습니다.
-
-```bash
-# crontab 예: 매일 19시에 갱신
-0 19 * * * cd /path/to/fundflow-dashboard && scripts/update.sh
-```
-
-macOS라면 `launchd`로도 동일하게 등록할 수 있습니다.
-
----
-
-## 8. 로컬에서 띄워 보기
+## 7. 로컬에서 띄워 보기
 
 빌드가 필요 없습니다. 정적 서버만 하나 띄우면 됩니다.
 
@@ -234,7 +208,7 @@ python3 -m http.server 4173
 
 ---
 
-## 9. 개발 · 검사
+## 8. 개발 · 검사
 
 파이프라인 코드를 고친 뒤에는 회귀를 막기 위해 검사를 돌립니다.
 
@@ -259,7 +233,7 @@ chmod +x .git/hooks/pre-commit
 
 ---
 
-## 10. 자주 묻는 질문
+## 9. 자주 묻는 질문
 
 ### 기준일은 어떻게 정해지나요?
 
@@ -268,13 +242,6 @@ chmod +x .git/hooks/pre-commit
 - BOK·SEIBro는 FREESIS와 갱신 시점이 어긋날 수 있습니다.
 - 만약 "모든 소스가 다 채워진 날짜"를 기준으로 잡으면, 가장 늦는 소스(보통 BOK)에 끌려가 기준일이 과거로 후퇴합니다.
 - 그래서 메인 데이터인 FREESIS 기준으로 잡고, 아직 다른 소스가 안 채워졌으면 그 날짜를 "잠정치"로 표시합니다.
-
-### GitHub Pages에서 Playwright가 도나요?
-
-아니요. **GitHub Pages는 정적 파일만 서빙**하고 Python/Node/Playwright를 실행하지 않습니다.
-
-- 실제 데이터 수집은 **GitHub Actions**(또는 로컬 cron)가 담당합니다. Actions에서는 워크플로가 `npx playwright install`로 Playwright를 설치하므로 정상 동작합니다.
-- 즉 "Pages에서 Playwright가 안 도는 것"은 정상입니다 — Actions가 데이터를 만들어 커밋하면, Pages는 그 결과(JSON)만 보여줍니다.
 
 ### SEIBro RP는 어떻게 누적되나요?
 
@@ -286,7 +253,7 @@ SEIBro는 과거 이력을 주지 않아 **초기 1주일치만 수동 백필**�
 
 ---
 
-## 11. 커스터마이징 포인트
+## 10. 커스터마이징 포인트
 
 | 바꾸고 싶은 것 | 어디를 수정 |
 |----------------|-------------|
@@ -294,4 +261,3 @@ SEIBro는 과거 이력을 주지 않아 **초기 1주일치만 수동 백필**�
 | FREESIS 수집 기간 | `scripts/freesis_final_4.py`의 `LOOKBACK_DAYS` |
 | BOK 수집 일수 | `scripts/update.sh`의 `--days` 값 |
 | 항목 정의 / 출처 링크 | `fundflow_pipeline/config.py`의 `TARGET_ITEMS`, `FREESIS_*`, `ITEM_LINK_OVERRIDES` |
-| 자동 실행 시간 | `.github/workflows/daily-update.yml`의 `cron` |
