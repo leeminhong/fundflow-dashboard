@@ -9,7 +9,7 @@ const state = {
   expandedParents: new Set(),
   compactView: false,
   trendExpanded: true,
-  trendMode: "change",
+  trendMode: "balance",
 };
 
 const els = {
@@ -682,7 +682,7 @@ async function init() {
     state.compareBasis = "day";
     state.compactView = false;
     state.trendExpanded = true;
-    state.trendMode = "change";
+    state.trendMode = "balance";
     state.expandedParents.clear();
     state.asOfDate = state.data.meta.defaultDate ?? state.data.summary.defaultDate ?? state.data.meta.latestDate;
     els.asOfDate.value = state.asOfDate;
