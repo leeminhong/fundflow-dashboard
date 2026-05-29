@@ -378,7 +378,11 @@ a:focus {
 
 .heatmap {
   display: grid;
-  min-width: 920px;
+  /* 전체 기간처럼 열이 많아 가로 스크롤이 길어질 때, 그리드 폭을 콘텐츠 전체로
+     고정(max-content)해야 좌측 섹터/항목 고정열(position: sticky)이 끝까지 유지된다.
+     min-width:100%로 열이 적을 때는 컨테이너를 채우며 1fr로 늘어난다. */
+  width: max-content;
+  min-width: 100%;
   padding: 0 10px 10px;
 }
 
