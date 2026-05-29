@@ -491,7 +491,10 @@ function drawLineChart(points, opts = {}) {
   const { includeZero = true, formatter = formatValue } = opts;
   const svg = els.trendChart;
   const width = svg.clientWidth || 760;
-  const height = 320;
+  // viewBox 높이를 실제 렌더 높이(CSS)와 맞춰야 preserveAspectRatio 레터박스가
+  // 생기지 않는다. 안 맞으면 x축이 가로로 축소·중앙정렬되어 끝점일수록 마우스
+  // 좌표와 점 위치가 어긋난다.
+  const height = svg.clientHeight || 320;
   const margin = { top: 26, right: 24, bottom: 42, left: 58 };
   const innerW = width - margin.left - margin.right;
   const innerH = height - margin.top - margin.bottom;
