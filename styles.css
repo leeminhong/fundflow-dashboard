@@ -488,16 +488,6 @@ a:focus {
   font-weight: 800;
 }
 
-.incomplete-column {
-  background-image: repeating-linear-gradient(
-    135deg,
-    rgba(183, 121, 31, 0.18) 0,
-    rgba(183, 121, 31, 0.18) 6px,
-    transparent 6px,
-    transparent 12px
-  );
-}
-
 .tree-toggle {
   align-items: center;
   appearance: none;

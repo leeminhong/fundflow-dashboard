@@ -326,9 +326,8 @@ function renderHeatmap() {
   cells.push(`<div class="heatmap-cell heatmap-header" style="grid-column:2;grid-row:1">항목</div>`);
   for (const [dateIdx, date] of dates.entries()) {
     const selectedClass = date === state.asOfDate ? " latest-column" : "";
-    const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
     cells.push(
-      `<div class="heatmap-cell heatmap-header${selectedClass}${incompleteClass}" style="grid-column:${dateIdx + 3};grid-row:1">${formatDate(date)}</div>`,
+      `<div class="heatmap-cell heatmap-header${selectedClass}" style="grid-column:${dateIdx + 3};grid-row:1">${formatDate(date)}</div>`,
     );
   }
 
@@ -361,9 +360,8 @@ function renderHeatmap() {
       const value = deltaValue(map, item.itemCode, date);
       const colorValue = colorMetricValue(map, item.itemCode, date);
       const latestClass = date === state.asOfDate ? " latest-column" : "";
-      const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
       cells.push(
-        `<div class="heatmap-cell${latestClass}${incompleteClass}" data-item-code="${item.itemCode}" style="grid-column:${dateIdx + 3};grid-row:${row};background:${colorFor(
+        `<div class="heatmap-cell${latestClass}" data-item-code="${item.itemCode}" style="grid-column:${dateIdx + 3};grid-row:${row};background:${colorFor(
           colorValue,
           maxAbs,
         )}">${formatValue(value)}</div>`,
