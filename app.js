@@ -3,6 +3,7 @@ const state = {
   sector: "전체",
   search: "",
   windowSize: 7,
+  compareBasis: "day",
   asOfDate: null,
   selectedItem: null,
   expandedParents: new Set(),
@@ -19,6 +20,7 @@ const els = {
   asOfDate: document.querySelector("#asOfDate"),
   sectorFilter: document.querySelector("#sectorFilter"),
   windowSize: document.querySelector("#windowSize"),
+  compareBasis: document.querySelector("#compareBasis"),
   itemSelect: document.querySelector("#itemSelect"),
   heatmap: document.querySelector("#heatmap"),
   heatmapCaption: document.querySelector("#heatmapCaption"),
@@ -152,6 +154,50 @@ function recordMap() {
   return map;
 }
 
+const BASIS_LABEL = { day: "전일대비", week: "전주대비", month: "전월대비" };
+
+const refDateCache = new Map();
+
+function toISODate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+// 비교 기준일(전주/전월)을 달력 기준으로 찾되, 휴일이면 그 이전 영업일로 스냅한다.
+function referenceDateFor(date, basis) {
+  if (basis === "day") return null;
+  const key = `${date}|${basis}`;
+  if (refDateCache.has(key)) return refDateCache.get(key);
+  const target = new Date(`${date}T00:00:00`);
+  if (basis === "week") target.setDate(target.getDate() - 7);
+  else if (basis === "month") target.setMonth(target.getMonth() - 1);
+  const targetStr = toISODate(target);
+  const dates = state.data.dates;
+  let ref = null;
+  for (let i = dates.length - 1; i >= 0; i -= 1) {
+    if (dates[i] <= targetStr) {
+      ref = dates[i];
+      break;
+    }
+  }
+  refDateCache.set(key, ref);
+  return ref;
+}
+
+function deltaValue(map, itemCode, date, basis = state.compareBasis) {
+  const record = map.get(`${itemCode}|${date}`);
+  if (!record) return undefined;
+  if (basis === "day") return record.changeValue;
+  const refDate = referenceDateFor(date, basis);
+  if (!refDate) return undefined;
+  const cur = record.balanceValue;
+  const prev = map.get(`${itemCode}|${refDate}`)?.balanceValue;
+  if (!Number.isFinite(cur) || !Number.isFinite(prev)) return undefined;
+  return cur - prev;
+}
+
 function colorFor(value, maxAbs) {
   if (!Number.isFinite(value) || maxAbs === 0) return "#f7fafc";
   const clamped = Math.max(-1, Math.min(1, value / maxAbs));
@@ -202,12 +248,13 @@ function recordsForDate(date) {
 }
 
 function selectedDateSummary() {
+  const map = recordMap();
   const records = recordsForDate(state.asOfDate).filter((record) => record.includeInTotal);
   const sectorSummary = orderedSectors().map((sector) => {
     const sectorRecords = records.filter((record) => record.sector === sector);
     return {
       sector,
-      latestChange: sectorRecords.reduce((sum, record) => sum + (record.changeValue || 0), 0),
+      latestChange: sectorRecords.reduce((sum, record) => sum + (deltaValue(map, record.itemCode, state.asOfDate) || 0), 0),
       latestBalance: sectorRecords.reduce((sum, record) => sum + (record.balanceValue || 0), 0),
       itemCount: sectorRecords.length,
     };
@@ -249,7 +296,7 @@ function renderHeatmap() {
 
   for (const item of items) {
     for (const date of dates) {
-      const value = map.get(`${item.itemCode}|${date}`)?.changeValue;
+      const value = deltaValue(map, item.itemCode, date);
       if (Number.isFinite(value)) values.push(Math.abs(value));
     }
   }
@@ -295,8 +342,7 @@ function renderHeatmap() {
     );
 
     for (const [dateIdx, date] of dates.entries()) {
-      const record = map.get(`${item.itemCode}|${date}`);
-      const value = record?.changeValue;
+      const value = deltaValue(map, item.itemCode, date);
       const latestClass = date === state.asOfDate ? " latest-column" : "";
       const incompleteClass = date === state.asOfDate && currentDateStatus()?.isComplete === false ? " incomplete-column" : "";
       cells.push(
@@ -375,11 +421,11 @@ function renderTrend() {
   const map = recordMap();
   const points = dates.map((date) => ({
     date,
-    value: map.get(`${item.itemCode}|${date}`)?.changeValue ?? 0,
+    value: deltaValue(map, item.itemCode, date) ?? 0,
   }));
 
   els.trendTitle.textContent = `${item.itemName} 최근 추이`;
-  els.trendSubtitle.textContent = `${item.sector} · ${dates.length}개 날짜 · 단위 ${state.data.meta.unit}`;
+  els.trendSubtitle.textContent = `${item.sector} · ${BASIS_LABEL[state.compareBasis]} · ${dates.length}개 날짜 · 단위 ${state.data.meta.unit}`;
 
   if (item.link) {
     els.itemLink.href = item.link;
@@ -521,6 +567,12 @@ async function init() {
     renderTrend();
     renderCompactToggle();
   });
+  els.compareBasis.addEventListener("change", (event) => {
+    state.compareBasis = event.target.value;
+    renderSectorSummary();
+    renderHeatmap();
+    renderTrend();
+  });
   els.itemSelect.addEventListener("change", (event) => {
     state.selectedItem = event.target.value;
     state.trendExpanded = true;
@@ -541,6 +593,7 @@ async function init() {
     state.sector = "전체";
     state.search = "";
     state.windowSize = 7;
+    state.compareBasis = "day";
     state.compactView = false;
     state.trendExpanded = true;
     state.expandedParents.clear();
@@ -548,6 +601,7 @@ async function init() {
     els.asOfDate.value = state.asOfDate;
     els.sectorFilter.value = "전체";
     els.windowSize.value = "7";
+    els.compareBasis.value = "day";
     render();
   });
   window.addEventListener("resize", renderTrend);

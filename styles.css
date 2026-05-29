@@ -177,7 +177,7 @@ main {
 
 .table-toolbar {
   align-items: end;
-  grid-template-columns: minmax(142px, 0.8fr) minmax(108px, 0.55fr) minmax(118px, 0.55fr) minmax(280px, 1fr);
+  grid-template-columns: minmax(142px, 0.8fr) minmax(108px, 0.55fr) minmax(118px, 0.55fr) minmax(118px, 0.55fr) 1fr;
 }
 
 .controls label {
@@ -225,6 +225,7 @@ a:focus {
   gap: 6px;
   grid-template-columns: auto 72px auto;
   min-width: 0;
+  white-space: nowrap;
 }
 
 .legend-scale {
@@ -235,14 +236,11 @@ a:focus {
 
 .toolbar-tools {
   align-items: center;
+  align-self: end;
   display: flex;
   gap: 6px;
   justify-content: flex-end;
   min-width: 0;
-}
-
-.toolbar-tools .legend {
-  margin-right: 14px;
 }
 
 .dashboard-panel {
@@ -634,6 +632,10 @@ a:focus {
 @media (max-width: 720px) {
   .table-toolbar {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .toolbar-tools {
+    grid-column: 1 / -1;
   }
 }
 
