@@ -44,7 +44,7 @@ SEIBro RP 스크래핑 ─────────────────┤
    ```
 
    주요 옵션:
-   - `--days 7` (기본): BOK 최근 N일치 fetch
+   - `--days N`: BOK 최근 N일치 fetch (CLI 기본값 7). BOK는 날짜마다 엑셀 첨부를 받아 파싱하므로 N이 곧 소요시간 — **일일 자동 실행(`update.sh`)은 `--days 1`로 최신 영업일 1건만** 받음. 과거치 백필이 필요할 때만 크게 줌.
    - `--freesis-db-json <path>`: freesis_db.json 경로 (기본 자동탐지)
    - `--skip-seibro-repo`: SEIBro RP fetch 건너뛰기
 
@@ -76,6 +76,8 @@ scripts/update.sh
 ```
 
 (FREESIS 누적 수집 → BOK + freesis_db + SEIBro 병합 → `data/fundflow.json` 재생성. BOK 시드는 고정 목록 URL을 쓰고 최신 글은 RSS로 자동 탐색하므로 매번 글 번호를 바꿀 필요 없음.)
+
+> 매일 돌리는 전제라 fetch 창은 짧게 둡니다 — FREESIS는 최근 10일(`freesis_final_4.py`의 `LOOKBACK_DAYS`), BOK는 최신 1영업일(`--days 1`)만 받고, 과거치는 누적 DB에 그대로 보존됩니다. 1년 백필 등이 필요하면 그 값만 일시적으로 키우면 됩니다.
 
 ### 자동화 옵션
 
@@ -120,5 +122,5 @@ chmod +x .git/hooks/pre-commit
 
 ## 참고
 
-- 섹터 표시 순서의 기준은 `app.js`의 `sectorOrder` (백엔드 `SECTOR_ORDER`도 동일하게 유지).
-- 자세한 작업 내역과 코드 포인트는 `HANDOFF.md` 참고.
+- 섹터 표시 순서의 기준은 `app.js`의 `sectorOrder` (백엔드 `SECTOR_ORDER`도 동일하게 유지). 현재 순서: `REPO → 투신 → 증권 → 은행`.
+- **기준일(default date)**은 메인 소스인 FREESIS의 최종 영업일로 잡습니다(`webdata.py`의 `freesis_default_date`). BOK·SEIBro는 갱신 시점이 FREESIS와 어긋날 수 있어, "모든 소스가 채워진 날짜"를 기준으로 하면 가장 늦는 소스에 끌려가기 때문입니다.
