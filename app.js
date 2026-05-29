@@ -16,7 +16,6 @@ const els = {
   sourceStatus: document.querySelector("#sourceStatus"),
   generatedAt: document.querySelector("#generatedAt"),
   latestDate: document.querySelector("#latestDate"),
-  dataStatus: document.querySelector("#dataStatus"),
   sectorSummary: document.querySelector("#sectorSummary"),
   asOfDate: document.querySelector("#asOfDate"),
   sectorFilter: document.querySelector("#sectorFilter"),
@@ -25,7 +24,6 @@ const els = {
   itemSelect: document.querySelector("#itemSelect"),
   heatmapScroll: document.querySelector(".heatmap-scroll"),
   heatmap: document.querySelector("#heatmap"),
-  heatmapCaption: document.querySelector("#heatmapCaption"),
   trendTitle: document.querySelector("#trendTitle"),
   trendSubtitle: document.querySelector("#trendSubtitle"),
   trendChart: document.querySelector("#trendChart"),
@@ -283,8 +281,6 @@ function renderSummary() {
 
   els.latestDate.textContent = formatFullDate(state.asOfDate);
   const isComplete = Boolean(status?.isComplete);
-  els.dataStatus.hidden = isComplete;
-  els.dataStatus.textContent = isComplete ? "" : "잠정치";
   els.sourceStatus.textContent = isComplete ? "" : "잠정치";
   els.generatedAt.textContent = `${state.data.meta.generatedAt.replace("T", " ").slice(0, 16)} 업데이트`;
 }
@@ -377,18 +373,6 @@ function renderHeatmap() {
     els.heatmap.innerHTML = `<div class="empty-state">표시할 항목이 없습니다</div>`;
   } else {
     els.heatmap.innerHTML = cells.join("");
-  }
-
-  const status = currentDateStatus();
-  const base = `${items.length}개 항목 · ${dates.length}개 날짜`;
-  if (status?.isComplete === false && status.missingItems.length) {
-    const missing = status.missingItems;
-    const pending = missing.length > 1 ? `${missing[0]} 외 ${missing.length - 1}개 집계 전` : `${missing[0]} 집계 전`;
-    els.heatmapCaption.textContent = `${base} · ${pending}`;
-    els.heatmapCaption.title = `집계 전: ${missing.join(", ")}`;
-  } else {
-    els.heatmapCaption.textContent = base;
-    els.heatmapCaption.title = "";
   }
 
   els.heatmap.querySelectorAll("[data-toggle-parent]").forEach((node) => {

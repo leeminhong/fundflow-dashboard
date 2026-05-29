@@ -139,7 +139,7 @@ main {
 }
 
 .sector-name {
-  color: var(--muted);
+  color: var(--ink);
   font-size: 12px;
   font-weight: 600;
 }
@@ -422,7 +422,7 @@ a:focus {
 }
 
 .heatmap-sector {
-  color: var(--muted);
+  color: var(--ink);
   font-weight: 600;
   left: 0;
 }
