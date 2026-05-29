@@ -427,6 +427,11 @@ a:focus {
   justify-content: center;
 }
 
+/* 섹터 마지막 행의 모든 셀(항목~마지막 날짜)에 강조 구분선을 이어 섹터를 구분한다. */
+.heatmap-cell.sector-end {
+  border-bottom-color: var(--line-strong);
+}
+
 .heatmap-item {
   gap: 6px;
   color: var(--ink);

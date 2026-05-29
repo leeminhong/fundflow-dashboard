@@ -343,6 +343,9 @@ function renderHeatmap() {
 
   items.forEach((item, itemIdx) => {
     const row = itemIdx + 2;
+    // 섹터 그룹의 마지막 행에 강조 구분선을 깔아 항목 셀~마지막 날짜까지 직선으로 잇는다.
+    const isSectorEnd = itemIdx === items.length - 1 || items[itemIdx + 1].sector !== item.sector;
+    const sectorEndClass = isSectorEnd ? " sector-end" : "";
     const hierarchyClass = item.level > 1 ? "heatmap-child" : "heatmap-parent";
     const canExpand = hasChildren(item);
     const expanded = Boolean(state.search) || !state.compactView || state.expandedParents.has(item.itemCode);
@@ -353,7 +356,7 @@ function renderHeatmap() {
       ? `<a href="${item.link}" target="_blank" rel="noreferrer" class="${hierarchyClass}">${item.itemName}</a>`
       : `<button class="item-button ${hierarchyClass}" type="button" data-item-code="${item.itemCode}">${item.itemName}</button>`;
     cells.push(
-      `<div class="heatmap-cell heatmap-item level-${item.level}" data-item-code="${item.itemCode}" style="grid-column:2;grid-row:${row}">${toggle}${link}</div>`,
+      `<div class="heatmap-cell heatmap-item level-${item.level}${sectorEndClass}" data-item-code="${item.itemCode}" style="grid-column:2;grid-row:${row}">${toggle}${link}</div>`,
     );
 
     for (const [dateIdx, date] of dates.entries()) {
@@ -361,7 +364,7 @@ function renderHeatmap() {
       const colorValue = colorMetricValue(map, item.itemCode, date);
       const latestClass = date === state.asOfDate ? " latest-column" : "";
       cells.push(
-        `<div class="heatmap-cell${latestClass}" data-item-code="${item.itemCode}" style="grid-column:${dateIdx + 3};grid-row:${row};background:${colorFor(
+        `<div class="heatmap-cell${latestClass}${sectorEndClass}" data-item-code="${item.itemCode}" style="grid-column:${dateIdx + 3};grid-row:${row};background:${colorFor(
           colorValue,
           maxAbs,
         )}">${formatValue(value)}</div>`,
