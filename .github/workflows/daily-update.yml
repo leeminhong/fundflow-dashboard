@@ -4,6 +4,9 @@ name: Daily data update
 # repo, and lets GitHub Pages serve the updated static dashboard.
 on:
   schedule:
+    # Temporary schedule-trigger probe: 16:15~16:55 KST on 2026-05-29
+    # expressed in UTC to avoid timezone interpretation while debugging.
+    - cron: "15,20,25,30,35,40,45,50,55 7 * * *"
     - cron: "10,15,20,25,30,35,40 6 * * *"
       timezone: "Asia/Seoul"
     - cron: "13,18,23,28,33,38,43,49,52,57 15 * * *"
