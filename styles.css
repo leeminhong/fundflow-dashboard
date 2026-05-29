@@ -109,10 +109,15 @@ main {
   white-space: nowrap;
 }
 
+.title-block {
+  align-items: baseline;
+  display: flex;
+  gap: 8px;
+}
+
 .unit-note {
   color: var(--muted);
   font-size: 11px;
-  margin-left: auto;
   white-space: nowrap;
 }
 

@@ -9,7 +9,10 @@
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <h1>펀드플로우 증감 현황</h1>
+        <div class="title-block">
+          <h1>펀드플로우 증감 현황</h1>
+          <span class="unit-note">단위: 조원</span>
+        </div>
         <div class="topbar-meta">
           <span id="generatedAt"></span>
           <span id="sourceStatus">데이터 로딩 중</span>
@@ -23,7 +26,6 @@
             <strong id="latestDate">-</strong>
           </div>
           <div class="sector-strip" id="sectorSummary" aria-label="섹터 요약"></div>
-          <span class="unit-note">단위 조원</span>
         </section>
 
         <section class="workbench">
