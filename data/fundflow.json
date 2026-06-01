@@ -6,9 +6,9 @@
     "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098187&menuNo=200366",
     "sourceAttachment": "s260528(5.22잔액).xlsx",
     "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/43d6fe71b57142e28389adb651a6e2de/1/a1933bbdc5b04db6b35cb88fb56c99e1.xlsx",
-    "generatedAt": "2026-06-01T10:58:00",
+    "generatedAt": "2026-06-01T15:11:26",
     "latestDate": "2026-05-29",
-    "defaultDate": "2026-05-28",
+    "defaultDate": "2026-05-29",
     "unit": "조원",
     "version": 3,
     "historyWindow": 246,
@@ -6271,7 +6271,6 @@
         "사모 해외 주식",
         "일임 국내 주식",
         "일임 해외 주식",
-        "고객예탁금",
         "고객RP",
         "CMA"
       ],
@@ -6291,35 +6290,34 @@
         "사모 해외 주식",
         "일임 국내 주식",
         "일임 해외 주식",
-        "고객예탁금",
         "고객RP",
         "CMA"
       ],
-      "filledItemCount": 4,
+      "filledItemCount": 5,
       "totalItemCount": 22
     }
   ],
   "summary": {
     "latestDate": "2026-05-29",
-    "defaultDate": "2026-05-28",
-    "totalLatestChange": 4.127154,
+    "defaultDate": "2026-05-29",
+    "totalLatestChange": -1.8982299999999999,
     "sectorSummary": [
       {
         "sector": "REPO",
-        "latestChange": 2.25,
-        "latestBalance": 277.457,
+        "latestChange": -2.352,
+        "latestBalance": 275.105,
         "itemCount": 1
       },
       {
         "sector": "투신",
-        "latestChange": -0.6796999999999997,
-        "latestBalance": 1390.8593,
-        "itemCount": 3
+        "latestChange": 0,
+        "latestBalance": 0,
+        "itemCount": 0
       },
       {
         "sector": "증권",
-        "latestChange": 2.556854,
-        "latestBalance": 131.131823,
+        "latestChange": 0.45377,
+        "latestBalance": 131.585593,
         "itemCount": 1
       },
       {
@@ -107773,6 +107771,34 @@
       "sourcePageUrl": "https://seibro.or.kr/websquare/control.jsp?w2xPath=/IPORTAL/user/repo/BIP_CNTS09001V.xml&menuNo=233",
       "sourcePageTitle": "SEIBro Repo 시장현황",
       "sourceAttachment": "",
+      "sourceAttachmentUrl": ""
+    },
+    {
+      "date": "2026-05-29",
+      "sector": "증권",
+      "groupName": "고객예탁금",
+      "itemCode": "SEC_CUSTOMER_DEPOSIT",
+      "itemName": "고객예탁금",
+      "parentCode": null,
+      "level": 1,
+      "itemType": "raw",
+      "includeInTotal": true,
+      "requiredForComplete": true,
+      "showInHeatmap": true,
+      "changeValue": 0.45377,
+      "balanceValue": 131.585593,
+      "link": "https://freesis.kofia.or.kr/stat/FreeSIS.do?parentDivId=MSIS10000000000000&serviceId=STATSCU0100000060",
+      "displayOrder": 70,
+      "isActive": true,
+      "hasSourceMapping": true,
+      "source": "FREESIS 증시자금추이",
+      "sourceLabel": "투자자예탁금",
+      "sourceUnit": "백만원",
+      "changeDate": "2026-05-29",
+      "balanceDate": "2026-05-29",
+      "sourcePageUrl": "https://freesis.kofia.or.kr/stat/FreeSIS.do?parentDivId=MSIS10000000000000&serviceId=STATSCU0100000060",
+      "sourcePageTitle": "FREESIS 증시자금추이",
+      "sourceAttachment": "freesis_db.json",
       "sourceAttachmentUrl": ""
     }
   ]
