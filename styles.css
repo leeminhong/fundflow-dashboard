@@ -21,9 +21,9 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family:
-    Arial,
-    "Apple SD Gothic Neo",
     "Malgun Gothic",
+    "Apple SD Gothic Neo",
+    Arial,
     sans-serif;
 }
 
