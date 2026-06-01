@@ -93,6 +93,12 @@
                   <span>선택 항목</span>
                   <select id="itemSelect"></select>
                 </label>
+                <div class="trend-range" role="group" aria-label="추이 기간 설정">
+                  <span>기간</span>
+                  <input type="date" id="trendStart" aria-label="추이 시작일" />
+                  <span class="range-sep" aria-hidden="true">~</span>
+                  <input type="date" id="trendEnd" aria-label="추이 종료일" />
+                </div>
                 <a id="itemLink" href="#" target="_blank" rel="noreferrer">상세</a>
                 <button id="trendToggle" type="button" aria-expanded="true">추이 접기</button>
               </div>

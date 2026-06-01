@@ -10,6 +10,8 @@ const state = {
   compactView: false,
   trendExpanded: true,
   trendMode: "balance",
+  trendStart: null,
+  trendEnd: null,
 };
 
 const els = {
@@ -22,6 +24,8 @@ const els = {
   windowSize: document.querySelector("#windowSize"),
   compareBasis: document.querySelector("#compareBasis"),
   itemSelect: document.querySelector("#itemSelect"),
+  trendStart: document.querySelector("#trendStart"),
+  trendEnd: document.querySelector("#trendEnd"),
   heatmapScroll: document.querySelector(".heatmap-scroll"),
   heatmap: document.querySelector("#heatmap"),
   trendTitle: document.querySelector("#trendTitle"),
@@ -147,6 +151,14 @@ function visibleDates() {
   return dates.slice(-Number(state.windowSize));
 }
 
+// 추이 차트 전용 날짜 범위. 시작/종료일이 지정되면 그 구간을, 아니면 히트맵과 동일한 표시 기간을 쓴다.
+function trendDates() {
+  if (!state.trendStart && !state.trendEnd) return visibleDates();
+  const start = state.trendStart;
+  const end = state.trendEnd;
+  return state.data.dates.filter((date) => (!start || date >= start) && (!end || date <= end));
+}
+
 function recordMap() {
   const map = new Map();
   for (const record of state.data.records) {
@@ -251,6 +263,28 @@ function setupControls() {
     state.selectedItem = activeItems()[0]?.itemCode ?? null;
   }
   els.itemSelect.value = state.selectedItem;
+
+  const dates = state.data.dates;
+  const minDate = dates[0];
+  const maxDate = dates[dates.length - 1];
+  for (const input of [els.trendStart, els.trendEnd]) {
+    input.min = minDate;
+    input.max = maxDate;
+  }
+  resyncTrendRangeToWindow();
+}
+
+// 추이 기간 입력칸을 히트맵의 표시 기간(기본 최근 7일 ~ 기준일)에 맞춰 채운다.
+function resyncTrendRangeToWindow() {
+  const dates = visibleDates();
+  state.trendStart = dates[0] ?? null;
+  state.trendEnd = dates[dates.length - 1] ?? state.asOfDate;
+  syncTrendRangeInputs();
+}
+
+function syncTrendRangeInputs() {
+  els.trendStart.value = state.trendStart ?? "";
+  els.trendEnd.value = state.trendEnd ?? "";
 }
 
 function currentDateStatus() {
@@ -428,7 +462,7 @@ function renderTrend() {
   if (!item) return;
   state.selectedItem = item.itemCode;
 
-  const dates = visibleDates();
+  const dates = trendDates();
   const map = recordMap();
   const isBalance = state.trendMode === "balance";
   const points = dates.map((date) => {
@@ -525,9 +559,22 @@ function drawLineChart(points, opts = {}) {
     )
     .join("");
 
+  // 라벨이 겹치지 않도록 차트 폭에 맞춰 균등 간격으로 솎아낸다(첫·마지막은 항상 표시).
+  const labelSlots = Math.max(2, Math.floor(innerW / 52));
+  const labelCount = Math.min(points.length, labelSlots);
+  const shownLabels = new Set();
+  if (points.length === 1) {
+    shownLabels.add(0);
+  } else {
+    for (let k = 0; k < labelCount; k += 1) {
+      shownLabels.add(Math.round((k * (points.length - 1)) / (labelCount - 1)));
+    }
+  }
   const xLabels = points
     .map((point, idx) =>
-      `<text class="axis-label" x="${x(idx)}" y="${height - 16}" text-anchor="middle">${formatDate(point.date)}</text>`,
+      shownLabels.has(idx)
+        ? `<text class="axis-label" x="${x(idx)}" y="${height - 16}" text-anchor="middle">${formatDate(point.date)}</text>`
+        : "",
     )
     .join("");
 
@@ -621,6 +668,7 @@ async function init() {
 
   els.asOfDate.addEventListener("change", (event) => {
     state.asOfDate = event.target.value;
+    resyncTrendRangeToWindow();
     render();
   });
   els.sectorFilter.addEventListener("change", (event) => {
@@ -629,6 +677,7 @@ async function init() {
   });
   els.windowSize.addEventListener("change", (event) => {
     state.windowSize = event.target.value;
+    resyncTrendRangeToWindow();
     renderHeatmap();
     renderTrend();
     renderCompactToggle();
@@ -641,6 +690,16 @@ async function init() {
   });
   els.itemSelect.addEventListener("change", (event) => {
     state.selectedItem = event.target.value;
+    state.trendExpanded = true;
+    renderTrend();
+  });
+  els.trendStart.addEventListener("change", (event) => {
+    state.trendStart = event.target.value || null;
+    state.trendExpanded = true;
+    renderTrend();
+  });
+  els.trendEnd.addEventListener("change", (event) => {
+    state.trendEnd = event.target.value || null;
     state.trendExpanded = true;
     renderTrend();
   });
@@ -676,6 +735,7 @@ async function init() {
     els.sectorFilter.value = "전체";
     els.windowSize.value = "7";
     els.compareBasis.value = "day";
+    resyncTrendRangeToWindow();
     render();
   });
   window.addEventListener("resize", renderTrend);

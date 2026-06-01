@@ -554,6 +554,33 @@ a:focus {
   justify-content: flex-end;
 }
 
+.trend-range {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+
+.trend-range > span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.trend-range .range-sep {
+  color: var(--line);
+}
+
+.trend-range input[type="date"] {
+  background: var(--surface-soft);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--navy);
+  font-size: 11px;
+  height: 26px;
+  padding: 0 6px;
+}
+
 .trend-chart {
   cursor: crosshair;
   display: block;
