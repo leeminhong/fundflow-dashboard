@@ -66,6 +66,13 @@ function formatDate(date) {
   }).format(new Date(`${date}T00:00:00`));
 }
 
+// 추이 차트 x축 전용. 공백 없는 "MM.DD" 형식으로 폭을 줄여 라벨을 더 촘촘히 넣는다.
+function formatAxisDate(date) {
+  if (!date) return "-";
+  const [, mm, dd] = date.split("-");
+  return `${mm}.${dd}`;
+}
+
 function formatFullDate(date) {
   if (!date) return "-";
   return new Intl.DateTimeFormat("ko-KR", {
@@ -559,21 +566,19 @@ function drawLineChart(points, opts = {}) {
     )
     .join("");
 
-  // 라벨이 겹치지 않도록 차트 폭에 맞춰 균등 간격으로 솎아낸다(첫·마지막은 항상 표시).
-  const labelSlots = Math.max(2, Math.floor(innerW / 52));
-  const labelCount = Math.min(points.length, labelSlots);
+  // 차트 폭에 맞춰 라벨을 균등한 정수 간격(step)으로 솎아낸다. 라벨 1개당 약 30px
+  // (공백 없는 "MM.DD" 폭 + 여백)을 확보 → 넓으면 30일도 전부, 좁으면 자동으로 줄어든다.
+  // 최신 날짜(마지막 점)를 기준으로 거꾸로 표시해 끝점은 항상 라벨이 붙고 간격도 일정하다.
+  const labelSlots = Math.max(2, Math.floor(innerW / 30));
+  const labelStep = Math.max(1, Math.ceil(points.length / labelSlots));
   const shownLabels = new Set();
-  if (points.length === 1) {
-    shownLabels.add(0);
-  } else {
-    for (let k = 0; k < labelCount; k += 1) {
-      shownLabels.add(Math.round((k * (points.length - 1)) / (labelCount - 1)));
-    }
+  for (let idx = points.length - 1; idx >= 0; idx -= labelStep) {
+    shownLabels.add(idx);
   }
   const xLabels = points
     .map((point, idx) =>
       shownLabels.has(idx)
-        ? `<text class="axis-label" x="${x(idx)}" y="${height - 16}" text-anchor="middle">${formatDate(point.date)}</text>`
+        ? `<text class="axis-label" x="${x(idx)}" y="${height - 16}" text-anchor="middle">${formatAxisDate(point.date)}</text>`
         : "",
     )
     .join("");
