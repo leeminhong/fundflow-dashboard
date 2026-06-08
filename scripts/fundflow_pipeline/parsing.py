@@ -57,11 +57,18 @@ def parse_ymd(value: object) -> str | None:
     return None
 
 
-def parse_market_workbook(path: Path) -> dict:
-    wb = openpyxl.load_workbook(path, data_only=True)
-    sheet_name = "일일동향" if "일일동향" in wb.sheetnames else wb.sheetnames[0]
-    ws = wb[sheet_name]
+# 월말 "잔액" 백필 게시물은 날짜별로 시트가 나뉜다(예: '5.13','5.12',...,'4.30').
+# 일반 일일 리포트는 '일일동향' 단일 시트.
+DATE_SHEET_RE = re.compile(r"^\s*\d{1,2}\.\d{1,2}\s*$")
 
+
+def _parse_market_sheet(ws) -> dict | None:
+    """Parse a single market-indicator worksheet.
+
+    Returns a dict with records/balanceDate, or None when the sheet does not
+    contain a parseable '2. 금융권별 여수신 동향' section (e.g. cover/summary
+    sheets in a multi-sheet backfill workbook).
+    """
     section_row = None
     for row in ws.iter_rows():
         for cell in row:
@@ -71,7 +78,7 @@ def parse_market_workbook(path: Path) -> dict:
         if section_row:
             break
     if section_row is None:
-        raise RuntimeError("Could not find '2. 금융권별 여수신 동향' section.")
+        return None
 
     header_row = section_row + 3
     latest_change_col = None
@@ -96,7 +103,7 @@ def parse_market_workbook(path: Path) -> dict:
                 latest_change_date = parsed_date
 
     if latest_change_col is None or balance_col is None:
-        raise RuntimeError("Could not locate latest change and balance date columns.")
+        return None
 
     found: dict[str, dict] = {}
     for row_idx in range(section_row + 1, ws.max_row + 1):
@@ -129,12 +136,60 @@ def parse_market_workbook(path: Path) -> dict:
     ]
     records = [found[key] for key in TARGET_ITEMS if key in found]
     return {
-        "sourceFile": str(path),
-        "sheetName": sheet_name,
+        "sheetName": ws.title,
         "latestChangeDate": latest_change_date,
         "balanceDate": balance_date,
         "records": records,
         "missingItems": missing,
+    }
+
+
+def parse_market_workbook(path: Path) -> dict:
+    """Parse a BOK market-indicator workbook.
+
+    Daily reports have a single '일일동향' sheet (one balance date). Month-end
+    "잔액" backfill posts instead carry one date-named sheet per missing date
+    (e.g. '5.13' … '4.30'); every such sheet is parsed and its records are
+    merged so the previously-missing dates get filled. Each record carries its
+    own balanceDate/changeDate, so downstream merge keys them per date.
+    """
+    wb = openpyxl.load_workbook(path, data_only=True)
+    if "일일동향" in wb.sheetnames:
+        target_sheets = ["일일동향"]
+    else:
+        # Backfill workbook: parse every date-named sheet (fall back to the
+        # first sheet if none match the date pattern).
+        target_sheets = [name for name in wb.sheetnames if DATE_SHEET_RE.match(name)]
+        if not target_sheets:
+            target_sheets = [wb.sheetnames[0]]
+
+    parsed_sheets = []
+    for name in target_sheets:
+        result = _parse_market_sheet(wb[name])
+        if result and result["balanceDate"]:
+            parsed_sheets.append(result)
+
+    if not parsed_sheets:
+        raise RuntimeError(
+            "Could not parse any '2. 금융권별 여수신 동향' section "
+            f"(sheets tried: {target_sheets})."
+        )
+
+    all_records = []
+    for sheet in parsed_sheets:
+        all_records.extend(sheet["records"])
+
+    # Top-level date fields describe the newest sheet (used for logging and the
+    # cli's per-page dedup); the full date set lives in balanceDates.
+    latest = max(parsed_sheets, key=lambda sheet: sheet["balanceDate"])
+    return {
+        "sourceFile": str(path),
+        "sheetName": ", ".join(sheet["sheetName"] for sheet in parsed_sheets),
+        "latestChangeDate": latest["latestChangeDate"],
+        "balanceDate": latest["balanceDate"],
+        "balanceDates": sorted({sheet["balanceDate"] for sheet in parsed_sheets}),
+        "records": all_records,
+        "missingItems": latest["missingItems"],
     }
 
 

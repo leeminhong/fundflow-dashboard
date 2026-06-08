@@ -191,7 +191,14 @@ def build_web_data(page_results: list[PageResult]) -> dict:
         for record in page_result.parsed["records"]:
             item = item_map[record["itemCode"]]
             key = (record["balanceDate"], record["itemCode"])
-            if key in records_by_key:
+            existing = records_by_key.get(key)
+            # First (newest nttId) wins, EXCEPT when its balance is missing
+            # ('..' → None, common for bank items at month-end): let a later
+            # backfill post with a real value override the empty daily record.
+            if existing is not None and (
+                existing["balanceValue"] is not None
+                or record["balanceValueTrillionKrw"] is None
+            ):
                 continue
 
             payload = {
@@ -328,7 +335,12 @@ def merge_web_data(existing: dict, new_data: dict) -> dict:
     for r in new_data.get("records", []):
         key = (r["date"], r["itemCode"])
         if key in old_rec_map:
-            # Always overwrite with new data (corrects stale change values)
+            old = old_rec_map[key]
+            # Overwrite with new data (corrects stale change values), but never
+            # let a now-empty value ('..' → None, e.g. bank items at month-end)
+            # clobber a balance we already captured from an earlier backfill.
+            if r.get("balanceValue") is None and old.get("balanceValue") is not None:
+                continue
             old_rec_map[key] = r
             update_count += 1
         else:

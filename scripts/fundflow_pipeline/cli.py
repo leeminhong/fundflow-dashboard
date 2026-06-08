@@ -10,7 +10,7 @@ from .freesis import apply_freesis_db, apply_freesis_summary
 from .httpfetch import (
     discover_recent_page_urls,
     extract_ntt_id,
-    extract_rss_page_urls,
+    extract_rss_entries,
     fetch_text,
 )
 from .seibro import apply_seibro_repo, fetch_seibro_repo_rows
@@ -65,18 +65,36 @@ def main() -> None:
         default=7,
         help="How many recent SEIBro daily rows to merge (default: 7).",
     )
+    parser.add_argument(
+        "--backfill-scan",
+        type=int,
+        default=60,
+        help="How many recent RSS posts to scan (by title) for month-end '잔액' "
+             "backfill posts (range workbooks) beyond the daily --days window. "
+             "Title-only classification, so this adds no extra downloads "
+             "(default: 60, ~1 month of posts).",
+    )
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     page_urls, html_cache = discover_recent_page_urls(args.url, args.days)
-    rss_urls = extract_rss_page_urls(limit=max(args.days * 6, 20))
+    # Widen the RSS window so a month-end backfill post (published ~weeks after
+    # the dates it covers) still appears, and keep titles so we can classify
+    # posts without fetching each page's HTML.
+    rss_entries = extract_rss_entries(limit=max(args.days * 6, args.backfill_scan, 20))
+    rss_titles = {url: title for url, title in rss_entries}
+    rss_urls = [url for url, _ in rss_entries]
     candidate_urls = sorted(
         set(page_urls + rss_urls),
         key=lambda url: extract_ntt_id(url) or 0,
         reverse=True,
     )
+
+    def is_backfill_title(title: str) -> bool:
+        # Backfill post titles carry a date range like "4.30~5.13잔액 포함".
+        return bool(title) and "~" in title and "잔액" in title
 
     print(f"seed_url: {args.url}")
     print(f"discovered_pages_from_related: {len(page_urls)}")
@@ -87,9 +105,20 @@ def main() -> None:
 
     page_results = []
     seen_balance_dates = set()
-    for page_url in candidate_urls:
-        if len(page_results) >= args.days:
+    daily_count = 0  # non-backfill (single-date) pages collected for daily data
+    for idx, page_url in enumerate(candidate_urls):
+        daily_done = daily_count >= args.days
+        scan_done = idx >= args.backfill_scan
+        # Stop once the daily window is filled AND we've scanned the title
+        # window for backfill posts.
+        if daily_done and scan_done:
             break
+
+        # Classify cheaply via the RSS title; only fetch/parse pages we'll use.
+        is_backfill = is_backfill_title(rss_titles.get(page_url, ""))
+        if daily_done and not is_backfill:
+            continue
+
         html = html_cache.get(page_url) or fetch_text(page_url)
         try:
             page_result = parse_page_result(page_url, html, output_dir)
@@ -97,13 +126,25 @@ def main() -> None:
             print(f"skip_page: {page_url} ({exc})")
             continue
 
-        balance_date = page_result.parsed["balanceDate"]
-        if balance_date in seen_balance_dates:
-            print(f"skip_duplicate_date: {page_url} ({balance_date})")
-            continue
-        seen_balance_dates.add(balance_date)
+        if is_backfill:
+            backfill_dates = page_result.parsed.get(
+                "balanceDates", [page_result.parsed["balanceDate"]]
+            )
+            print(
+                f"backfill_page: {page_url} "
+                f"dates={backfill_dates[0]}..{backfill_dates[-1]} ({len(backfill_dates)})"
+            )
+            seen_balance_dates.update(backfill_dates)
+            page_results.append(page_result)
+        else:
+            balance_date = page_result.parsed["balanceDate"]
+            if balance_date in seen_balance_dates:
+                print(f"skip_duplicate_date: {page_url} ({balance_date})")
+                continue
+            seen_balance_dates.add(balance_date)
+            page_results.append(page_result)
+            daily_count += 1
 
-        page_results.append(page_result)
         print("parsed_records:")
         for record in page_result.parsed["records"]:
             change = record["changeValueTrillionKrw"]
@@ -111,12 +152,12 @@ def main() -> None:
             change_text = "-" if change is None else f"{change:,.4f}"
             balance_text = "-" if balance is None else f"{balance:,.4f}"
             print(
-                f"- {record['sector']} / {record['itemName']}: "
+                f"- {record['sector']} / {record['itemName']} ({record['balanceDate']}): "
                 f"증감 {change_text}조원, 잔액 {balance_text}조원"
             )
-    print(f"selected_pages: {len(page_results)}")
-    if len(page_results) < args.days:
-        print(f"warning: requested {args.days} pages but only {len(page_results)} valid pages were found.")
+    print(f"selected_pages: {len(page_results)} (daily {daily_count})")
+    if daily_count < args.days:
+        print(f"warning: requested {args.days} daily pages but only {daily_count} valid pages were found.")
 
     if args.write_web_data:
         web_data = build_web_data(page_results)

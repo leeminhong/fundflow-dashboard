@@ -170,22 +170,43 @@ def discover_recent_page_urls(seed_url: str, count: int, max_pages: int = 24) ->
     return sorted_urls[:count], html_cache
 
 
-def extract_rss_page_urls(limit: int = 40) -> list[str]:
+_RSS_ITEM_RE = re.compile(r"<item>(.*?)</item>", re.I | re.S)
+_RSS_TITLE_RE = re.compile(r"<title>\s*(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?\s*</title>", re.I | re.S)
+_RSS_LINK_RE = re.compile(
+    r"<link>\s*(?:<!\[CDATA\[)?\s*"
+    r"(https://www\.bok\.or\.kr/portal/bbs/P0002018/view\.do\?[^\]\s<]+)",
+    re.I,
+)
+
+
+def extract_rss_entries(limit: int = 40) -> list[tuple[str, str]]:
+    """Return [(canonical_page_url, title)] from the BOK market-indicator RSS.
+
+    Titles let callers classify posts (e.g. month-end '잔액' backfill posts whose
+    title contains a date range like '4.30~5.13잔액 포함') without fetching each
+    page's HTML.
+    """
     rss = fetch_text(BOK_MARKET_RSS_URL)
-    pattern = re.compile(
-        r"<link><!\[CDATA\[(https://www\.bok\.or\.kr/portal/bbs/P0002018/view\.do\?[^]]+)\]\]></link>",
-        re.I,
-    )
-    urls = []
+    entries: list[tuple[str, str]] = []
     seen = set()
-    for raw in pattern.findall(rss):
-        canonical = canonicalize_detail_url(raw)
-        if canonical and canonical not in seen:
-            seen.add(canonical)
-            urls.append(canonical)
-        if len(urls) >= limit:
+    for block in _RSS_ITEM_RE.findall(rss):
+        link_match = _RSS_LINK_RE.search(block)
+        if not link_match:
+            continue
+        canonical = canonicalize_detail_url(link_match.group(1))
+        if not canonical or canonical in seen:
+            continue
+        title_match = _RSS_TITLE_RE.search(block)
+        title = title_match.group(1).strip() if title_match else ""
+        seen.add(canonical)
+        entries.append((canonical, title))
+        if len(entries) >= limit:
             break
-    return urls
+    return entries
+
+
+def extract_rss_page_urls(limit: int = 40) -> list[str]:
+    return [url for url, _ in extract_rss_entries(limit)]
 
 
 def safe_filename(name: str) -> str:
