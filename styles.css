@@ -438,6 +438,53 @@ a:focus {
   border-bottom-color: var(--line-strong);
 }
 
+/* 미발표(잠정) 셀: 빗금 무늬 + 흐린 글자. background-image는 인라인 background로
+   덮이므로 pending 셀은 인라인 배경을 주지 않는다(app.js). */
+.heatmap-cell.pending {
+  background-color: #fafbfc;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 4px,
+    #dde3e9 4px,
+    #dde3e9 5px
+  );
+  color: var(--muted);
+  cursor: help;
+}
+
+.heatmap-note {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 10.5px;
+  gap: 6px;
+  line-height: 1.5;
+  margin: 8px 2px 0;
+}
+
+.heatmap-note strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.pending-swatch {
+  background-color: #fafbfc;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 4px,
+    #dde3e9 4px,
+    #dde3e9 5px
+  );
+  border: 1px solid #e8edf1;
+  border-radius: 2px;
+  display: inline-block;
+  height: 12px;
+  width: 16px;
+}
+
 .heatmap-item {
   gap: 6px;
   color: var(--ink);

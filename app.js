@@ -174,6 +174,19 @@ function recordMap() {
   return map;
 }
 
+// 항목별로 잔액이 실제로 채워진 마지막 날짜. 이 날짜 이후의 빈 셀은 "미발표(잠정)"로
+// 보고, 그 이전의 빈 셀(휴일 등)과 구분한다. 데이터에서 직접 도출하므로 발표 일정을
+// 하드코딩하지 않는다(예금은행·은행신탁 잔액은 BOK가 월말~익월 초 지연 발표).
+function lastFilledDateByItem() {
+  const map = new Map();
+  for (const record of state.data.records) {
+    if (!Number.isFinite(record.balanceValue)) continue;
+    const prev = map.get(record.itemCode);
+    if (!prev || record.date > prev) map.set(record.itemCode, record.date);
+  }
+  return map;
+}
+
 const BASIS_LABEL = { day: "전일대비", week: "전주대비", month: "전월대비" };
 
 const refDateCache = new Map();
@@ -355,6 +368,7 @@ function renderHeatmap() {
   }
 
   const maxAbs = colorValues.length ? Math.max(...colorValues) : 0;
+  const lastFilled = lastFilledDateByItem();
   els.heatmap.style.gridTemplateColumns = `86px 136px repeat(${dates.length}, minmax(62px, 1fr))`;
   els.heatmap.style.gridTemplateRows = `repeat(${items.length + 1}, 27px)`;
 
@@ -396,10 +410,23 @@ function renderHeatmap() {
       `<div class="heatmap-cell heatmap-item level-${item.level}${sectorEndClass}" data-item-code="${item.itemCode}" style="grid-column:2;grid-row:${row}">${toggle}${link}</div>`,
     );
 
+    const lastDate = lastFilled.get(item.itemCode);
     for (const [dateIdx, date] of dates.entries()) {
       const value = deltaValue(map, item.itemCode, date);
       const colorValue = colorMetricValue(map, item.itemCode, date);
       const latestClass = date === state.asOfDate ? " latest-column" : "";
+      const balance = map.get(`${item.itemCode}|${date}`)?.balanceValue;
+      // 잔액이 비어 있고 항목의 마지막 보유일보다 뒤이면 "미발표(잠정)"로 표시한다.
+      const isPending = !Number.isFinite(balance) && lastDate && date > lastDate;
+      if (isPending) {
+        const note = item.sector === "은행"
+          ? "BOK ‘금융시장 주요지표’ 잔액 미입수 · 월말~익월 초 지연 발표되어 익월 일괄 보정 시 자동 반영됩니다"
+          : "아직 미발표(잠정)";
+        cells.push(
+          `<div class="heatmap-cell pending${latestClass}${sectorEndClass}" data-item-code="${item.itemCode}" title="${note}" style="grid-column:${dateIdx + 3};grid-row:${row}">–</div>`,
+        );
+        continue;
+      }
       cells.push(
         `<div class="heatmap-cell${latestClass}${sectorEndClass}" data-item-code="${item.itemCode}" style="grid-column:${dateIdx + 3};grid-row:${row};background:${colorFor(
           colorValue,
