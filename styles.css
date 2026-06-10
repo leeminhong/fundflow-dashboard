@@ -506,6 +506,10 @@ a:focus {
   content: "└ ";
 }
 
+.heatmap-item.level-3 .heatmap-child {
+  padding-left: 18px;
+}
+
 .heatmap-item a {
   color: var(--ink);
   font-weight: inherit;

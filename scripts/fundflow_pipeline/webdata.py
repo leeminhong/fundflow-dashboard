@@ -347,11 +347,11 @@ def merge_web_data(existing: dict, new_data: dict) -> dict:
             old_rec_map[key] = r
             new_count += 1
 
-    # Merge items (keep unique by itemCode)
+    # Merge items by code. New data owns display metadata so hierarchy changes
+    # (parentCode/level/displayOrder) are reflected on existing histories.
     item_map: dict[str, dict] = {i["itemCode"]: i for i in existing.get("items", [])}
     for i in new_data.get("items", []):
-        if i["itemCode"] not in item_map:
-            item_map[i["itemCode"]] = i
+        item_map[i["itemCode"]] = i
 
     records = sorted(old_rec_map.values(), key=lambda r: (r["date"], r.get("displayOrder", 0)))
     items = sorted(item_map.values(), key=lambda i: i.get("displayOrder", 0))
@@ -439,5 +439,4 @@ def merge_web_data(existing: dict, new_data: dict) -> dict:
         },
         "records": records,
     }
-
 

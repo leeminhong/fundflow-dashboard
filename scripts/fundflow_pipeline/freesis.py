@@ -20,6 +20,11 @@ from .config import (
 from .parsing import parse_ymd, to_number
 from .webdata import recompute_status_summary
 
+
+def item_level(meta: dict) -> int:
+    return meta.get("level", 2 if meta.get("parentCode") else 1)
+
+
 def apply_freesis_stock_deposit(data: dict, wb, freesis_summary_path: Path) -> None:
     if "투자자예탁금" not in wb.sheetnames:
         return
@@ -151,10 +156,10 @@ def apply_freesis_summary(data: dict, freesis_summary_path: Path) -> None:
                     "sector": "투신",
                     "groupName": parent["itemName"],
                     "itemName": parent["itemName"],
-                    "parentCode": None,
-                    "level": 1,
+                    "parentCode": parent.get("parentCode"),
+                    "level": item_level(parent),
                     "itemType": "calculated",
-                    "includeInTotal": True,
+                    "includeInTotal": parent.get("includeInTotal", True),
                     "requiredForComplete": False,
                     "showInHeatmap": True,
                     "rawBalanceColumn": None,
@@ -176,7 +181,7 @@ def apply_freesis_summary(data: dict, freesis_summary_path: Path) -> None:
                 "groupName": meta.get("parentCode", "투신"),
                 "itemName": meta["itemName"],
                 "parentCode": meta.get("parentCode"),
-                "level": 2 if meta.get("parentCode") else 1,
+                "level": item_level(meta),
                 "itemType": "raw",
                 "includeInTotal": False,
                 "requiredForComplete": True,
@@ -223,7 +228,7 @@ def apply_freesis_summary(data: dict, freesis_summary_path: Path) -> None:
                     "itemCode": item_code,
                     "itemName": meta["itemName"],
                     "parentCode": meta.get("parentCode"),
-                    "level": 2 if meta.get("parentCode") else 1,
+                    "level": item_level(meta),
                     "itemType": "raw",
                     "includeInTotal": False,
                     "requiredForComplete": True,
@@ -270,10 +275,10 @@ def apply_freesis_summary(data: dict, freesis_summary_path: Path) -> None:
                     "groupName": parent["itemName"],
                     "itemCode": parent["itemCode"],
                     "itemName": parent["itemName"],
-                    "parentCode": None,
-                    "level": 1,
+                    "parentCode": parent.get("parentCode"),
+                    "level": item_level(parent),
                     "itemType": "calculated",
-                    "includeInTotal": True,
+                    "includeInTotal": parent.get("includeInTotal", True),
                     "requiredForComplete": False,
                     "showInHeatmap": True,
                     "changeValue": sum(change_values) if change_values else None,
@@ -321,8 +326,8 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
             data["items"].append({
                 "itemCode": parent["itemCode"], "sector": "투신",
                 "groupName": parent["itemName"], "itemName": parent["itemName"],
-                "parentCode": None, "level": 1, "itemType": "calculated",
-                "includeInTotal": True, "requiredForComplete": False,
+                "parentCode": parent.get("parentCode"), "level": item_level(parent), "itemType": "calculated",
+                "includeInTotal": parent.get("includeInTotal", True), "requiredForComplete": False,
                 "showInHeatmap": True, "rawBalanceColumn": None,
                 "rawChangeColumn": None, "link": FREESIS_LINK_URL,
                 "displayOrder": parent["displayOrder"], "isActive": True,
@@ -336,7 +341,7 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
             "groupName": meta.get("parentCode", "투신"),
             "itemName": meta["itemName"],
             "parentCode": meta.get("parentCode"),
-            "level": 2 if meta.get("parentCode") else 1,
+            "level": item_level(meta),
             "itemType": "raw", "includeInTotal": False,
             "requiredForComplete": True, "showInHeatmap": True,
             "rawBalanceColumn": FREESIS_SUMMARY_COLUMNS[meta["itemCode"]],
@@ -366,7 +371,7 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
                 "groupName": meta.get("parentCode", "투신"),
                 "itemCode": meta["itemCode"], "itemName": meta["itemName"],
                 "parentCode": meta.get("parentCode"),
-                "level": 2 if meta.get("parentCode") else 1,
+                "level": item_level(meta),
                 "itemType": "raw", "includeInTotal": False,
                 "requiredForComplete": True, "showInHeatmap": True,
                 "changeValue": change, "balanceValue": balance,
@@ -397,8 +402,8 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
                 "groupName": parent["itemName"],
                 "itemCode": parent["itemCode"],
                 "itemName": parent["itemName"],
-                "parentCode": None, "level": 1,
-                "itemType": "calculated", "includeInTotal": True,
+                "parentCode": parent.get("parentCode"), "level": item_level(parent),
+                "itemType": "calculated", "includeInTotal": parent.get("includeInTotal", True),
                 "requiredForComplete": False, "showInHeatmap": True,
                 "changeValue": sum(cv) if cv else None,
                 "balanceValue": sum(bv) if bv else None,
@@ -497,5 +502,4 @@ def apply_freesis_db(data: dict, db_path: Path) -> None:
     print(f"freesis_db_applied: {db_path} "
           f"(fund {len(fund_summary)} days, deposit {len(stock_deposit)} days, "
           f"repo {len(repo_balance)} days)")
-
 

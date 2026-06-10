@@ -8,6 +8,8 @@ from datetime import date, datetime
 
 from fundflow_pipeline.config import (
     BOK_MARKET_LIST_URL,
+    FREESIS_CALCULATED_PARENTS,
+    FREESIS_FUND_ITEMS,
     FREESIS_LINK_URL,
     REPO_LINK_URL,
     SECTOR_ORDER,
@@ -79,6 +81,24 @@ def test_item_link_routing():
 def test_sector_order_matches_frontend():
     # Must stay in sync with app.js `sectorOrder` (REPO→투신→증권→은행).
     assert SECTOR_ORDER == {"REPO": 1, "투신": 2, "증권": 3, "은행": 4}
+
+
+def test_equity_fund_market_hierarchy():
+    parents = {item["itemCode"]: item for item in FREESIS_CALCULATED_PARENTS}
+    children = {item["itemCode"]: item for item in FREESIS_FUND_ITEMS}
+
+    assert parents["FUND_EQUITY_MARKET_DOMESTIC"]["itemName"] == "시가형 국내 주식"
+    assert parents["FUND_EQUITY_MARKET_DOMESTIC"]["parentCode"] == "FUND_EQUITY_TOTAL"
+    assert parents["FUND_EQUITY_MARKET_DOMESTIC"]["includeInTotal"] is False
+    assert parents["FUND_EQUITY_MARKET_OVERSEAS"]["itemName"] == "시가형 해외 주식"
+    assert parents["FUND_EQUITY_MARKET_OVERSEAS"]["parentCode"] == "FUND_EQUITY_TOTAL"
+    assert parents["FUND_EQUITY_MARKET_OVERSEAS"]["includeInTotal"] is False
+    assert children["FUND_EQUITY_PUBLIC_DOMESTIC"]["parentCode"] == "FUND_EQUITY_MARKET_DOMESTIC"
+    assert children["FUND_EQUITY_PRIVATE_DOMESTIC"]["parentCode"] == "FUND_EQUITY_MARKET_DOMESTIC"
+    assert children["FUND_EQUITY_PUBLIC_OVERSEAS"]["parentCode"] == "FUND_EQUITY_MARKET_OVERSEAS"
+    assert children["FUND_EQUITY_PRIVATE_OVERSEAS"]["parentCode"] == "FUND_EQUITY_MARKET_OVERSEAS"
+    assert children["FUND_EQUITY_DISCRETIONARY_DOMESTIC"]["parentCode"] == "FUND_EQUITY_TOTAL"
+    assert children["FUND_EQUITY_DISCRETIONARY_OVERSEAS"]["parentCode"] == "FUND_EQUITY_TOTAL"
 
 
 def test_seibro_fresh_fill_computes_changes():

@@ -72,10 +72,20 @@ FREESIS_CALCULATED_PARENTS = [
     {
         "itemCode": "FUND_EQUITY_TOTAL", "itemName": "주식", "displayOrder": 55,
         "children": [
-            "FUND_EQUITY_PUBLIC_DOMESTIC", "FUND_EQUITY_PUBLIC_OVERSEAS",
-            "FUND_EQUITY_PRIVATE_DOMESTIC", "FUND_EQUITY_PRIVATE_OVERSEAS",
+            "FUND_EQUITY_PUBLIC_DOMESTIC", "FUND_EQUITY_PRIVATE_DOMESTIC",
+            "FUND_EQUITY_PUBLIC_OVERSEAS", "FUND_EQUITY_PRIVATE_OVERSEAS",
             "FUND_EQUITY_DISCRETIONARY_DOMESTIC", "FUND_EQUITY_DISCRETIONARY_OVERSEAS",
         ],
+    },
+    {
+        "itemCode": "FUND_EQUITY_MARKET_DOMESTIC", "itemName": "시가형 국내 주식", "displayOrder": 56,
+        "parentCode": "FUND_EQUITY_TOTAL", "level": 2, "includeInTotal": False,
+        "children": ["FUND_EQUITY_PUBLIC_DOMESTIC", "FUND_EQUITY_PRIVATE_DOMESTIC"],
+    },
+    {
+        "itemCode": "FUND_EQUITY_MARKET_OVERSEAS", "itemName": "시가형 해외 주식", "displayOrder": 59,
+        "parentCode": "FUND_EQUITY_TOTAL", "level": 2, "includeInTotal": False,
+        "children": ["FUND_EQUITY_PUBLIC_OVERSEAS", "FUND_EQUITY_PRIVATE_OVERSEAS"],
     },
 ]
 
@@ -85,12 +95,12 @@ FREESIS_FUND_ITEMS = [
     {"itemCode": "FUND_BOND_PUBLIC_DOMESTIC", "itemName": "공모 국내 채권", "displayOrder": 46, "parentCode": "FUND_BOND_TOTAL"},
     {"itemCode": "FUND_BOND_PRIVATE_DOMESTIC", "itemName": "사모 국내 채권", "displayOrder": 47, "parentCode": "FUND_BOND_TOTAL"},
     {"itemCode": "FUND_BOND_DISCRETIONARY_DOMESTIC", "itemName": "일임 국내 채권", "displayOrder": 48, "parentCode": "FUND_BOND_TOTAL"},
-    {"itemCode": "FUND_EQUITY_PUBLIC_DOMESTIC", "itemName": "공모 국내 주식", "displayOrder": 56, "parentCode": "FUND_EQUITY_TOTAL"},
-    {"itemCode": "FUND_EQUITY_PUBLIC_OVERSEAS", "itemName": "공모 해외 주식", "displayOrder": 57, "parentCode": "FUND_EQUITY_TOTAL"},
-    {"itemCode": "FUND_EQUITY_PRIVATE_DOMESTIC", "itemName": "사모 국내 주식", "displayOrder": 58, "parentCode": "FUND_EQUITY_TOTAL"},
-    {"itemCode": "FUND_EQUITY_PRIVATE_OVERSEAS", "itemName": "사모 해외 주식", "displayOrder": 59, "parentCode": "FUND_EQUITY_TOTAL"},
-    {"itemCode": "FUND_EQUITY_DISCRETIONARY_DOMESTIC", "itemName": "일임 국내 주식", "displayOrder": 60, "parentCode": "FUND_EQUITY_TOTAL"},
-    {"itemCode": "FUND_EQUITY_DISCRETIONARY_OVERSEAS", "itemName": "일임 해외 주식", "displayOrder": 61, "parentCode": "FUND_EQUITY_TOTAL"},
+    {"itemCode": "FUND_EQUITY_PUBLIC_DOMESTIC", "itemName": "공모 국내 주식", "displayOrder": 57, "parentCode": "FUND_EQUITY_MARKET_DOMESTIC", "level": 3},
+    {"itemCode": "FUND_EQUITY_PRIVATE_DOMESTIC", "itemName": "사모 국내 주식", "displayOrder": 58, "parentCode": "FUND_EQUITY_MARKET_DOMESTIC", "level": 3},
+    {"itemCode": "FUND_EQUITY_PUBLIC_OVERSEAS", "itemName": "공모 해외 주식", "displayOrder": 60, "parentCode": "FUND_EQUITY_MARKET_OVERSEAS", "level": 3},
+    {"itemCode": "FUND_EQUITY_PRIVATE_OVERSEAS", "itemName": "사모 해외 주식", "displayOrder": 61, "parentCode": "FUND_EQUITY_MARKET_OVERSEAS", "level": 3},
+    {"itemCode": "FUND_EQUITY_DISCRETIONARY_DOMESTIC", "itemName": "일임 국내 주식", "displayOrder": 62, "parentCode": "FUND_EQUITY_TOTAL"},
+    {"itemCode": "FUND_EQUITY_DISCRETIONARY_OVERSEAS", "itemName": "일임 해외 주식", "displayOrder": 63, "parentCode": "FUND_EQUITY_TOTAL"},
 ]
 
 

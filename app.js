@@ -124,6 +124,10 @@ function childMap() {
   return map;
 }
 
+function expandableParentCodes() {
+  return [...childMap().keys()];
+}
+
 function hasChildren(item) {
   return childMap().has(item.itemCode);
 }
@@ -187,7 +191,15 @@ function lastFilledDateByItem() {
   return map;
 }
 
-const BASIS_LABEL = { day: "전일대비", week: "전주대비", month: "전월대비", balance: "잔액" };
+const BASIS_LABEL = {
+  day: "전일대비",
+  week: "전주대비",
+  month: "전월대비",
+  year: "전년대비",
+  monthStart: "월초대비",
+  yearStart: "연초대비",
+  balance: "잔액",
+};
 
 const refDateCache = new Map();
 
@@ -198,14 +210,31 @@ function toISODate(d) {
   return `${y}-${m}-${day}`;
 }
 
-// 비교 기준일(전주/전월)을 달력 기준으로 찾되, 휴일이면 그 이전 영업일로 스냅한다.
+function firstDateInPeriod(date, prefixLength) {
+  const prefix = date.slice(0, prefixLength);
+  return state.data.dates.find((candidate) => candidate <= date && candidate.startsWith(prefix)) ?? null;
+}
+
+// 비교 기준일(전주/전월/전년)을 달력 기준으로 찾되, 휴일이면 그 이전 영업일로 스냅한다.
+// 월초/연초는 현재 데이터에서 해당 기간의 첫 날짜를 기준으로 삼는다.
 function referenceDateFor(date, basis) {
   if (basis === "day") return null;
   const key = `${date}|${basis}`;
   if (refDateCache.has(key)) return refDateCache.get(key);
+  if (basis === "monthStart") {
+    const ref = firstDateInPeriod(date, 7);
+    refDateCache.set(key, ref);
+    return ref;
+  }
+  if (basis === "yearStart") {
+    const ref = firstDateInPeriod(date, 4);
+    refDateCache.set(key, ref);
+    return ref;
+  }
   const target = new Date(`${date}T00:00:00`);
   if (basis === "week") target.setDate(target.getDate() - 7);
   else if (basis === "month") target.setMonth(target.getMonth() - 1);
+  else if (basis === "year") target.setFullYear(target.getFullYear() - 1);
   const targetStr = toISODate(target);
   const dates = state.data.dates;
   let ref = null;
@@ -455,7 +484,8 @@ function renderHeatmap() {
       const itemCode = node.dataset.toggleParent;
       if (!state.compactView) {
         state.compactView = true;
-        state.expandedParents.clear();
+        state.expandedParents = new Set(expandableParentCodes());
+        state.expandedParents.delete(itemCode);
       } else if (state.expandedParents.has(itemCode)) {
         state.expandedParents.delete(itemCode);
       } else {
