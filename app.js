@@ -45,6 +45,11 @@ document.body.appendChild(tooltip);
 
 let chartCtx = null;
 
+const DEFAULT_COLLAPSED_PARENT_CODES = new Set([
+  "FUND_EQUITY_MARKET_DOMESTIC",
+  "FUND_EQUITY_MARKET_OVERSEAS",
+]);
+
 const nf = new Intl.NumberFormat("ko-KR", {
   maximumFractionDigits: 1,
   minimumFractionDigits: 1,
@@ -126,6 +131,15 @@ function childMap() {
 
 function expandableParentCodes() {
   return [...childMap().keys()];
+}
+
+function defaultExpandedParentCodes() {
+  return expandableParentCodes().filter((itemCode) => !DEFAULT_COLLAPSED_PARENT_CODES.has(itemCode));
+}
+
+function applyDefaultExpansion() {
+  state.compactView = true;
+  state.expandedParents = new Set(defaultExpandedParentCodes());
 }
 
 function hasChildren(item) {
@@ -690,6 +704,7 @@ async function init() {
   if (!response.ok) throw new Error(`Data load failed: ${response.status}`);
   state.data = await response.json();
   setupControls();
+  applyDefaultExpansion();
   render();
 
   let hoverIdx = -1;
@@ -796,10 +811,9 @@ async function init() {
     state.search = "";
     state.windowSize = 7;
     state.compareBasis = "day";
-    state.compactView = false;
     state.trendExpanded = true;
     state.trendMode = "balance";
-    state.expandedParents.clear();
+    applyDefaultExpansion();
     state.asOfDate = state.data.meta.defaultDate ?? state.data.summary.defaultDate ?? state.data.meta.latestDate;
     els.asOfDate.value = state.asOfDate;
     els.sectorFilter.value = "전체";
