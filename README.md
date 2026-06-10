@@ -2,6 +2,7 @@
 
 국내 자금 흐름(펀드플로우)의 **일별 증감·잔액**을 한 화면에서 보여주는 정적 웹 대시보드입니다. 데이터 파이프라인으로 매일 갱신해 GitHub Pages로 서빙합니다.
 
+
 - 🌐 **배포 주소**: https://leeminhong.github.io/fundflow-dashboard/
 - 🧩 **기술 스택**: 순수 HTML/CSS/JS(빌드 도구 없음) + Python 데이터 파이프라인
 - 📦 **데이터 단위**: 조원.
