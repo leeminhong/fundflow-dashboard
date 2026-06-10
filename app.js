@@ -187,7 +187,7 @@ function lastFilledDateByItem() {
   return map;
 }
 
-const BASIS_LABEL = { day: "전일대비", week: "전주대비", month: "전월대비" };
+const BASIS_LABEL = { day: "전일대비", week: "전주대비", month: "전월대비", balance: "잔액" };
 
 const refDateCache = new Map();
 
@@ -222,6 +222,7 @@ function referenceDateFor(date, basis) {
 function deltaValue(map, itemCode, date, basis = state.compareBasis) {
   const record = map.get(`${itemCode}|${date}`);
   if (!record) return undefined;
+  if (basis === "balance") return Number.isFinite(record.balanceValue) ? record.balanceValue : undefined;
   if (basis === "day") return record.changeValue;
   const refDate = referenceDateFor(date, basis);
   if (!refDate) return undefined;
@@ -235,7 +236,8 @@ function colorMetricValue(map, itemCode, date, basis = state.compareBasis) {
   const record = map.get(`${itemCode}|${date}`);
   if (!record) return undefined;
 
-  if (basis === "day") {
+  // 잔액 모드도 색은 전일대비 증감률로 칠해 셀에 표시된 절대 잔액과 별개로 그날의 흐름을 보여준다.
+  if (basis === "day" || basis === "balance") {
     const change = record.changeValue;
     const current = record.balanceValue;
     const previous = current - change;
@@ -318,11 +320,13 @@ function recordsForDate(date) {
 function selectedDateSummary() {
   const map = recordMap();
   const records = recordsForDate(state.asOfDate).filter((record) => record.includeInTotal);
+  // 요약 줄의 증감은 항상 증감을 의미해야 하므로, 잔액 모드일 땐 전일대비로 대체한다.
+  const changeBasis = state.compareBasis === "balance" ? "day" : state.compareBasis;
   const sectorSummary = orderedSectors().map((sector) => {
     const sectorRecords = records.filter((record) => record.sector === sector);
     return {
       sector,
-      latestChange: sectorRecords.reduce((sum, record) => sum + (deltaValue(map, record.itemCode, state.asOfDate) || 0), 0),
+      latestChange: sectorRecords.reduce((sum, record) => sum + (deltaValue(map, record.itemCode, state.asOfDate, changeBasis) || 0), 0),
       latestBalance: sectorRecords.reduce((sum, record) => sum + (record.balanceValue || 0), 0),
       itemCount: sectorRecords.length,
     };
@@ -369,6 +373,8 @@ function renderHeatmap() {
 
   const maxAbs = colorValues.length ? Math.max(...colorValues) : 0;
   const lastFilled = lastFilledDateByItem();
+  // 잔액 모드는 부호 없는 절대 잔액을, 그 외에는 +/- 증감을 셀에 표시한다.
+  const cellFormatter = state.compareBasis === "balance" ? formatBalance : formatValue;
   els.heatmap.style.gridTemplateColumns = `86px 136px repeat(${dates.length}, minmax(62px, 1fr))`;
   els.heatmap.style.gridTemplateRows = `repeat(${items.length + 1}, 27px)`;
 
@@ -431,7 +437,7 @@ function renderHeatmap() {
         `<div class="heatmap-cell${latestClass}${sectorEndClass}" data-item-code="${item.itemCode}" style="grid-column:${dateIdx + 3};grid-row:${row};background:${colorFor(
           colorValue,
           maxAbs,
-        )}">${formatValue(value)}</div>`,
+        )}">${cellFormatter(value)}</div>`,
       );
     }
   });
@@ -499,15 +505,17 @@ function renderTrend() {
   const dates = trendDates();
   const map = recordMap();
   const isBalance = state.trendMode === "balance";
+  // 추이의 증감은 자체 잔액/증감 토글로 정해지므로, 비교 기준이 '잔액'이어도 증감 추이는 전일대비로 그린다.
+  const trendBasis = state.compareBasis === "balance" ? "day" : state.compareBasis;
   const points = dates.map((date) => {
     const record = map.get(`${item.itemCode}|${date}`);
     const value = isBalance
       ? (Number.isFinite(record?.balanceValue) ? record.balanceValue : null)
-      : (deltaValue(map, item.itemCode, date) ?? 0);
+      : (deltaValue(map, item.itemCode, date, trendBasis) ?? 0);
     return { date, value };
   });
 
-  const basisLabel = isBalance ? "잔액" : BASIS_LABEL[state.compareBasis];
+  const basisLabel = isBalance ? "잔액" : BASIS_LABEL[trendBasis];
   els.trendTitle.textContent = `${item.itemName} ${isBalance ? "잔액" : "증감"} 추이`;
   els.trendSubtitle.textContent = `${item.sector} · ${basisLabel} · ${dates.length}개 날짜 · 단위 ${state.data.meta.unit}`;
 
