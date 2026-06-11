@@ -148,20 +148,19 @@ def parse_market_workbook(path: Path) -> dict:
     """Parse a BOK market-indicator workbook.
 
     Daily reports have a single '일일동향' sheet (one balance date). Month-end
-    "잔액" backfill posts instead carry one date-named sheet per missing date
-    (e.g. '5.13' … '4.30'); every such sheet is parsed and its records are
-    merged so the previously-missing dates get filled. Each record carries its
-    own balanceDate/changeDate, so downstream merge keys them per date.
+    "잔액" backfill posts carry one date-named sheet per missing date (e.g.
+    '5.13' … '4.30') — sometimes alongside a '일일동향' sheet in the same
+    workbook (e.g. '5.29~6.8잔액 포함_6.11'), so both kinds are always parsed
+    together. Each record carries its own balanceDate/changeDate, so downstream
+    merge keys them per date.
     """
     wb = openpyxl.load_workbook(path, data_only=True)
-    if "일일동향" in wb.sheetnames:
-        target_sheets = ["일일동향"]
-    else:
-        # Backfill workbook: parse every date-named sheet (fall back to the
-        # first sheet if none match the date pattern).
-        target_sheets = [name for name in wb.sheetnames if DATE_SHEET_RE.match(name)]
-        if not target_sheets:
-            target_sheets = [wb.sheetnames[0]]
+    target_sheets = [
+        name for name in wb.sheetnames
+        if name == "일일동향" or DATE_SHEET_RE.match(name)
+    ]
+    if not target_sheets:
+        target_sheets = [wb.sheetnames[0]]
 
     parsed_sheets = []
     for name in target_sheets:
