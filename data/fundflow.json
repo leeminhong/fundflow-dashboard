@@ -6,7 +6,7 @@
     "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098187&menuNo=200366",
     "sourceAttachment": "s260528(5.22잔액).xlsx",
     "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/43d6fe71b57142e28389adb651a6e2de/1/a1933bbdc5b04db6b35cb88fb56c99e1.xlsx",
-    "generatedAt": "2026-06-11T20:44:53",
+    "generatedAt": "2026-06-11T21:42:38",
     "latestDate": "2026-06-10",
     "defaultDate": "2026-06-10",
     "unit": "조원",
@@ -6271,92 +6271,42 @@
     },
     {
       "date": "2026-05-29",
-      "isComplete": false,
-      "missingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "pendingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "filledItemCount": 20,
+      "isComplete": true,
+      "missingItems": [],
+      "pendingItems": [],
+      "filledItemCount": 24,
       "totalItemCount": 24
     },
     {
       "date": "2026-06-01",
-      "isComplete": false,
-      "missingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "pendingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "filledItemCount": 20,
+      "isComplete": true,
+      "missingItems": [],
+      "pendingItems": [],
+      "filledItemCount": 24,
       "totalItemCount": 24
     },
     {
       "date": "2026-06-02",
-      "isComplete": false,
-      "missingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "pendingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "filledItemCount": 20,
+      "isComplete": true,
+      "missingItems": [],
+      "pendingItems": [],
+      "filledItemCount": 24,
       "totalItemCount": 24
     },
     {
       "date": "2026-06-04",
-      "isComplete": false,
-      "missingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "pendingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "filledItemCount": 20,
+      "isComplete": true,
+      "missingItems": [],
+      "pendingItems": [],
+      "filledItemCount": 24,
       "totalItemCount": 24
     },
     {
       "date": "2026-06-05",
-      "isComplete": false,
-      "missingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "pendingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "filledItemCount": 20,
+      "isComplete": true,
+      "missingItems": [],
+      "pendingItems": [],
+      "filledItemCount": 24,
       "totalItemCount": 24
     },
     {
@@ -118008,8 +117958,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 10.007247431299836,
+      "balanceValue": 2180.5480404388,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 10,
       "isActive": true,
@@ -118019,10 +117969,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-05-29",
       "balanceDate": "2026-05-29",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098306&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.4)",
-      "sourceAttachment": "s260604(5.29잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cf0b98e25b9245c8b549f4d5b9aacc21/1/61905be5fff549a296021512ac83d83e.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-05-29",
@@ -118036,8 +117986,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 6.020289871100011,
+      "balanceValue": 343.72038917,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 11,
       "isActive": true,
@@ -118047,10 +117997,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-05-29",
       "balanceDate": "2026-05-29",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098306&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.4)",
-      "sourceAttachment": "s260604(5.29잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cf0b98e25b9245c8b549f4d5b9aacc21/1/61905be5fff549a296021512ac83d83e.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-05-29",
@@ -118064,8 +118014,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 3.9869575601998717,
+      "balanceValue": 1836.8276512688,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 12,
       "isActive": true,
@@ -118075,10 +118025,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-05-29",
       "balanceDate": "2026-05-29",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098306&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.4)",
-      "sourceAttachment": "s260604(5.29잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cf0b98e25b9245c8b549f4d5b9aacc21/1/61905be5fff549a296021512ac83d83e.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-05-29",
@@ -118092,8 +118042,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -11.032069469899964,
+      "balanceValue": 471.44521931410003,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 20,
       "isActive": true,
@@ -118103,10 +118053,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-05-29",
       "balanceDate": "2026-05-29",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098306&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.4)",
-      "sourceAttachment": "s260604(5.29잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cf0b98e25b9245c8b549f4d5b9aacc21/1/61905be5fff549a296021512ac83d83e.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-05-29",
@@ -118595,10 +118545,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-05-29",
       "balanceDate": "2026-05-29",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098306&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.4)",
-      "sourceAttachment": "s260604(5.29잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cf0b98e25b9245c8b549f4d5b9aacc21/1/61905be5fff549a296021512ac83d83e.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-05-29",
@@ -118623,10 +118573,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-05-29",
       "balanceDate": "2026-05-29",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098306&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.4)",
-      "sourceAttachment": "s260604(5.29잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cf0b98e25b9245c8b549f4d5b9aacc21/1/61905be5fff549a296021512ac83d83e.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-01",
@@ -118640,8 +118590,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -3.2817109730001537,
+      "balanceValue": 2177.2663294657996,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 10,
       "isActive": true,
@@ -118651,10 +118601,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-01",
       "balanceDate": "2026-06-01",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098329&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.5)",
-      "sourceAttachment": "s260605(6.1잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cfcfd53650c04caab227f48244fcb19c/1/c08bb6076d7f48a7994fbf56b8fcfe62.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-01",
@@ -118668,8 +118618,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -4.611817512599984,
+      "balanceValue": 339.10857165740003,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 11,
       "isActive": true,
@@ -118679,10 +118629,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-01",
       "balanceDate": "2026-06-01",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098329&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.5)",
-      "sourceAttachment": "s260605(6.1잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cfcfd53650c04caab227f48244fcb19c/1/c08bb6076d7f48a7994fbf56b8fcfe62.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-01",
@@ -118696,8 +118646,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 1.33010653959997,
+      "balanceValue": 1838.1577578084,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 12,
       "isActive": true,
@@ -118707,10 +118657,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-01",
       "balanceDate": "2026-06-01",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098329&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.5)",
-      "sourceAttachment": "s260605(6.1잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cfcfd53650c04caab227f48244fcb19c/1/c08bb6076d7f48a7994fbf56b8fcfe62.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-01",
@@ -118724,8 +118674,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 1.3418820878999307,
+      "balanceValue": 472.78710140199996,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 20,
       "isActive": true,
@@ -118735,10 +118685,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-01",
       "balanceDate": "2026-06-01",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098329&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.5)",
-      "sourceAttachment": "s260605(6.1잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cfcfd53650c04caab227f48244fcb19c/1/c08bb6076d7f48a7994fbf56b8fcfe62.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-01",
@@ -119227,10 +119177,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-01",
       "balanceDate": "2026-06-01",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098329&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.5)",
-      "sourceAttachment": "s260605(6.1잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cfcfd53650c04caab227f48244fcb19c/1/c08bb6076d7f48a7994fbf56b8fcfe62.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-01",
@@ -119255,10 +119205,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-01",
       "balanceDate": "2026-06-01",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098329&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.5)",
-      "sourceAttachment": "s260605(6.1잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/cfcfd53650c04caab227f48244fcb19c/1/c08bb6076d7f48a7994fbf56b8fcfe62.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-02",
@@ -119272,8 +119222,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -4.542187377099693,
+      "balanceValue": 2172.7241420887,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 10,
       "isActive": true,
@@ -119283,10 +119233,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-02",
       "balanceDate": "2026-06-02",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098358&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.8)",
-      "sourceAttachment": "s260608(6.2잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/312e7406fcb843ab8654522a6297d3ed/1/5d7268c733c047b8b46a99ec1cbeaf0f.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-02",
@@ -119300,8 +119250,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -2.601312265000027,
+      "balanceValue": 336.5072593924,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 11,
       "isActive": true,
@@ -119311,10 +119261,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-02",
       "balanceDate": "2026-06-02",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098358&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.8)",
-      "sourceAttachment": "s260608(6.2잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/312e7406fcb843ab8654522a6297d3ed/1/5d7268c733c047b8b46a99ec1cbeaf0f.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-02",
@@ -119328,8 +119278,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -1.9408751120999455,
+      "balanceValue": 1836.2168826963,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 12,
       "isActive": true,
@@ -119339,10 +119289,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-02",
       "balanceDate": "2026-06-02",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098358&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.8)",
-      "sourceAttachment": "s260608(6.2잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/312e7406fcb843ab8654522a6297d3ed/1/5d7268c733c047b8b46a99ec1cbeaf0f.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-02",
@@ -119356,8 +119306,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 7.8903235490000805,
+      "balanceValue": 480.67742495100003,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 20,
       "isActive": true,
@@ -119367,10 +119317,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-02",
       "balanceDate": "2026-06-02",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098358&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.8)",
-      "sourceAttachment": "s260608(6.2잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/312e7406fcb843ab8654522a6297d3ed/1/5d7268c733c047b8b46a99ec1cbeaf0f.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-02",
@@ -119859,10 +119809,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-02",
       "balanceDate": "2026-06-02",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098358&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.8)",
-      "sourceAttachment": "s260608(6.2잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/312e7406fcb843ab8654522a6297d3ed/1/5d7268c733c047b8b46a99ec1cbeaf0f.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-02",
@@ -119887,10 +119837,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-02",
       "balanceDate": "2026-06-02",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098358&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.8)",
-      "sourceAttachment": "s260608(6.2잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/312e7406fcb843ab8654522a6297d3ed/1/5d7268c733c047b8b46a99ec1cbeaf0f.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-04",
@@ -119904,8 +119854,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 7.551343049199879,
+      "balanceValue": 2180.2754851379,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 10,
       "isActive": true,
@@ -119915,10 +119865,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-04",
       "balanceDate": "2026-06-04",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098399&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.9)",
-      "sourceAttachment": "s260609(6.4잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/891a51ac26ab4a2ab0cd87dccbef1c46/1/1e5155b664d84509a6d448f0216fbfcb.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-04",
@@ -119932,8 +119882,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 1.0720071663000155,
+      "balanceValue": 337.5792665587,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 11,
       "isActive": true,
@@ -119943,10 +119893,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-04",
       "balanceDate": "2026-06-04",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098399&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.9)",
-      "sourceAttachment": "s260609(6.4잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/891a51ac26ab4a2ab0cd87dccbef1c46/1/1e5155b664d84509a6d448f0216fbfcb.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-04",
@@ -119960,8 +119910,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 6.47933588289991,
+      "balanceValue": 1842.6962185792,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 12,
       "isActive": true,
@@ -119971,10 +119921,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-04",
       "balanceDate": "2026-06-04",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098399&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.9)",
-      "sourceAttachment": "s260609(6.4잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/891a51ac26ab4a2ab0cd87dccbef1c46/1/1e5155b664d84509a6d448f0216fbfcb.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-04",
@@ -119988,8 +119938,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 7.09980538379997,
+      "balanceValue": 487.77723033480004,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 20,
       "isActive": true,
@@ -119999,10 +119949,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-04",
       "balanceDate": "2026-06-04",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098399&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.9)",
-      "sourceAttachment": "s260609(6.4잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/891a51ac26ab4a2ab0cd87dccbef1c46/1/1e5155b664d84509a6d448f0216fbfcb.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-04",
@@ -120491,10 +120441,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-04",
       "balanceDate": "2026-06-04",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098399&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.9)",
-      "sourceAttachment": "s260609(6.4잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/891a51ac26ab4a2ab0cd87dccbef1c46/1/1e5155b664d84509a6d448f0216fbfcb.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-04",
@@ -120519,10 +120469,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-04",
       "balanceDate": "2026-06-04",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098399&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.9)",
-      "sourceAttachment": "s260609(6.4잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/891a51ac26ab4a2ab0cd87dccbef1c46/1/1e5155b664d84509a6d448f0216fbfcb.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-05",
@@ -120536,8 +120486,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -4.370962661499902,
+      "balanceValue": 2175.9045224764,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 10,
       "isActive": true,
@@ -120547,10 +120497,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-05",
       "balanceDate": "2026-06-05",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098412&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.10)",
-      "sourceAttachment": "s260610(6.5잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/bb895c5ffaec4b91b03cc44920df8bfe/1/0360ec4481e04a9baaadede681cca5e5.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-05",
@@ -120564,8 +120514,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -1.2486429525000042,
+      "balanceValue": 336.3306236062,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 11,
       "isActive": true,
@@ -120575,10 +120525,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-05",
       "balanceDate": "2026-06-05",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098412&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.10)",
-      "sourceAttachment": "s260610(6.5잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/bb895c5ffaec4b91b03cc44920df8bfe/1/0360ec4481e04a9baaadede681cca5e5.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-05",
@@ -120592,8 +120542,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -3.1223197089999912,
+      "balanceValue": 1839.5738988701999,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 12,
       "isActive": true,
@@ -120603,10 +120553,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-05",
       "balanceDate": "2026-06-05",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098412&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.10)",
-      "sourceAttachment": "s260610(6.5잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/bb895c5ffaec4b91b03cc44920df8bfe/1/0360ec4481e04a9baaadede681cca5e5.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-05",
@@ -120620,8 +120570,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -2.0513945737000556,
+      "balanceValue": 485.7258357611,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 20,
       "isActive": true,
@@ -120631,10 +120581,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-05",
       "balanceDate": "2026-06-05",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098412&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.10)",
-      "sourceAttachment": "s260610(6.5잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/bb895c5ffaec4b91b03cc44920df8bfe/1/0360ec4481e04a9baaadede681cca5e5.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-05",
@@ -121123,10 +121073,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-05",
       "balanceDate": "2026-06-05",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098412&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.10)",
-      "sourceAttachment": "s260610(6.5잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/bb895c5ffaec4b91b03cc44920df8bfe/1/0360ec4481e04a9baaadede681cca5e5.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-05",
@@ -121151,10 +121101,10 @@
       "sourceUnit": "억원",
       "changeDate": "2026-06-05",
       "balanceDate": "2026-06-05",
-      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098412&menuNo=200366",
-      "sourcePageTitle": "금융시장 주요지표(6.10)",
-      "sourceAttachment": "s260610(6.5잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/bb895c5ffaec4b91b03cc44920df8bfe/1/0360ec4481e04a9baaadede681cca5e5.xlsx"
+      "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098429&menuNo=200366",
+      "sourcePageTitle": "금융시장주요지표(5.29~6.8잔액 포함_6.11)",
+      "sourceAttachment": "s260611(5.29~6.8잔액).xlsx",
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/f23268429b3a4c4ead81d0e2f63592d6/1/2191bc045a2a4c6a9528fcf87cf658d7.xlsx"
     },
     {
       "date": "2026-06-08",
