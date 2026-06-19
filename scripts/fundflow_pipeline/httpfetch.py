@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import re
 import ssl
+import time
 from collections import deque
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Iterable
+from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, unquote, urljoin, urlparse
 from urllib.request import Request, urlopen
 
@@ -46,11 +48,36 @@ class LinkParser(HTMLParser):
             self._text_parts = []
 
 
+# BOK 서버가 간헐적으로 30초 안에 응답하지 않아(read timeout) 파이프라인 첫 호출이
+# 죽는 일이 있다. 일시적 네트워크 오류는 backoff를 두고 몇 번 재시도해서 흡수한다.
+FETCH_RETRIES = 3
+FETCH_BACKOFF_SECONDS = 3
+
+
 def fetch_bytes(url: str) -> bytes:
     context = ssl._create_unverified_context()
     req = Request(url, headers={"User-Agent": USER_AGENT})
-    with urlopen(req, timeout=30, context=context) as response:
-        return response.read()
+    last_exc: Exception | None = None
+    for attempt in range(1, FETCH_RETRIES + 1):
+        try:
+            with urlopen(req, timeout=30, context=context) as response:
+                return response.read()
+        except HTTPError as exc:
+            # 4xx는 일시적 오류가 아니므로 재시도하지 않는다(잘못된 URL 등).
+            if exc.code is not None and 400 <= exc.code < 500:
+                raise
+            last_exc = exc
+        except (URLError, TimeoutError, OSError) as exc:
+            last_exc = exc
+        if attempt < FETCH_RETRIES:
+            wait = FETCH_BACKOFF_SECONDS * attempt
+            print(
+                f"warning: fetch failed ({last_exc}); "
+                f"retrying {attempt}/{FETCH_RETRIES - 1} in {wait}s: {url}"
+            )
+            time.sleep(wait)
+    assert last_exc is not None
+    raise last_exc
 
 
 def fetch_text(url: str) -> str:
