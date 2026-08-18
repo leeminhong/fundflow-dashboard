@@ -6,7 +6,7 @@
     "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=10098187&menuNo=200366",
     "sourceAttachment": "s260528(5.22잔액).xlsx",
     "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/43d6fe71b57142e28389adb651a6e2de/1/a1933bbdc5b04db6b35cb88fb56c99e1.xlsx",
-    "generatedAt": "2026-08-18T09:40:43",
+    "generatedAt": "2026-08-18T11:12:09",
     "latestDate": "2026-08-14",
     "defaultDate": "2026-08-13",
     "unit": "조원",
@@ -6717,20 +6717,10 @@
     },
     {
       "date": "2026-08-11",
-      "isComplete": false,
-      "missingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "pendingItems": [
-        "실세총예금",
-        "실세요구불",
-        "저축성",
-        "금전신탁"
-      ],
-      "filledItemCount": 20,
+      "isComplete": true,
+      "missingItems": [],
+      "pendingItems": [],
+      "filledItemCount": 24,
       "totalItemCount": 24
     },
     {
@@ -145610,7 +145600,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-07-31",
@@ -145638,7 +145628,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-07-31",
@@ -145666,7 +145656,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-07-31",
@@ -145694,7 +145684,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-07-31",
@@ -146186,7 +146176,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-07-31",
@@ -146214,7 +146204,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-03",
@@ -146242,7 +146232,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-03",
@@ -146270,7 +146260,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-03",
@@ -146298,7 +146288,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-03",
@@ -146326,7 +146316,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-03",
@@ -146818,7 +146808,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-03",
@@ -146846,7 +146836,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-04",
@@ -146874,7 +146864,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-04",
@@ -146902,7 +146892,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-04",
@@ -146930,7 +146920,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-04",
@@ -146958,7 +146948,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-04",
@@ -147450,7 +147440,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-04",
@@ -147478,7 +147468,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-05",
@@ -147506,7 +147496,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-05",
@@ -147534,7 +147524,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-05",
@@ -147562,7 +147552,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-05",
@@ -147590,7 +147580,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-05",
@@ -148082,7 +148072,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-05",
@@ -148110,7 +148100,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-06",
@@ -148138,7 +148128,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-06",
@@ -148166,7 +148156,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-06",
@@ -148194,7 +148184,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-06",
@@ -148222,7 +148212,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-06",
@@ -148714,7 +148704,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-06",
@@ -148742,7 +148732,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-07",
@@ -148770,7 +148760,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-07",
@@ -148798,7 +148788,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-07",
@@ -148826,7 +148816,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-07",
@@ -148854,7 +148844,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-07",
@@ -149346,7 +149336,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-07",
@@ -149374,7 +149364,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-10",
@@ -149402,7 +149392,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-10",
@@ -149430,7 +149420,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-10",
@@ -149458,7 +149448,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-10",
@@ -149486,7 +149476,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-10",
@@ -149978,7 +149968,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-10",
@@ -150006,7 +149996,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-11",
@@ -150020,8 +150010,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -0.5229013082001358,
+      "balanceValue": 2170.0403225482,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 10,
       "isActive": true,
@@ -150034,7 +150024,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-11",
@@ -150048,8 +150038,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": 0.17985651980000547,
+      "balanceValue": 325.5303121944,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 11,
       "isActive": true,
@@ -150062,7 +150052,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-11",
@@ -150076,8 +150066,8 @@
       "includeInTotal": false,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -0.7027578280001878,
+      "balanceValue": 1844.5100103538,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 12,
       "isActive": true,
@@ -150090,7 +150080,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-11",
@@ -150104,8 +150094,8 @@
       "includeInTotal": true,
       "requiredForComplete": true,
       "showInHeatmap": true,
-      "changeValue": null,
-      "balanceValue": null,
+      "changeValue": -1.0315935994999483,
+      "balanceValue": 484.6410326379,
       "link": "https://www.bok.or.kr/portal/bbs/P0002018/list.do?menuNo=200366",
       "displayOrder": 20,
       "isActive": true,
@@ -150118,7 +150108,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-11",
@@ -150610,7 +150600,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-11",
@@ -150638,7 +150628,7 @@
       "sourcePageUrl": "https://www.bok.or.kr/portal/bbs/P0002018/view.do?nttId=11063807&menuNo=200366",
       "sourcePageTitle": "금융시장 주요지표(7.31~8.11잔액 포함_8.14)",
       "sourceAttachment": "s260814(7.31~8.11잔액).xlsx",
-      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/9b6771def64e4e0b977505eb45e828bc.xlsx"
+      "sourceAttachmentUrl": "https://www.bok.or.kr/fileSrc/portal/dbcb5431eb1245c19f9467b7e4585147/1/83e7406739f543a984a8400a0cfd2543.xlsx"
     },
     {
       "date": "2026-08-12",
